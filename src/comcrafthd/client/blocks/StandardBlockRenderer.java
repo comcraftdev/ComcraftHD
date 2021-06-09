@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comcrafthd.render.blocks;
+package comcrafthd.client.blocks;
 
 import comcrafthd.Block;
-import comcrafthd.render.BlockMaterial;
-import comcrafthd.render.BlockRenderParam;
-import comcrafthd.render.ChunkRenderer;
-import comcrafthd.render.IBlockRenderer;
-import comcrafthd.render.Renderer;
+import comcrafthd.client.BlockMaterial;
+import comcrafthd.client.BlockRenderParam;
+import comcrafthd.client.ChunkRenderer;
+import comcrafthd.client.IBlockRenderer;
+import comcrafthd.client.Renderer;
 
 /**
  *
@@ -75,9 +75,11 @@ public class StandardBlockRenderer implements IBlockRenderer {
     }
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
-        for (int n = 0; n < 6; ++n) {
-            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
-        }
+//        for (int n = 0; n < 6; ++n) {
+//            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
+//        }
+        int n = 3;
+        chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
     }
 
 }

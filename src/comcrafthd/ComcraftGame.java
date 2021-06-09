@@ -5,10 +5,9 @@
  */
 package comcrafthd;
 
-import comcrafthd.render.BlockMaterialList;
-import comcrafthd.render.Renderer;
-import comcrafthd.midlets.ComcraftMIDPCanvas;
-import comcrafthd.midlets.ComcraftMIDlet;
+import comcrafthd.client.*;
+import comcrafthd.client.midlets.ComcraftMIDPCanvas;
+import comcrafthd.client.midlets.ComcraftMIDlet;
 
 /**
  *
@@ -34,6 +33,8 @@ public final class ComcraftGame implements Runnable {
     public final Renderer renderer;
     public final ChunkList chunkList;
     public final BlockMaterialList blockMaterials;
+    public final KeyboardMapping keyboardMapping;
+    public final CameraMovement cameraMovement;
 
     public ComcraftGame(ComcraftGameConfiguration gameConfiguration, ComcraftMIDlet comcraftMIDlet, ComcraftMIDPCanvas comcraftCanvas) {
         instance = this;
@@ -43,13 +44,15 @@ public final class ComcraftGame implements Runnable {
         this.comcraftMIDPCanvas = comcraftCanvas;
 
         gameThread = new Thread(this);
-        
+
         blockMaterials = new BlockMaterialList();
         blockList = new BlockList();
         chunkPartitionPool = new ChunkPartitionPool();
         chunkGenerator = new ChunkGenerator();
         renderer = new Renderer();
         chunkList = new ChunkList();
+        keyboardMapping = new KeyboardMapping();
+        cameraMovement = new CameraMovement();
     }
 
     private boolean gameStarted = false;
@@ -78,13 +81,16 @@ public final class ComcraftGame implements Runnable {
 
     public void run() {
         Log.info(this, "run() entered");
-        
+
+        Time.reset();
+
         initialize();
 
         while (!gameStopped) {
             synchronized (this) {
                 while (gamePaused) {
                     Log.info(this, "run() gamePaused");
+                    Time.reset();
                     try {
                         wait();
                     } catch (InterruptedException ex) {
@@ -97,34 +103,38 @@ public final class ComcraftGame implements Runnable {
                     break;
                 }
             }
+            
+            Time.tick();
 
             tick();
 
             Thread.yield();
         }
-        
+
         Log.info(this, "run() finished");
     }
 
-    private static final int DEFAULT_CHUNK_RADIUS = 2;
-    
+    private static final int DEFAULT_CHUNK_RADIUS = 0;
+
     private void initialize() {
         Log.info(this, "initialize() entered");
-        
+
         blockList.initialize();
         renderer.initialize();
-        
+
         chunkList.loadAround(0, 0, DEFAULT_CHUNK_RADIUS);
-        
+
         System.gc();
-        
+
         Log.info(this, "initialize() finished");
     }
 
     private void tick() {
 //        Log.debug(this, "tick() entered");
-        
-        renderer.renderTick();
+
+        cameraMovement.tick();
+
+        renderer.render();
     }
 
 }

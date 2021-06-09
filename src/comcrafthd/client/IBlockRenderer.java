@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package comcrafthd.client;
 
-package comcrafthd.render;
+import comcrafthd.Block;
 
 /**
  *
  * @author quead
  */
-public final class GreedyMeshing {
-
+public interface IBlockRenderer {
+    
+    public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param);
+    
 }

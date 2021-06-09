@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comcrafthd.render;
+package comcrafthd.client;
 
 import comcrafthd.Chunk;
 import comcrafthd.ChunkList;
 import comcrafthd.ComcraftGame;
 import comcrafthd.Log;
-import comcrafthd.midlets.ComcraftMIDPCanvas;
+import comcrafthd.client.midlets.ComcraftMIDPCanvas;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.m3g.Background;
@@ -34,6 +34,8 @@ public final class Renderer {
     private final Graphics3D g3d;
 
     public final World world = new World();
+    
+    public Camera camera;
 
     public Renderer() {
         chunkRenderer = new ChunkRenderer();
@@ -49,7 +51,7 @@ public final class Renderer {
 
     }
 
-    public void renderTick() {
+    public void render() {
         renderChunksCache();
 
         int hints = Graphics3D.OVERWRITE;
@@ -102,7 +104,7 @@ public final class Renderer {
 
         world.addChild(myLight);
 
-        Camera camera = new Camera();
+        camera = new Camera();
         camera.setPerspective(90.0f, // field of view
                 (float) comcraftCanvas.getWidth() / (float) comcraftCanvas.getHeight(), // aspectRatio
                 0.1f, // near clipping plane

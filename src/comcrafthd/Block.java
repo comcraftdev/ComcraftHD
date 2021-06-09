@@ -5,7 +5,7 @@
  */
 package comcrafthd;
 
-import comcrafthd.render.IBlockRenderer;
+import comcrafthd.client.IBlockRenderer;
 
 /**
  *

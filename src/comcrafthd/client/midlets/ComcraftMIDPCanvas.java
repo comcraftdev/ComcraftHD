@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package comcrafthd.client.midlets;
 
-package comcrafthd.midlets;
-
+import comcrafthd.client.Keyboard;
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.game.GameCanvas;
 
@@ -13,31 +13,35 @@ import javax.microedition.lcdui.game.GameCanvas;
  * @author quead
  */
 public final class ComcraftMIDPCanvas extends GameCanvas {
-    
+
     public static ComcraftMIDPCanvas instance;
-    
-    /**
-     * constructor
-     */
+
+    private final Keyboard keyboard = new Keyboard();
+
     public ComcraftMIDPCanvas() {
-        super(true);
-        
+        super(false);
+
         instance = this;
-    } 
-    
-    /**
-     * paint
-     */
-    public void paint(Graphics g) {
-        g.drawString("Sample Text",0,0,Graphics.TOP|Graphics.LEFT);
     }
-    
+
     public Graphics getGraphics() {
         return super.getGraphics();
     }
-    
+
     public void flushGraphics() {
         super.flushGraphics();
+    }
+
+    protected void keyRepeated(int keyCode) {
+//        keyboard.notifyKeyRepeated(keyCode);
+    }
+
+    protected void keyReleased(int keyCode) {
+        keyboard.notifyKeyReleased(keyCode > 0 ? keyCode : getGameAction(keyCode));
+    }
+
+    protected void keyPressed(int keyCode) {
+        keyboard.notifyKeyPressed(keyCode > 0 ? keyCode : getGameAction(keyCode));
     }
 
 }

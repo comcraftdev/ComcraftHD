@@ -6,7 +6,7 @@
 
 package comcrafthd;
 
-import comcrafthd.render.ChunkRenderCache;
+import comcrafthd.client.ChunkRenderCache;
 
 /**
  *

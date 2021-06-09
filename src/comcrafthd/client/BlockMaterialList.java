@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package comcrafthd.render;
+package comcrafthd.client;
 
 import javax.microedition.m3g.Appearance;
 import javax.microedition.m3g.Material;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comcrafthd.midlets;
+package comcrafthd.client.midlets;
 
 import comcrafthd.ComcraftGame;
 import comcrafthd.ComcraftGameConfiguration;
