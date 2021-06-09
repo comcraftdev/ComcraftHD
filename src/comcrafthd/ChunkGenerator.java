@@ -27,7 +27,7 @@ public final class ChunkGenerator {
     private void generateImpl() {
         BlockList blockList = ComcraftGame.instance.blockList;
         
-        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 16, Chunk.CHUNK_SIZE, blockList.stone.fullId);
+        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 1, Chunk.CHUNK_SIZE, blockList.stone.fullId);
     }
     
     private void fillRect(int localBlockX, int localBlockY, int localBlockZ, int width, int height, int depth, short value) {

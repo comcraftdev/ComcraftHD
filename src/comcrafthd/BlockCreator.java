@@ -54,6 +54,8 @@ public final class BlockCreator {
         IBlockRenderer standardRenderer = new StandardBlockRenderer(ComcraftGame.instance.blockMaterials.standardMat);
         
         Block block = new Block((byte) id, (byte) metaId, standardRenderer);
+        
+        add(block);
         return block;
     }
     

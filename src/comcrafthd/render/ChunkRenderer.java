@@ -9,6 +9,7 @@ import comcrafthd.Block;
 import comcrafthd.BlockList;
 import comcrafthd.Chunk;
 import comcrafthd.ComcraftGame;
+import comcrafthd.Log;
 import javax.microedition.m3g.Appearance;
 import javax.microedition.m3g.Group;
 import javax.microedition.m3g.Mesh;
@@ -30,6 +31,7 @@ public final class ChunkRenderer {
     private final byte[] normals = new byte[3 * MAX_VERTICES];
     private final byte[] texes = new byte[2 * MAX_VERTICES];
     private int vertCount;
+    private int texCount;
 
     private final int[][] stripIndices = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
     private final int[][] stripLengths = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
@@ -38,7 +40,22 @@ public final class ChunkRenderer {
 
     private Chunk chunk;
 
-    public Node renderChunk(Chunk chunk) {
+    private boolean overflow;
+
+    private void clearCounts() {
+        vertCount = 0;
+        texCount = 0;
+        overflow = false;
+
+        for (int n = stripsIndicesCount.length - 1; n >= 0; --n) {
+            stripsIndicesCount[n] = 0;
+        }
+        for (int n = stripsLengthsCount.length - 1; n >= 0; --n) {
+            stripsLengthsCount[n] = 0;
+        }
+    }
+
+    public Node renderChunk(final Chunk chunk) {
         clearCounts();
 
         this.chunk = chunk;
@@ -46,7 +63,8 @@ public final class ChunkRenderer {
         renderChunkWork();
 
         Node node = prepareNode();
-        chunk = null;
+
+        this.chunk = null;
         return node;
     }
 
@@ -75,18 +93,32 @@ public final class ChunkRenderer {
                     final byte meta = Block.getMeta(val);
 
                     final Block block = blockList.get(id, meta);
+                    if (block == null) {
+                        continue;
+                    }
 
                     param.id = id;
                     param.meta = meta;
                     param.block = block;
 
                     block.blockRenderer.render(this, param);
+
+                    if (overflow) {
+                        return;
+                    }
                 }
             }
         }
     }
 
     private Node prepareNode() {
+        Log.debug(this, "prepareNode() entered");
+
+        if (vertCount == 0) {
+            Log.debug(this, "prepareNode() empty");
+            return null;
+        }
+
         final Chunk chunk = this.chunk;
         final BlockMaterialList materialList = ComcraftGame.instance.blockMaterials;
 
@@ -107,92 +139,88 @@ public final class ChunkRenderer {
         vertexBuffer.setTexCoords(0, texArr, 1f, null);
 
         int usedMaterialCount = 0;
-        
+
         for (int n = BlockMaterialList.MAX_MATERIALS - 1; n >= 0; --n) {
             if (stripsIndicesCount[n] > 0) {
                 usedMaterialCount++;
             }
         }
-        
+
         final Appearance[] apprArr = new Appearance[usedMaterialCount];
         final TriangleStripArray[] stripsArrs = new TriangleStripArray[usedMaterialCount];
         int stripsArrsIdx = 0;
-        
+
         for (int matIdx = BlockMaterialList.MAX_MATERIALS - 1; matIdx >= 0; --matIdx) {
             final int indicesCount = stripsIndicesCount[matIdx];
             final int lengthsCount = stripsLengthsCount[matIdx];
-            
+
             if (indicesCount == 0) {
                 continue;
             }
-            
+
             final int[] tempStripIndices = new int[indicesCount];
             final int[] tempStripLengths = new int[lengthsCount];
-            
-            System.arraycopy(stripIndices, 0, tempStripIndices, 0, indicesCount);
-            System.arraycopy(stripLengths, 0, tempStripLengths, 0, lengthsCount);
-            
+
+            System.arraycopy(stripIndices[matIdx], 0, tempStripIndices, 0, indicesCount);
+            System.arraycopy(stripLengths[matIdx], 0, tempStripLengths, 0, lengthsCount);
+
             TriangleStripArray triArr = new TriangleStripArray(tempStripIndices, tempStripLengths);
             stripsArrs[stripsArrsIdx] = triArr;
-            
+
             apprArr[stripsArrsIdx] = materialList.materials[matIdx].appearance;
-            
+
             ++stripsArrsIdx;
         }
-        
+
+        Log.debug(this, "prepareNode() finishing");
+
         Mesh mesh = new Mesh(vertexBuffer, stripsArrs, apprArr);
         return mesh;
-    }
-
-    private void clearCounts() {
-        vertCount = 0;
-        
-        for (int n = stripsIndicesCount.length - 1; n >= 0; --n) {
-            stripsIndicesCount[n] = 0;
-        }
-        for (int n = stripsLengthsCount.length - 1; n >= 0; --n) {
-            stripsLengthsCount[n] = 0;
-        }
     }
 
     public void render(BlockRenderParam param, byte[] vertices, byte[] normals, byte[] texes, int[] stripIndices, int[] stripLengths, BlockMaterial material) {
         final int matIdx = material.id;
 
         if (vertices.length + vertCount > MAX_VERTICES) {
+            Log.debug(this, "render() max vert");
+            overflow = true;
             return;
         }
         if (stripIndices.length + stripsIndicesCount[matIdx] > MAX_STRIPS) {
+            Log.debug(this, "render() max indi");
+            overflow = true;
             return;
         }
 
         final int startingVertIdx = vertCount;
-        
+
         final int vertLen = vertices.length;
-        
-        final byte x = (byte) param.localBlockX;
-        final byte y = (byte) param.localBlockY;
-        final byte z = (byte) param.localBlockZ;
-        
+
+        final byte ox = (byte) (param.localBlockX * Renderer.BLOCK_RENDER_SIZE);
+        final byte oy = (byte) (param.localBlockY * Renderer.BLOCK_RENDER_SIZE);
+        final byte oz = (byte) (param.localBlockZ * Renderer.BLOCK_RENDER_SIZE);
+
         for (int n = 0; n < vertLen; n += 3) {
-            this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + x);
-            this.vertices[startingVertIdx + n + 1] = (byte) (vertices[n + 1] + y);
-            this.vertices[startingVertIdx + n + 2] = (byte) (vertices[n + 2] + z);
+            this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + ox);
+            this.vertices[startingVertIdx + n + 1] = (byte) (vertices[n + 1] + oy);
+            this.vertices[startingVertIdx + n + 2] = (byte) (vertices[n + 2] + oz);
         }
-        
-        
+
         System.arraycopy(normals, 0, this.normals, vertCount, vertLen);
-        System.arraycopy(texes, 0, this.texes, vertCount, vertLen);
         vertCount += vertLen;
 
+        System.arraycopy(texes, 0, this.texes, texCount, texes.length);
+        texCount += texes.length;
+
         final int stripLen = stripIndices.length;
-        
+
         final int startingIndicesIdx = stripsIndicesCount[matIdx];
         for (int n = 0; n < stripLen; ++n) {
             this.stripIndices[matIdx][startingIndicesIdx + n] = stripIndices[n] + startingVertIdx;
         }
         stripsIndicesCount[matIdx] += stripLen;
-        
-        System.arraycopy(stripLengths, 0, this.stripLengths, stripsLengthsCount[matIdx], stripLengths.length);
+
+        System.arraycopy(stripLengths, 0, this.stripLengths[matIdx], stripsLengthsCount[matIdx], stripLengths.length);
         stripsLengthsCount[matIdx] += stripLengths.length;
     }
 

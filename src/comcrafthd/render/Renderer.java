@@ -68,7 +68,7 @@ public final class Renderer {
         for (int n = chunkList.chunksSize - 1; n >= 0; --n) {
             Chunk chunk = chunkList.chunks[n];
 
-            if (chunk.renderCache == null) {
+            if (chunk.renderCache.done == false) {
                 renderChunkCache(chunk);
             }
         }
@@ -81,13 +81,17 @@ public final class Renderer {
         }
 
         Node node = chunkRenderer.renderChunk(chunk);
-        chunk.renderCache.node = node;
-        world.addChild(node);
+        if (node != null) {
+            chunk.renderCache.node = node;
+            world.addChild(node);
+        }
+        
+        chunk.renderCache.done = true;
     }
 
     private void initializeWorld() {
         Log.info(this, "initializeWorld() entered");
-        
+
         Background background = new Background();
         background.setColor(0x87ceeb);
         world.setBackground(background);
@@ -95,7 +99,7 @@ public final class Renderer {
         Light myLight = new Light();
         myLight.setColor(0xffffff); // white light
         myLight.setIntensity(1.25f);
-        
+
         world.addChild(myLight);
 
         Camera camera = new Camera();
@@ -103,18 +107,19 @@ public final class Renderer {
                 (float) comcraftCanvas.getWidth() / (float) comcraftCanvas.getHeight(), // aspectRatio
                 0.1f, // near clipping plane
                 1000.0f); // far clipping plan
-        camera.setTranslation(0, 0, 100);
+
+        camera.setTranslation(0, 10, 20);
 
         world.addChild(camera);
         world.setActiveCamera(camera);
-        
-        try {
-            Node testCube = TestCube.getTestCube();
-            world.addChild(testCube);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        
+
+//        try {
+//            Node testCube = TestCube.getTestCube();
+//            world.addChild(testCube);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+
         Log.info(this, "initializeWorld() finished");
     }
 

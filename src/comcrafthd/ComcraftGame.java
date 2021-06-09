@@ -106,7 +106,7 @@ public final class ComcraftGame implements Runnable {
         Log.info(this, "run() finished");
     }
 
-    private static final int DEFAULT_CHUNK_RADIUS = 5;
+    private static final int DEFAULT_CHUNK_RADIUS = 2;
     
     private void initialize() {
         Log.info(this, "initialize() entered");

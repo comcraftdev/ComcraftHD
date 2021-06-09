@@ -12,7 +12,13 @@ import javax.microedition.m3g.Node;
  * @author quead
  */
 public final class ChunkRenderCache {
-    
+
+    public boolean done;
     public Node node;
-    
+
+    public void clear() {
+        done = false;
+        node = null;
+    }
+
 }

@@ -19,6 +19,9 @@ public final class BlockList {
     
     public Block get(byte id, byte meta) {
         BlockVariants variant = blocks[ByteHelper.toUnsignedByte(id)];
+        if (variant == null) {
+            return null;
+        }
         
         if (variant.variantCount == 1) {
             return variant.variants[0];
