@@ -32,6 +32,7 @@ public final class ComcraftGame implements Runnable {
     public final ChunkGenerator chunkGenerator;
     public final Renderer renderer;
     public final ChunkList chunkList;
+    public final BlockMaterialList blockMaterials;
 
     public ComcraftGame(ComcraftGameConfiguration gameConfiguration, ComcraftMIDlet comcraftMIDlet, ComcraftMIDPCanvas comcraftCanvas) {
         instance = this;
@@ -47,6 +48,7 @@ public final class ComcraftGame implements Runnable {
         chunkGenerator = new ChunkGenerator();
         renderer = new Renderer();
         chunkList = new ChunkList();
+        blockMaterials = new BlockMaterialList();
     }
 
     private boolean gameStarted = false;

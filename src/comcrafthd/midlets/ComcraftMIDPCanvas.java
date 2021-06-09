@@ -13,11 +13,16 @@ import javax.microedition.lcdui.game.GameCanvas;
  * @author quead
  */
 public final class ComcraftMIDPCanvas extends GameCanvas {
+    
+    public static ComcraftMIDPCanvas instance;
+    
     /**
      * constructor
      */
     public ComcraftMIDPCanvas() {
         super(true);
+        
+        instance = this;
     } 
     
     /**
@@ -27,6 +32,12 @@ public final class ComcraftMIDPCanvas extends GameCanvas {
         g.drawString("Sample Text",0,0,Graphics.TOP|Graphics.LEFT);
     }
     
+    public Graphics getGraphics() {
+        return super.getGraphics();
+    }
     
+    public void flushGraphics() {
+        super.flushGraphics();
+    }
 
 }

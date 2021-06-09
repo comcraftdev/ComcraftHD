@@ -5,7 +5,11 @@
  */
 package comcrafthd;
 
+import comcrafthd.render.BlockMaterial;
+import comcrafthd.render.blocks.StandardBlockRenderer;
 import java.util.Vector;
+import javax.microedition.m3g.Appearance;
+import comcrafthd.render.IBlockRenderer;
 
 /**
  *
@@ -47,7 +51,9 @@ public final class BlockCreator {
     }
     
     public Block createStandard(int id, int metaId) {
-        Block block = new Block((byte) id, (byte) metaId);
+        IBlockRenderer standardRenderer = new StandardBlockRenderer(ComcraftGame.instance.blockMaterials.standardMat);
+        
+        Block block = new Block((byte) id, (byte) metaId, standardRenderer);
         return block;
     }
     

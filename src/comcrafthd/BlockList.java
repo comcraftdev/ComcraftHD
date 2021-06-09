@@ -17,11 +17,24 @@ public final class BlockList {
         seedBlockList();
     }
     
-    public void register(BlockVariants blockVariants) {
-        if (blocks[blockVariants.id] != null) {
-            throw new RuntimeException("ID exists: " + blockVariants.id);
+    public Block get(byte id, byte meta) {
+        BlockVariants variant = blocks[ByteHelper.toUnsignedByte(id)];
+        
+        if (variant.variantCount == 1) {
+            return variant.variants[0];
         }
-        blocks[blockVariants.id] = blockVariants;
+        
+        return variant.variants[Block.getMetaIdFromMeta(meta)];
+    }
+    
+    public void register(BlockVariants blockVariants) {
+        int idx = ByteHelper.toUnsignedByte(blockVariants.id);
+        
+        if (blocks[idx] != null) {
+            throw new RuntimeException("ID exists: " + idx);
+        }
+        
+        blocks[idx] = blockVariants;
     }
     
     private void seedBlockList() {
