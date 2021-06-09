@@ -7,7 +7,6 @@ package comcrafthd.render;
 
 import comcrafthd.Block;
 import comcrafthd.BlockList;
-import comcrafthd.BlockMaterialList;
 import comcrafthd.Chunk;
 import comcrafthd.ComcraftGame;
 import javax.microedition.m3g.Appearance;
@@ -55,7 +54,7 @@ public final class ChunkRenderer {
         final Chunk chunk = this.chunk;
         final BlockList blockList = ComcraftGame.instance.blockList;
 
-        final BlockRenderParam param = new BlockRenderParam(this);
+        final BlockRenderParam param = new BlockRenderParam();
 
         final int offsetX = chunk.chunkX << Chunk.BLOCK_TO_CHUNK_SHIFT;
         final int offsetZ = chunk.chunkZ << Chunk.BLOCK_TO_CHUNK_SHIFT;
@@ -81,7 +80,7 @@ public final class ChunkRenderer {
                     param.meta = meta;
                     param.block = block;
 
-                    block.blockRenderer.render(param);
+                    block.blockRenderer.render(this, param);
                 }
             }
         }
@@ -156,7 +155,7 @@ public final class ChunkRenderer {
         }
     }
 
-    public void render(byte[] vertices, byte[] normals, byte[] texes, int[] stripIndices, int[] stripLengths, BlockMaterial material) {
+    public void render(BlockRenderParam param, byte[] vertices, byte[] normals, byte[] texes, int[] stripIndices, int[] stripLengths, BlockMaterial material) {
         final int matIdx = material.id;
 
         if (vertices.length + vertCount > MAX_VERTICES) {
@@ -169,7 +168,18 @@ public final class ChunkRenderer {
         final int startingVertIdx = vertCount;
         
         final int vertLen = vertices.length;
-        System.arraycopy(vertices, 0, this.vertices, vertCount, vertLen);
+        
+        final byte x = (byte) param.localBlockX;
+        final byte y = (byte) param.localBlockY;
+        final byte z = (byte) param.localBlockZ;
+        
+        for (int n = 0; n < vertLen; n += 3) {
+            this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + x);
+            this.vertices[startingVertIdx + n + 1] = (byte) (vertices[n + 1] + y);
+            this.vertices[startingVertIdx + n + 2] = (byte) (vertices[n + 2] + z);
+        }
+        
+        
         System.arraycopy(normals, 0, this.normals, vertCount, vertLen);
         System.arraycopy(texes, 0, this.texes, vertCount, vertLen);
         vertCount += vertLen;

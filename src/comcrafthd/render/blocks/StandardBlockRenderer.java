@@ -74,9 +74,9 @@ public class StandardBlockRenderer implements IBlockRenderer {
         this.blockMaterial = blockMaterial;
     }
 
-    public void render(BlockRenderParam param) {
+    public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
         for (int n = 0; n < 6; ++n) {
-            param.chunkRenderer.render(VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
+            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
         }
     }
 

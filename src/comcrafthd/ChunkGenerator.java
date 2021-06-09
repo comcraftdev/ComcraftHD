@@ -21,7 +21,7 @@ public final class ChunkGenerator {
         
         Chunk res = chunk;
         chunk = null;
-        return chunk;
+        return res;
     }
     
     private void generateImpl() {
@@ -31,7 +31,7 @@ public final class ChunkGenerator {
     }
     
     private void fillRect(int localBlockX, int localBlockY, int localBlockZ, int width, int height, int depth, short value) {
-        for (int y = 0; y < height; ++y) {
+        for (int y = localBlockY; y < height; ++y) {
             for (int x = localBlockX; x < width; ++x) {
                 for (int z = localBlockZ; z < depth; ++z) {
                     chunk.set(x, y, z, value);

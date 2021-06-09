@@ -13,6 +13,6 @@ import comcrafthd.Block;
  */
 public interface IBlockRenderer {
     
-    public void render(BlockRenderParam param);
+    public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param);
     
 }

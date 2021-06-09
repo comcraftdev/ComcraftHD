@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-package comcrafthd;
+package comcrafthd.render;
 
-import comcrafthd.render.BlockMaterial;
 import javax.microedition.m3g.Appearance;
+import javax.microedition.m3g.Material;
+import javax.microedition.m3g.PolygonMode;
 
 /**
  *
@@ -19,19 +20,27 @@ public final class BlockMaterialList {
     
     public final BlockMaterial[] materials = new BlockMaterial[MAX_MATERIALS];
     
-    public final BlockMaterial standardMat = createMaterial(0);
+    public final BlockMaterial standardMat = createTestMaterial(0);
     
-    private BlockMaterial createMaterial(int idx) {
+    private BlockMaterial createTestMaterial(int idx) {
         if (materials[idx] != null) {
             throw new RuntimeException("Material exists: " + idx);
         }
+
+        Material mat = new Material();
+        mat.setColor(Material.EMISSIVE, 0xFF00FF);
+
+        PolygonMode polMod = new PolygonMode();
+        polMod.setCulling(PolygonMode.CULL_NONE);
         
         Appearance apr = new Appearance();
+        apr.setMaterial(mat);
+        apr.setPolygonMode(polMod);
         
-        BlockMaterial mat = new BlockMaterial((byte) idx, apr);
+        BlockMaterial blockMat = new BlockMaterial((byte) idx, apr);
         
-        materials[idx] = mat;
-        return mat;
+        materials[idx] = blockMat;
+        return blockMat;
     }
     
 }

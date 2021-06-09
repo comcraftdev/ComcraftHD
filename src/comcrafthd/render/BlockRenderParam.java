@@ -13,8 +13,6 @@ import comcrafthd.Block;
  */
 public final class BlockRenderParam {
 
-    public final ChunkRenderer chunkRenderer;
-    
     public int blockX;
     public int blockY;
     public int blockZ;
@@ -25,8 +23,4 @@ public final class BlockRenderParam {
     public byte meta;
     public Block block;
     
-    public BlockRenderParam(ChunkRenderer chunkRenderer) {
-        this.chunkRenderer = chunkRenderer;
-    }
-
 }

@@ -12,19 +12,10 @@ package comcrafthd;
  */
 public final class ChunkList {
 
-    public static final int DEFAULT_MAX_CHUNKS = 64;
+    public static final int MAX_CHUNKS = 256;
     
-    public int maxChunks;
-    
-    public Chunk[] chunks;
-    public int chunksSize;
-    
-    public void initialize() {
-        maxChunks = DEFAULT_MAX_CHUNKS;
-        
-        chunks = new Chunk[maxChunks];
-        chunksSize = 0;
-    }
+    public final Chunk[] chunks = new Chunk[MAX_CHUNKS];
+    public int chunksSize = 0;
     
     public void loadAround(int blockX, int blockZ, int chunkRadius) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
@@ -44,22 +35,27 @@ public final class ChunkList {
     }
     
     public void loadChunk(short chunkX, short chunkZ) {
+        Log.debug(this, "loadChunk() entered " + chunkX + ":" + chunkZ);
+        
         if (chunkExists(chunkX, chunkZ)) {
             return;
         }
         
-        if (chunksSize == maxChunks) {
+        if (chunksSize == MAX_CHUNKS) {
+            Log.debug(this, "loadChunk() max chunks");
             return;
         }
         
         Chunk chunk = ComcraftGame.instance.chunkGenerator.generateChunk(chunkX, chunkZ);
         chunks[chunksSize++] = chunk;
+        
+        Log.debug(this, "loadChunk() finished " + chunk);
     }
     
     public boolean chunkExists(short chunkX, short chunkZ) {
         for (int n = chunksSize - 1; n >= 0; --n) {
             Chunk chunk = chunks[n];
-            if (chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
+            if (chunk != null && chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
                 return true;
             }
         }

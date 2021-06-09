@@ -39,7 +39,7 @@ public final class Chunk {
     }
     
     public void set(int localBlockX, int localBlockY, int localBlockZ, short value) {
-        int partitionY = (localBlockY << Chunk.BLOCK_TO_PARTITION_SHIFT);
+        int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
         int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
         
         if (partitions[partitionY] == null) {
@@ -53,7 +53,7 @@ public final class Chunk {
     }
     
     public short get(int localBlockX, int localBlockY, int localBlockZ) {
-        int partitionY = (localBlockY << Chunk.BLOCK_TO_PARTITION_SHIFT);
+        int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
         int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
         
         if (partitions[partitionY] == null) {
@@ -61,5 +61,9 @@ public final class Chunk {
         }
         
         return partitions[partitionY].get(localBlockX, localPartitionY, localBlockZ);
+    }
+    
+    public String toString() {
+        return "Chunk(" + chunkX + ":" + chunkZ + ")";
     }
 }
