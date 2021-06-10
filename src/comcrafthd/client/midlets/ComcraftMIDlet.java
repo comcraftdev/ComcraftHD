@@ -466,9 +466,7 @@ comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postIn
     private void startGame(ComcraftGameConfiguration gameConfiguration) {
         stopGame();
 
-        ComcraftGame game = new ComcraftGame(gameConfiguration);
-        
-        currentGameThread = new ComcraftGameThread(game);
+        currentGameThread = new ComcraftGameThread(gameConfiguration);
         currentGameThread.start();
     }
 

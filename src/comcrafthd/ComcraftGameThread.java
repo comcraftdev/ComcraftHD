@@ -21,16 +21,16 @@ public final class ComcraftGameThread implements Runnable {
 
     private Thread gameThread;
     
-    public ComcraftGame comcraftGame;
+    private final ComcraftGameConfiguration gameConfiguration;
     
-    public ComcraftGameThread(ComcraftGame comcraftGame) {
+    public ComcraftGameThread(ComcraftGameConfiguration gameConfiguration) {
         if (instance != null) {
             throw new IllegalStateException("ComcraftGameThread");
         }
         
         instance = this;
         
-        this.comcraftGame = comcraftGame;
+        this.gameConfiguration = gameConfiguration;
         
         gameThread = new Thread(this);
     }
@@ -69,7 +69,9 @@ public final class ComcraftGameThread implements Runnable {
     public void run() {
         Log.info(this, "run() entered");
 
-        final ComcraftGame game = this.comcraftGame;
+        final ComcraftGame game = new ComcraftGame(gameConfiguration);
+        
+        Log.info(this, "run() game created");
         
         Time.reset();
 
@@ -103,7 +105,6 @@ public final class ComcraftGameThread implements Runnable {
         game.clear();
         
         this.gameThread = null;
-        this.comcraftGame = null;
         
         instance = null;
         
