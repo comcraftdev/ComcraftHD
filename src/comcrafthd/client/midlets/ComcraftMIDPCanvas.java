@@ -5,6 +5,7 @@
  */
 package comcrafthd.client.midlets;
 
+import comcrafthd.ComcraftGameThread;
 import comcrafthd.client.Keyboard;
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.game.GameCanvas;
@@ -32,6 +33,14 @@ public final class ComcraftMIDPCanvas extends GameCanvas {
         super.flushGraphics();
     }
 
+    protected void showNotify() {
+        ComcraftGameThread.instance.resume();
+    }
+
+    protected void hideNotify() {
+        ComcraftGameThread.instance.pause();
+    }
+    
     protected void keyRepeated(int keyCode) {
 //        keyboard.notifyKeyRepeated(keyCode);
     }
@@ -43,5 +52,5 @@ public final class ComcraftMIDPCanvas extends GameCanvas {
     protected void keyPressed(int keyCode) {
         keyboard.notifyKeyPressed(keyCode > 0 ? keyCode : getGameAction(keyCode));
     }
-
+    
 }

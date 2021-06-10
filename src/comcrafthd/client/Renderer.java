@@ -128,14 +128,16 @@ public final class Renderer {
         world.addChild(camera);
         world.setActiveCamera(camera);
 
+        Log.info(this, "initializeWorld() finished");
+    }
+    
+    private void addTestCube() {
         try {
             Node testCube = TestCube.getTestCube();
             world.addChild(testCube);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        Log.info(this, "initializeWorld() finished");
     }
 
 }

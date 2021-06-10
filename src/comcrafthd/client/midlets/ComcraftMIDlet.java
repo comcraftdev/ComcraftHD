@@ -5,8 +5,7 @@
  */
 package comcrafthd.client.midlets;
 
-import comcrafthd.ComcraftGame;
-import comcrafthd.ComcraftGameConfiguration;
+import comcrafthd.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
@@ -17,9 +16,11 @@ import org.netbeans.microedition.lcdui.pda.FileBrowser;
  */
 public final class ComcraftMIDlet extends MIDlet implements CommandListener {
 
+    public static ComcraftMIDlet instance;
+
     private boolean midletPaused = false;
 
-    private ComcraftGame currentGame;
+    private ComcraftGameThread currentGameThread;
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private java.util.Hashtable __previousDisplayables = new java.util.Hashtable();
@@ -30,18 +31,14 @@ public final class ComcraftMIDlet extends MIDlet implements CommandListener {
     private Command okCommand1;
     private Command exitCommand2;
     private Command okCommand2;
-    private Form form;
-    private StringItem stringItem;
     private FileBrowser fileBrowser;
     private SplashScreen splashScreen;
     private List MainMenu;
     private ComcraftMIDPCanvas comcraftMIDPCanvas;
 //</editor-fold>//GEN-END:|fields|0|
 
-    /**
-     * The HelloMIDlet constructor.
-     */
     public ComcraftMIDlet() {
+        instance = this;
     }
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -165,23 +162,17 @@ switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|8|67-postActi
         // write pre-action user code here
 switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|12|61-postAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|13|19-preAction
-} else if (displayable == form) {
-    if (command == exitCommand) {//GEN-END:|7-commandAction|13|19-preAction
-        // write pre-action user code here
-exitMIDlet();//GEN-LINE:|7-commandAction|14|19-postAction
-        // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|15|27-preAction
+}//GEN-BEGIN:|7-commandAction|13|27-preAction
 } else if (displayable == splashScreen) {
-    if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|15|27-preAction
+    if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|13|27-preAction
         // write pre-action user code here
-switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|16|27-postAction
+switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|14|27-postAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|17|7-postCommandAction
-        }//GEN-END:|7-commandAction|17|7-postCommandAction
+}//GEN-BEGIN:|7-commandAction|15|7-postCommandAction
+        }//GEN-END:|7-commandAction|15|7-postCommandAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|18|
-//</editor-fold>//GEN-END:|7-commandAction|18|
+}//GEN-BEGIN:|7-commandAction|16|
+//</editor-fold>//GEN-END:|7-commandAction|16|
 
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
@@ -201,41 +192,6 @@ exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-po
     }
 //</editor-fold>//GEN-END:|18-getter|2|
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|14-getter|0|14-preInit
-    /**
-     * Returns an initialized instance of form component.
-     *
-     * @return the initialized component instance
-     */
-    public Form getForm() {
-        if (form == null) {
-//GEN-END:|14-getter|0|14-preInit
-            // write pre-init user code here
-form = new Form("Welcome", new Item[]{getStringItem()});//GEN-BEGIN:|14-getter|1|14-postInit
-            form.addCommand(getExitCommand());
-            form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
-            // write post-init user code here
-}//GEN-BEGIN:|14-getter|2|
-        return form;
-    }
-//</editor-fold>//GEN-END:|14-getter|2|
-
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: stringItem ">//GEN-BEGIN:|16-getter|0|16-preInit
-    /**
-     * Returns an initialized instance of stringItem component.
-     *
-     * @return the initialized component instance
-     */
-    public StringItem getStringItem() {
-        if (stringItem == null) {
-//GEN-END:|16-getter|0|16-preInit
-            // write pre-init user code here
-stringItem = new StringItem("Hello", "Hello, World!");//GEN-LINE:|16-getter|1|16-postInit
-            // write post-init user code here
-}//GEN-BEGIN:|16-getter|2|
-        return stringItem;
-    }
-//</editor-fold>//GEN-END:|16-getter|2|
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: fileBrowser ">//GEN-BEGIN:|22-getter|0|22-preInit
     /**
@@ -338,7 +294,7 @@ String __selectedString = getMainMenu().getString(getMainMenu().getSelectedIndex
 switchDisplayable(null, getComcraftMIDPCanvas());//GEN-LINE:|45-action|2|48-postAction
                 // write post-action user code here
                 startSingleplayerGame();
-} else if (__selectedString.equals("Options")) {//GEN-LINE:|45-action|3|51-preAction
+            } else if (__selectedString.equals("Options")) {//GEN-LINE:|45-action|3|51-preAction
                 // write pre-action user code here
 //GEN-LINE:|45-action|4|51-postAction
                 // write post-action user code here
@@ -445,7 +401,8 @@ okCommand2 = new Command("Ok", Command.OK, 0);//GEN-LINE:|72-getter|1|72-postIni
      * @return the initialized component instance
      */
     public ComcraftMIDPCanvas getComcraftMIDPCanvas() {
-        if (comcraftMIDPCanvas == null) {//GEN-END:|65-getter|0|65-preInit
+        if (comcraftMIDPCanvas == null) {
+//GEN-END:|65-getter|0|65-preInit
             // write pre-init user code here
 comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postInit
             comcraftMIDPCanvas.setTitle("comcraftMIDPCanvas");
@@ -509,14 +466,16 @@ comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postIn
     private void startGame(ComcraftGameConfiguration gameConfiguration) {
         stopGame();
 
-        currentGame = new ComcraftGame(gameConfiguration, this, getComcraftMIDPCanvas());
-        currentGame.start();
+        ComcraftGame game = new ComcraftGame(gameConfiguration);
+        
+        currentGameThread = new ComcraftGameThread(game);
+        currentGameThread.start();
     }
 
     private void stopGame() {
-        if (currentGame != null) {
-            currentGame.stop();
-            currentGame = null;
+        if (currentGameThread != null) {
+            currentGameThread.stop();
+            currentGameThread = null;
         }
     }
 

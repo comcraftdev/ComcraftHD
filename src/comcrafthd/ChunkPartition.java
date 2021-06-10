@@ -34,11 +34,11 @@ public final class ChunkPartition {
         }
     }
     
-    public void set(int localBlockX, int localBlockY, int localBlockZ, short value) {
+    public void set(final int localBlockX, final int localBlockY, final int localBlockZ, final short value) {
         data[(localBlockY << Y_SHIFT) | (localBlockX << X_SHIFT) | localBlockZ] = value;
     }
     
-    public short get(int localBlockX, int localBlockY, int localBlockZ) {
+    public short get(final int localBlockX, final int localBlockY, final int localBlockZ) {
         return data[(localBlockY << Y_SHIFT) | (localBlockX << X_SHIFT) | localBlockZ];
     }
     

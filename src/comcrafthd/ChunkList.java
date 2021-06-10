@@ -29,12 +29,12 @@ public final class ChunkList {
                     continue;
                 }
                 
-                loadChunk((short) (originChunkX + x), (short) (originChunkZ + z));
+                loadChunk(originChunkX + x, originChunkZ + z);
             }
         }
     }
     
-    public void loadChunk(short chunkX, short chunkZ) {
+    public void loadChunk(int chunkX, int chunkZ) {
         Log.debug(this, "loadChunk() entered " + chunkX + ":" + chunkZ);
         
         if (chunkExists(chunkX, chunkZ)) {
@@ -52,7 +52,7 @@ public final class ChunkList {
         Log.debug(this, "loadChunk() finished " + chunk);
     }
     
-    public boolean chunkExists(short chunkX, short chunkZ) {
+    public boolean chunkExists(int chunkX, int chunkZ) {
         for (int n = chunksSize - 1; n >= 0; --n) {
             Chunk chunk = chunks[n];
             if (chunk != null && chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
@@ -60,6 +60,16 @@ public final class ChunkList {
             }
         }
         return false;
+    }
+    
+    public Chunk getChunk(int chunkX, int chunkZ) {
+        for (int n = chunksSize - 1; n >= 0; --n) {
+            Chunk chunk = chunks[n];
+            if (chunk != null && chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
+                return chunk;
+            }
+        }
+        return null;
     }
     
 }

@@ -21,7 +21,7 @@ import javax.microedition.m3g.Texture2D;
  */
 public final class BlockMaterialList {
 
-    public static final int MAX_MATERIALS = 8;
+    public static final int MAX_MATERIALS = 4;
     
     public final BlockMaterial[] materials = new BlockMaterial[MAX_MATERIALS];
     

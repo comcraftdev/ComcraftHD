@@ -38,9 +38,9 @@ public final class Chunk {
         this.chunkZ = chunkZ;
     }
     
-    public void set(int localBlockX, int localBlockY, int localBlockZ, short value) {
-        int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
-        int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
+    public void set(final int localBlockX, final int localBlockY, final int localBlockZ, final short value) {
+        final int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
+        final int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
         
         if (partitions[partitionY] == null) {
             if (value == 0) {
@@ -52,9 +52,9 @@ public final class Chunk {
         partitions[partitionY].set(localBlockX, localPartitionY, localBlockZ, value);
     }
     
-    public short get(int localBlockX, int localBlockY, int localBlockZ) {
-        int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
-        int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
+    public short get(final int localBlockX, final int localBlockY, final int localBlockZ) {
+        final int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
+        final int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);
         
         if (partitions[partitionY] == null) {
             return 0;
