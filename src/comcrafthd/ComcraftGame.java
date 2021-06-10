@@ -28,6 +28,10 @@ public final class ComcraftGame {
     public final CameraMovement cameraMovement;
 
     public ComcraftGame(ComcraftGameConfiguration gameConfiguration) {
+        if (instance != null) {
+            throw new IllegalStateException("ComcraftGame");
+        }
+        
         instance = this;
 
         this.gameConfiguration = gameConfiguration;
@@ -65,7 +69,7 @@ public final class ComcraftGame {
     }
     
     public void clear() {
-        
+        instance = null;
     }
 
 }

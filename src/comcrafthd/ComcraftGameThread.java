@@ -24,6 +24,10 @@ public final class ComcraftGameThread implements Runnable {
     public ComcraftGame comcraftGame;
     
     public ComcraftGameThread(ComcraftGame comcraftGame) {
+        if (instance != null) {
+            throw new IllegalStateException("ComcraftGameThread");
+        }
+        
         instance = this;
         
         this.comcraftGame = comcraftGame;
@@ -100,6 +104,8 @@ public final class ComcraftGameThread implements Runnable {
         
         this.gameThread = null;
         this.comcraftGame = null;
+        
+        instance = null;
         
         Log.info(this, "run() finished");
     }

@@ -5,11 +5,9 @@
  */
 package comcrafthd;
 
-import comcrafthd.client.BlockMaterial;
+import comcrafthd.client.IBlockRenderer;
 import comcrafthd.client.blocks.StandardBlockRenderer;
 import java.util.Vector;
-import javax.microedition.m3g.Appearance;
-import comcrafthd.client.IBlockRenderer;
 
 /**
  *
