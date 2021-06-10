@@ -14,14 +14,14 @@ import comcrafthd.client.ChunkRenderCache;
  */
 public final class Chunk {
     
-    public static final int CHUNK_SIZE = 16; 
+    public static final int CHUNK_SIZE = 8; 
     public static final int CHUNK_HEIGHT = 64;
     public static final int CHUNK_PARTITION_HEIGHT = 8;
     
     public static final int CHUNK_PARTITION_COUNT = CHUNK_HEIGHT / CHUNK_PARTITION_HEIGHT;
 
-    public static final int BLOCK_TO_CHUNK_SHIFT = 4;
-    public static final int BLOCK_TO_CHUNK_AND = 16 - 1;
+    public static final int BLOCK_TO_CHUNK_SHIFT = 3;
+    public static final int BLOCK_TO_CHUNK_AND = 8 - 1;
     
     public static final int BLOCK_TO_PARTITION_SHIFT = 3;
     public static final int BLOCK_TO_PARTITION_AND = 8 - 1;

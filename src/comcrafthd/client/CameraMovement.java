@@ -51,8 +51,8 @@ public final class CameraMovement {
         }
     }
 
-    private static final float ROT_SPEED_X = 45f;
-    private static final float ROT_SPEED_Y = 45f;
+    private static final float ROT_SPEED_X = 60f;
+    private static final float ROT_SPEED_Y = 60f;
 
     private float currRotX = 0;
     private float currRotY = 0;

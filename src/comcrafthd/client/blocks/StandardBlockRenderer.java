@@ -18,8 +18,13 @@ import comcrafthd.client.Renderer;
  */
 public class StandardBlockRenderer implements IBlockRenderer {
 
-    private static final byte BLOCK_SIZE = Renderer.BLOCK_RENDER_SIZE;
-
+    public static final int SIDE_FRONT = 0;
+    public static final int SIDE_BACK = 1;
+    public static final int SIDE_LEFT = 2;
+    public static final int SIDE_RIGHT = 3;
+    public static final int SIDE_TOP = 4;
+    public static final int SIDE_BOTTOM = 5;
+    
     // In this case
     // Front is positive z axis
     // Back is negative z axis
@@ -38,6 +43,9 @@ public class StandardBlockRenderer implements IBlockRenderer {
     // 3 * * * * * 2
     // The ascii diagram above represents the vertices in the first line
     // (the first tri-strip
+    
+    private static final byte BLOCK_SIZE = Renderer.BLOCK_RENDER_SIZE;
+    
     public static final byte[][] VERT = {
         {BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE, 0, BLOCK_SIZE, 0, 0, BLOCK_SIZE}, // front
         {0, BLOCK_SIZE, 0, BLOCK_SIZE, BLOCK_SIZE, 0, 0, 0, 0, BLOCK_SIZE, 0, 0}, // back
@@ -75,11 +83,9 @@ public class StandardBlockRenderer implements IBlockRenderer {
     }
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
-//        for (int n = 0; n < 6; ++n) {
-//            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
-//        }
-        int n = 3;
-        chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
+        for (int n = 0; n < 6; ++n) {
+            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
+        }
     }
 
 }

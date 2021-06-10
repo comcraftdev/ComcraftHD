@@ -64,7 +64,7 @@ public final class TestCube {
 
         // create the VertexBuffer for our object
         VertexBuffer vb = new VertexBuffer();
-        vb.setPositions(vertArray, 1.0f, null); // unit scale, zero bias
+        vb.setPositions(vertArray, 0.1f, null);
         vb.setNormals(normArray);
         vb.setTexCoords(0, texArray, 1.0f, null); // unit scale, zero bias
 

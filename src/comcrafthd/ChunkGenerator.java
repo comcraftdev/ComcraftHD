@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package comcrafthd;
 
 /**
@@ -13,23 +12,23 @@ package comcrafthd;
 public final class ChunkGenerator {
 
     private Chunk chunk;
-    
+
     public Chunk generateChunk(int chunkX, int chunkZ) {
         chunk = new Chunk((short) chunkX, (short) chunkZ);
-        
+
         generateImpl();
-        
+
         Chunk res = chunk;
         chunk = null;
         return res;
     }
-    
+
     private void generateImpl() {
         BlockList blockList = ComcraftGame.instance.blockList;
-        
+
         fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 1, Chunk.CHUNK_SIZE, blockList.stone.fullId);
     }
-    
+
     private void fillRect(int localBlockX, int localBlockY, int localBlockZ, int width, int height, int depth, short value) {
         for (int y = localBlockY; y < height; ++y) {
             for (int x = localBlockX; x < width; ++x) {
@@ -39,5 +38,5 @@ public final class ChunkGenerator {
             }
         }
     }
-    
+
 }

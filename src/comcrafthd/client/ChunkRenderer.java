@@ -30,8 +30,8 @@ public final class ChunkRenderer {
     private final byte[] vertices = new byte[3 * MAX_VERTICES];
     private final byte[] normals = new byte[3 * MAX_VERTICES];
     private final byte[] texes = new byte[2 * MAX_VERTICES];
-    private int vertCount;
-    private int texCount;
+    private int vertCountX3;
+    private int texCountX2;
 
     private final int[][] stripIndices = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
     private final int[][] stripLengths = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
@@ -43,8 +43,8 @@ public final class ChunkRenderer {
     private boolean overflow;
 
     private void clearCounts() {
-        vertCount = 0;
-        texCount = 0;
+        vertCountX3 = 0;
+        texCountX2 = 0;
         overflow = false;
 
         for (int n = stripsIndicesCount.length - 1; n >= 0; --n) {
@@ -114,7 +114,7 @@ public final class ChunkRenderer {
     private Node prepareNode() {
         Log.debug(this, "prepareNode() entered");
 
-        if (vertCount == 0) {
+        if (vertCountX3 == 0) {
             Log.debug(this, "prepareNode() empty");
             return null;
         }
@@ -122,6 +122,8 @@ public final class ChunkRenderer {
         final Chunk chunk = this.chunk;
         final BlockMaterialList materialList = ComcraftGame.instance.blockMaterials;
 
+        final int vertCount = vertCountX3 / 3;
+        
         VertexArray vertArr = new VertexArray(vertCount, 3, 1);
         vertArr.set(0, vertCount, vertices);
 
@@ -135,6 +137,7 @@ public final class ChunkRenderer {
 
         VertexBuffer vertexBuffer = new VertexBuffer();
         vertexBuffer.setPositions(vertArr, 1f / Renderer.BLOCK_RENDER_SIZE, bias);
+//        vertexBuffer.setPositions(vertArr, 0.05f, bias);
         vertexBuffer.setNormals(normArr);
         vertexBuffer.setTexCoords(0, texArr, 1f, null);
 
@@ -181,7 +184,7 @@ public final class ChunkRenderer {
     public void render(BlockRenderParam param, byte[] vertices, byte[] normals, byte[] texes, int[] stripIndices, int[] stripLengths, BlockMaterial material) {
         final int matIdx = material.id;
 
-        if (vertices.length + vertCount > MAX_VERTICES) {
+        if (vertices.length + vertCountX3 > MAX_VERTICES) {
             Log.debug(this, "render() max vert");
             overflow = true;
             return;
@@ -192,13 +195,14 @@ public final class ChunkRenderer {
             return;
         }
 
-        final int startingVertIdx = vertCount;
+        final int startingVertIdx = vertCountX3;
+        final int startingVertIdxForIndices = vertCountX3 / 3;
 
         final int vertLen = vertices.length;
 
-        final byte ox = (byte) (param.localBlockX * Renderer.BLOCK_RENDER_SIZE);
-        final byte oy = (byte) (param.localBlockY * Renderer.BLOCK_RENDER_SIZE);
-        final byte oz = (byte) (param.localBlockZ * Renderer.BLOCK_RENDER_SIZE);
+        final int ox = (byte) (param.localBlockX * Renderer.BLOCK_RENDER_SIZE);
+        final int oy = (byte) (param.localBlockY * Renderer.BLOCK_RENDER_SIZE);
+        final int oz = (byte) (param.localBlockZ * Renderer.BLOCK_RENDER_SIZE);
 
         for (int n = 0; n < vertLen; n += 3) {
             this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + ox);
@@ -206,17 +210,17 @@ public final class ChunkRenderer {
             this.vertices[startingVertIdx + n + 2] = (byte) (vertices[n + 2] + oz);
         }
 
-        System.arraycopy(normals, 0, this.normals, vertCount, vertLen);
-        vertCount += vertLen;
+        System.arraycopy(normals, 0, this.normals, vertCountX3, vertLen);
+        vertCountX3 += vertLen;
 
-        System.arraycopy(texes, 0, this.texes, texCount, texes.length);
-        texCount += texes.length;
+        System.arraycopy(texes, 0, this.texes, texCountX2, texes.length);
+        texCountX2 += texes.length;
 
         final int stripLen = stripIndices.length;
 
         final int startingIndicesIdx = stripsIndicesCount[matIdx];
         for (int n = 0; n < stripLen; ++n) {
-            this.stripIndices[matIdx][startingIndicesIdx + n] = stripIndices[n] + startingVertIdx;
+            this.stripIndices[matIdx][startingIndicesIdx + n] = stripIndices[n] + startingVertIdxForIndices;
         }
         stripsIndicesCount[matIdx] += stripLen;
 

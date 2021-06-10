@@ -60,7 +60,7 @@ public final class Renderer {
         g3d.clear(null);
         g3d.render(world);
         g3d.releaseTarget();
-
+        
         comcraftCanvas.flushGraphics();
     }
 
@@ -98,12 +98,23 @@ public final class Renderer {
         background.setColor(0x87ceeb);
         world.setBackground(background);
 
-        Light myLight = new Light();
-        myLight.setColor(0xffffff); // white light
-        myLight.setIntensity(1.25f);
+        Light ambientLigth = new Light();
+        ambientLigth.setMode(Light.AMBIENT);
+        ambientLigth.setColor(0xffffff);
+        ambientLigth.setIntensity(1f);
+        
+        world.addChild(ambientLigth);
+        
+        Light directionalLight = new Light();
+        directionalLight.setMode(Light.DIRECTIONAL);
+        directionalLight.setColor(0xffffff);
+        directionalLight.setIntensity(1f);
+        
+        directionalLight.setOrientation(20f, 0, 1f, 0);
+        directionalLight.postRotate(80f, -1f, 0, 0);
 
-        world.addChild(myLight);
-
+        world.addChild(directionalLight);
+        
         camera = new Camera();
         camera.setPerspective(90.0f, // field of view
                 (float) comcraftCanvas.getWidth() / (float) comcraftCanvas.getHeight(), // aspectRatio
@@ -115,12 +126,12 @@ public final class Renderer {
         world.addChild(camera);
         world.setActiveCamera(camera);
 
-//        try {
-//            Node testCube = TestCube.getTestCube();
-//            world.addChild(testCube);
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            Node testCube = TestCube.getTestCube();
+            world.addChild(testCube);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
         Log.info(this, "initializeWorld() finished");
     }
