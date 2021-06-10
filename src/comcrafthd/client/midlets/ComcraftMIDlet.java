@@ -461,6 +461,7 @@ comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postIn
      * terminated and all resources has to be released.
      */
     public void destroyApp(boolean unconditional) {
+        stopGame();
     }
 
     private void startGame(ComcraftGameConfiguration gameConfiguration) {

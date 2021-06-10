@@ -30,6 +30,7 @@ public final class ChunkRenderer {
     private final byte[] vertices = new byte[3 * MAX_VERTICES];
     private final byte[] normals = new byte[3 * MAX_VERTICES];
     private final byte[] texes = new byte[2 * MAX_VERTICES];
+    private final byte[] colors = new byte[3 * MAX_VERTICES];
     private int vertCountX3;
     private int texCountX2;
 
@@ -133,12 +134,16 @@ public final class ChunkRenderer {
         VertexArray texArr = new VertexArray(vertCount, 2, 1);
         texArr.set(0, vertCount, texes);
 
+        VertexArray colArr = new VertexArray(vertCount, 3, 1);
+        colArr.set(0, vertCount, colors);
+        
         final float[] bias = {chunk.chunkX * Chunk.CHUNK_SIZE, 0, chunk.chunkZ * Chunk.CHUNK_SIZE};
 
         VertexBuffer vertexBuffer = new VertexBuffer();
         vertexBuffer.setPositions(vertArr, 1f / Renderer.BLOCK_RENDER_SIZE, bias);
         vertexBuffer.setNormals(normArr);
         vertexBuffer.setTexCoords(0, texArr, 1f / Renderer.TEXTURE_ATLAS_SIZE, null);
+        vertexBuffer.setColors(colArr);
 
         int usedMaterialCount = 0;
 
@@ -187,6 +192,7 @@ public final class ChunkRenderer {
             final byte[] texes,
             final byte texOffsetX,
             final byte texOffsetY,
+            final byte[] colors,
             final int[] stripIndices,
             final int[] stripLengths,
             final BlockMaterial material) {
@@ -220,6 +226,7 @@ public final class ChunkRenderer {
         }
 
         System.arraycopy(normals, 0, this.normals, vertCountX3, vertLen);
+        System.arraycopy(colors, 0, this.colors, vertCountX3, vertLen);
         vertCountX3 += vertLen;
 
         final int startingTexesIdx = texCountX2;

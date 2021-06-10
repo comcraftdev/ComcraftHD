@@ -33,6 +33,7 @@ public final class BlockMaterialList {
         }
 
         Material mat = new Material();
+        mat.setVertexColorTrackingEnable(true);
 
         Appearance apr = new Appearance();
         apr.setMaterial(mat);

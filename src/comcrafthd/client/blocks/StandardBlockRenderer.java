@@ -21,13 +21,6 @@ import comcrafthd.client.Renderer;
  */
 public class StandardBlockRenderer implements IBlockRenderer {
 
-    public static final int SIDE_FRONT = 0;
-    public static final int SIDE_BACK = 1;
-    public static final int SIDE_LEFT = 2;
-    public static final int SIDE_RIGHT = 3;
-    public static final int SIDE_TOP = 4;
-    public static final int SIDE_BOTTOM = 5;
-
     // In this case
     // Front is positive z axis
     // Back is negative z axis
@@ -76,37 +69,47 @@ public class StandardBlockRenderer implements IBlockRenderer {
 
     private static final int[] STRIP_LEN = {4};
 
-    private static final int[][] SIDE_OFFSETS = {
-        {0, 0, 1}, // front
-        {0, 0, -1}, // back
-        {-1, 0, 0}, // left
-        {1, 0, 0}, // right
-        {0, 1, 0}, // top
-        {0, -1, 0} // bottom
-    };
+    private static final byte W = (byte) 0xFF;
+
+    public static final byte[][] DEFAULT_COLORS = createDefaultColorArray();
+
+    public static byte[][] createDefaultColorArray() {
+        byte[][] arr = {
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W}
+        };
+        return arr;
+    }
 
     private final BlockMaterial blockMaterial;
 
-    private final byte texX;
-    private final byte texY;
+    private final byte[] texX;
+    private final byte[] texY;
 
-    public StandardBlockRenderer(BlockMaterial blockMaterial, byte texX, byte texY) {
+    private final byte[][] colors;
+
+    public StandardBlockRenderer(BlockMaterial blockMaterial, byte[] texX, byte[] texY, byte[][] colors) {
         this.blockMaterial = blockMaterial;
         this.texX = texX;
         this.texY = texY;
+        this.colors = colors;
     }
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
         final ChunkWorld chunkWorld = ComcraftGame.instance.chunkWorld;
         final BlockList blockList = ComcraftGame.instance.blockList;
-        
-        for (int side = 0; side < 6; ++side) {
-            if (!isSideOccluded(chunkWorld, blockList, param, SIDE_OFFSETS[side])) {
-                chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], texX, texY, STRIP_IND, STRIP_LEN, blockMaterial);
+
+        for (int side = 0; side < Block.MAX_SIDES; ++side) {
+            if (!isSideOccluded(chunkWorld, blockList, param, Block.SIDE_OFFSETS[side])) {
+                chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], texX[side], texY[side], colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
             }
         }
     }
-    
+
     private boolean isSideOccluded(final ChunkWorld chunkWorld, final BlockList blockList, final BlockRenderParam param, final int[] side) {
         final short value = chunkWorld.get(param.blockX + side[0], param.blockY + side[1], param.blockZ + side[2]);
         final Block block = blockList.get(value);

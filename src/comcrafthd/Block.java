@@ -21,6 +21,24 @@ public class Block {
     
     public static final short BLOCK_METAID_MASK = (short) 0x000F;
 
+    public static final int MAX_SIDES = 6;
+    
+    public static final int SIDE_FRONT = 0;
+    public static final int SIDE_BACK = 1;
+    public static final int SIDE_LEFT = 2;
+    public static final int SIDE_RIGHT = 3;
+    public static final int SIDE_TOP = 4;
+    public static final int SIDE_BOTTOM = 5;
+    
+    public static final int[][] SIDE_OFFSETS = {
+        {0, 0, 1}, // front
+        {0, 0, -1}, // back
+        {-1, 0, 0}, // left
+        {1, 0, 0}, // right
+        {0, 1, 0}, // top
+        {0, -1, 0} // bottom
+    };
+    
     public final short fullId;
 
     public final IBlockRenderer blockRenderer;
@@ -31,6 +49,10 @@ public class Block {
         fullId = (short) ((metaId << BLOCK_META_SHIFT) | id);
         
         this.blockRenderer = blockRenderer;
+    }
+    
+    public String toString() {
+        return "Block(id:" + getId() + ", metaId:" + getMetaId() + ")";
     }
 
     public byte getId() {

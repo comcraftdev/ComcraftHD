@@ -41,7 +41,7 @@ public final class BlockCreator {
                 variants.set((byte) k, (Block) list.elementAt(k));
             }
 
-            blockList.register(variants);
+            blockList.registerVariant(variants);
 
             list.removeAllElements();
             blocks[n] = null;
@@ -49,12 +49,14 @@ public final class BlockCreator {
     }
 
     public Block createStandard(int id, int metaId, int texX, int texY) {
-        IBlockRenderer standardRenderer = new StandardBlockRenderer(ComcraftGame.instance.blockMaterials.standardMat, (byte) texX, (byte) texY);
-
-        Block block = new Block((byte) id, (byte) metaId, standardRenderer);
-
-        add(block);
-        return block;
+        throw new UnsupportedOperationException();
+        
+//        IBlockRenderer standardRenderer = new StandardBlockRenderer(ComcraftGame.instance.blockMaterials.standardMat, (byte) texX, (byte) texY);
+//
+//        Block block = new Block((byte) id, (byte) metaId, standardRenderer);
+//
+//        add(block);
+//        return block;
     }
 
 }

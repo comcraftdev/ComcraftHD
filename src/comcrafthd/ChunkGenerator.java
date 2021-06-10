@@ -24,12 +24,16 @@ public final class ChunkGenerator {
     }
 
     private void generateImpl() {
-        BlockList blockList = ComcraftGame.instance.blockList;
+        BlockSeedList blocks = ComcraftGame.instance.blockSeedList;
 
-        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 1, Chunk.CHUNK_SIZE, blockList.stone.fullId);
+        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, blocks.stone.fullId);
+        
+        fillRect(0, 3, 0, Chunk.CHUNK_SIZE, 5, Chunk.CHUNK_SIZE, blocks.grass.fullId);
     }
 
-    private void fillRect(int localBlockX, int localBlockY, int localBlockZ, int width, int height, int depth, short value) {
+    private void fillRect(final int localBlockX, final int localBlockY, final int localBlockZ, final int width, final int height, final int depth, final short value) {
+        final Chunk chunk = this.chunk;
+        
         for (int y = localBlockY; y < height; ++y) {
             for (int x = localBlockX; x < width; ++x) {
                 for (int z = localBlockZ; z < depth; ++z) {

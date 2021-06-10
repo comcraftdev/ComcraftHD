@@ -103,7 +103,7 @@ public final class Renderer {
         Light ambientLigth = new Light();
         ambientLigth.setMode(Light.AMBIENT);
         ambientLigth.setColor(0xffffff);
-        ambientLigth.setIntensity(1f);
+        ambientLigth.setIntensity(0.3f);
         
         world.addChild(ambientLigth);
         
