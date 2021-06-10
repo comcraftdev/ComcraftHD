@@ -25,7 +25,7 @@ public class Block {
 
     public final IBlockRenderer blockRenderer;
     
-    public final boolean hidesNeighbourFace = true;
+    public final boolean occludesNeighbourFace = true;
     
     public Block(byte id, byte metaId, IBlockRenderer blockRenderer) {
         fullId = (short) ((metaId << BLOCK_META_SHIFT) | id);

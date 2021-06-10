@@ -17,6 +17,10 @@ public final class BlockList {
         seedBlockList();
     }
 
+    public Block get(short value) {
+        return get(Block.getId(value), Block.getMeta(value));
+    }
+    
     public Block get(byte id, byte meta) {
         BlockVariants variant = blocks[ByteHelper.toUnsignedByte(id)];
         if (variant == null) {

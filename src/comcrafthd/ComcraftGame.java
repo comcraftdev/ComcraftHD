@@ -17,12 +17,12 @@ public final class ComcraftGame {
 
     public final ComcraftGameConfiguration gameConfiguration;
 
-    public final BlockList blockList;
     public final ChunkPartitionPool chunkPartitionPool;
     public final ChunkGenerator chunkGenerator;
-    public final Renderer renderer;
     public final ChunkList chunkList;
     public final ChunkWorld chunkWorld;
+    public final BlockList blockList;
+    public final Renderer renderer;
     public final BlockMaterialList blockMaterials;
     public final KeyboardMapping keyboardMapping;
     public final CameraMovement cameraMovement;
@@ -31,18 +31,18 @@ public final class ComcraftGame {
         if (instance != null) {
             throw new IllegalStateException("ComcraftGame");
         }
-        
+
         instance = this;
 
         this.gameConfiguration = gameConfiguration;
 
-        blockMaterials = new BlockMaterialList();
-        blockList = new BlockList();
         chunkPartitionPool = new ChunkPartitionPool();
         chunkGenerator = new ChunkGenerator();
-        renderer = new Renderer();
         chunkList = new ChunkList();
         chunkWorld = new ChunkWorld();
+        blockMaterials = new BlockMaterialList();
+        blockList = new BlockList();
+        renderer = new Renderer();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
     }
@@ -67,7 +67,7 @@ public final class ComcraftGame {
 
         renderer.render();
     }
-    
+
     public void clear() {
         instance = null;
     }

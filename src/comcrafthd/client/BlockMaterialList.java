@@ -33,7 +33,6 @@ public final class BlockMaterialList {
         }
 
         Material mat = new Material();
-        mat.setColor(Material.EMISSIVE, 0xFF00FF);
 
         Appearance apr = new Appearance();
         apr.setMaterial(mat);

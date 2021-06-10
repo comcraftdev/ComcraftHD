@@ -28,6 +28,10 @@ public final class ChunkWorld {
     }
     
     public short get(final int blockX, final int blockY, final int blockZ) {
+        if (blockY < 0 || blockY > Chunk.CHUNK_HEIGHT) {
+            return 0;
+        }
+        
         final int chunkX = blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT;
         final int chunkZ = blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT;
         
