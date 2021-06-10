@@ -6,9 +6,14 @@
 
 package comcrafthd.client;
 
+import java.io.IOException;
 import javax.microedition.m3g.Appearance;
+import javax.microedition.m3g.Image2D;
+import javax.microedition.m3g.Loader;
 import javax.microedition.m3g.Material;
+import javax.microedition.m3g.Object3D;
 import javax.microedition.m3g.PolygonMode;
+import javax.microedition.m3g.Texture2D;
 
 /**
  *
@@ -30,12 +35,17 @@ public final class BlockMaterialList {
         Material mat = new Material();
         mat.setColor(Material.EMISSIVE, 0xFF00FF);
 
-        PolygonMode polMod = new PolygonMode();
-        polMod.setCulling(PolygonMode.CULL_NONE);
-        
         Appearance apr = new Appearance();
         apr.setMaterial(mat);
-        apr.setPolygonMode(polMod);
+        
+        try {
+            Image2D image = (Image2D) Loader.load("/terrain.png")[0];
+            
+            Texture2D texture = new Texture2D(image);
+            apr.setTexture(0, texture);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         
         BlockMaterial blockMat = new BlockMaterial((byte) idx, apr);
         

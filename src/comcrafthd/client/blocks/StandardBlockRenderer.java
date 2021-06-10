@@ -78,13 +78,18 @@ public class StandardBlockRenderer implements IBlockRenderer {
 
     private final BlockMaterial blockMaterial;
 
-    public StandardBlockRenderer(BlockMaterial blockMaterial) {
+    public final byte texX;
+    public final byte texY;
+    
+    public StandardBlockRenderer(BlockMaterial blockMaterial, byte texX, byte texY) {
         this.blockMaterial = blockMaterial;
+        this.texX = texX;
+        this.texY = texY;
     }
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
         for (int n = 0; n < 6; ++n) {
-            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], STRIP_IND, STRIP_LEN, blockMaterial);
+            chunkRenderer.render(param, VERT[n], NORM[n], TEX[n], texX, texY, STRIP_IND, STRIP_LEN, blockMaterial);
         }
     }
 

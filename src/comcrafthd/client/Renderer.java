@@ -26,6 +26,8 @@ import javax.microedition.m3g.World;
 public final class Renderer {
 
     public static final byte BLOCK_RENDER_SIZE = 8;
+    
+    public static final int TEXTURE_ATLAS_SIZE = 16;
 
     public final ChunkRenderer chunkRenderer;
 

@@ -123,7 +123,7 @@ public final class ChunkRenderer {
         final BlockMaterialList materialList = ComcraftGame.instance.blockMaterials;
 
         final int vertCount = vertCountX3 / 3;
-        
+
         VertexArray vertArr = new VertexArray(vertCount, 3, 1);
         vertArr.set(0, vertCount, vertices);
 
@@ -137,9 +137,8 @@ public final class ChunkRenderer {
 
         VertexBuffer vertexBuffer = new VertexBuffer();
         vertexBuffer.setPositions(vertArr, 1f / Renderer.BLOCK_RENDER_SIZE, bias);
-//        vertexBuffer.setPositions(vertArr, 0.05f, bias);
         vertexBuffer.setNormals(normArr);
-        vertexBuffer.setTexCoords(0, texArr, 1f, null);
+        vertexBuffer.setTexCoords(0, texArr, 1f / Renderer.TEXTURE_ATLAS_SIZE, null);
 
         int usedMaterialCount = 0;
 
@@ -181,7 +180,17 @@ public final class ChunkRenderer {
         return mesh;
     }
 
-    public void render(BlockRenderParam param, byte[] vertices, byte[] normals, byte[] texes, int[] stripIndices, int[] stripLengths, BlockMaterial material) {
+    public void render(
+            final BlockRenderParam param,
+            final byte[] vertices,
+            final byte[] normals,
+            final byte[] texes,
+            final byte texOffsetX,
+            final byte texOffsetY,
+            final int[] stripIndices,
+            final int[] stripLengths,
+            final BlockMaterial material) {
+        
         final int matIdx = material.id;
 
         if (vertices.length + vertCountX3 > MAX_VERTICES) {
@@ -213,8 +222,13 @@ public final class ChunkRenderer {
         System.arraycopy(normals, 0, this.normals, vertCountX3, vertLen);
         vertCountX3 += vertLen;
 
-        System.arraycopy(texes, 0, this.texes, texCountX2, texes.length);
-        texCountX2 += texes.length;
+        final int startingTexesIdx = texCountX2;
+        final int texLen = texes.length;
+        for (int n = 0; n < texLen; n += 2) {
+            this.texes[startingTexesIdx + n + 0] = (byte) (texes[n + 0] + texOffsetX);
+            this.texes[startingTexesIdx + n + 1] = (byte) (texes[n + 1] + texOffsetY);
+        }
+        texCountX2 += texLen;
 
         final int stripLen = stripIndices.length;
 
