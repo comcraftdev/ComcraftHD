@@ -28,10 +28,39 @@ public final class ChunkList {
         return (int) (ComcraftPrefs.instance.chunkRenderDistance * ComcraftPrefs.instance.chunkRenderDistance * 3.2f) + 1;
     }
 
-    public void triggerRenderChunks(final ComcraftRenderer renderer) {
+    public void triggerRenderClosestChunk(final ComcraftRenderer renderer, int blockX, int blockZ) {
+        final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
+        final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
+
+        Chunk closest = null;
+        int min = 0;
+
         for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
             final Chunk chunk = (Chunk) e.nextElement();
-            renderer.renderChunkListCallback(chunk);
+
+            if (!areNeighboursLoaded(chunk.chunkX, chunk.chunkZ)) {
+                continue;
+            }
+            
+            synchronized (chunk.renderCache) {
+                if (chunk.renderCache.done || chunk.renderCache.isCacheBeingGenerated) {
+                    continue;
+                }
+            }
+
+            final int x = chunk.chunkX - originChunkX;
+            final int z = chunk.chunkZ - originChunkZ;
+
+            final int dist = x * x + z * z;
+
+            if (closest == null || dist < min) {
+                closest = chunk;
+                min = dist;
+            }
+        }
+
+        if (closest != null) {
+            renderer.renderChunkListCallback(closest);
         }
     }
 
@@ -76,9 +105,9 @@ public final class ChunkList {
                 return;
             }
         }
-        
+
         chunks.remove(getChunkKey(chunk.chunkX, chunk.chunkZ));
-        
+
         ComcraftGame.instance.renderer.dropChunkListCallback(chunk);
     }
 
@@ -108,6 +137,22 @@ public final class ChunkList {
 
     private void addChunk(int chunkX, int chunkZ, Chunk chunk) {
         chunks.put(getChunkKey(chunkX, chunkZ), chunk);
+    }
+    
+    public boolean areNeighboursLoaded(int chunkX, int chunkZ) {
+        if (!chunkExists(chunkX - 1, chunkZ)) {
+            return false;
+        }
+        if (!chunkExists(chunkX + 1, chunkZ)) {
+            return false;
+        }
+        if (!chunkExists(chunkX, chunkZ - 1)) {
+            return false;
+        }
+        if (!chunkExists(chunkX, chunkZ + 1)) {
+            return false;
+        }
+        return true;
     }
 
 }

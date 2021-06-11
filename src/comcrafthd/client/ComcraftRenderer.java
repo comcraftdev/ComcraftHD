@@ -9,6 +9,7 @@ import comcrafthd.Chunk;
 import comcrafthd.ChunkList;
 import comcrafthd.ComcraftGame;
 import comcrafthd.Log;
+import comcrafthd.MathHelper;
 import comcrafthd.client.midlets.ComcraftMIDPCanvas;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
@@ -58,11 +59,9 @@ public final class ComcraftRenderer {
     public void stop() {
         chunkRendererThread.stop();
     }
-    
+
     public void render() {
-        if (chunkRendererThread.hasVaccancy) {
-            ComcraftGame.instance.chunkList.triggerRenderChunks(this);
-        }
+        renderChunksCache();
 
         int hints = Graphics3D.OVERWRITE;
 
@@ -74,24 +73,33 @@ public final class ComcraftRenderer {
         comcraftCanvas.flushGraphics();
     }
 
+    private void renderChunksCache() {
+        if (chunkRendererThread.hasVaccancy) {
+            final CameraMovement cameraMovement = ComcraftGame.instance.cameraMovement;
+
+            final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
+            final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
+
+            ComcraftGame.instance.chunkList.triggerRenderClosestChunk(this, centerBlockX, centerBlockZ);
+        }
+    }
+
     public synchronized void chunkRendererThreadCallback(final Chunk chunk) {
         world.addChild(chunk.renderCache.node);
     }
 
     public void renderChunkListCallback(final Chunk chunk) {
-        if (chunk.renderCache.done == false) {
-            clearChunkRenderCache(chunk);
+        clearChunkRenderCache(chunk);
 
-            if (chunkRendererThread.hasVaccancy) {
-                chunkRendererThread.enqueue(chunk);
-            }
+        if (chunkRendererThread.hasVaccancy) {
+            chunkRendererThread.enqueue(chunk);
         }
     }
 
     public void dropChunkListCallback(final Chunk chunk) {
         clearChunkRenderCache(chunk);
     }
-    
+
     private void clearChunkRenderCache(final Chunk chunk) {
         if (chunk.renderCache.node != null) {
             world.removeChild(chunk.renderCache.node);
