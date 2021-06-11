@@ -55,7 +55,7 @@ public final class ComcraftGame {
         blockList.initialize();
         renderer.initialize();
 
-        chunkList.loadAround(0, 0, ComcraftPrefs.instance.chunkRenderDistance);
+        updateVisibleChunks();
 
         System.gc();
 
@@ -65,9 +65,19 @@ public final class ComcraftGame {
     public void tick() {
         cameraMovement.tick();
 
+        updateVisibleChunks();
+        
         renderer.render();
     }
 
+    private void updateVisibleChunks() {
+        final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
+        final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
+        
+        chunkList.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
+        chunkList.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
+    }
+    
     public void clear() {
         instance = null;
     }

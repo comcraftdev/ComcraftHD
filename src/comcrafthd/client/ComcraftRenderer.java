@@ -26,7 +26,7 @@ import javax.microedition.m3g.World;
 public final class ComcraftRenderer {
 
     public static final byte BLOCK_RENDER_SIZE = 8;
-    
+
     public static final int TEXTURE_ATLAS_SIZE = 16;
 
     public final ChunkRenderer chunkRenderer;
@@ -36,7 +36,7 @@ public final class ComcraftRenderer {
     private final Graphics3D g3d;
 
     public final World world = new World();
-    
+
     public Camera camera;
 
     public ComcraftRenderer() {
@@ -62,31 +62,33 @@ public final class ComcraftRenderer {
         g3d.clear(null);
         g3d.render(world);
         g3d.releaseTarget();
-        
+
         comcraftCanvas.flushGraphics();
     }
-
-    public void renderChunkCallback(Chunk chunk) {
-        if (chunk.renderCache.done == false) {
-                renderChunkCache(chunk);
-            }
-    }
     
-    private void renderChunkCache(Chunk chunk) {
+    public void renderChunkCallback(final Chunk chunk) {
+        if (chunk.renderCache.done == false) {
+            renderChunkCache(chunk);
+        }
+    }
+
+    private void renderChunkCache(final Chunk chunk) {
+        dropChunkCallback(chunk);
+        
+        chunkRenderer.renderChunkCache(chunk);
+
+        if (chunk.renderCache.node != null) {
+            world.addChild(chunk.renderCache.node);
+        }
+    }
+
+    public void dropChunkCallback(final Chunk chunk) {
         if (chunk.renderCache.node != null) {
             world.removeChild(chunk.renderCache.node);
-            chunk.renderCache.node = null;
+            chunk.renderCache.clear();
         }
-
-        Node node = chunkRenderer.renderChunk(chunk);
-        if (node != null) {
-            chunk.renderCache.node = node;
-            world.addChild(node);
-        }
-        
-        chunk.renderCache.done = true;
     }
-    
+
     public static final int SKY_COLOR = 0x87ceeb;
 
     private void initializeWorld() {
@@ -100,19 +102,19 @@ public final class ComcraftRenderer {
         ambientLigth.setMode(Light.AMBIENT);
         ambientLigth.setColor(0xffffff);
         ambientLigth.setIntensity(0.3f);
-        
+
         world.addChild(ambientLigth);
-        
+
         Light directionalLight = new Light();
         directionalLight.setMode(Light.DIRECTIONAL);
         directionalLight.setColor(0xffffff);
         directionalLight.setIntensity(1f);
-        
+
         directionalLight.setOrientation(20f, 0, 1f, 0);
         directionalLight.postRotate(80f, -1f, 0, 0);
 
         world.addChild(directionalLight);
-        
+
         camera = new Camera();
         camera.setPerspective(90.0f, // field of view
                 (float) comcraftCanvas.getWidth() / (float) comcraftCanvas.getHeight(), // aspectRatio
@@ -126,7 +128,7 @@ public final class ComcraftRenderer {
 
         Log.info(this, "initializeWorld() finished");
     }
-    
+
     private void addTestCube() {
         try {
             Node testCube = TestCube.getTestCube();

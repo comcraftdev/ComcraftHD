@@ -56,7 +56,7 @@ public final class ChunkRenderer {
         }
     }
 
-    public Node renderChunk(final Chunk chunk) {
+    public void renderChunkCache(final Chunk chunk) {
         clearCounts();
 
         this.chunk = chunk;
@@ -64,9 +64,11 @@ public final class ChunkRenderer {
         renderChunkWork();
 
         Node node = prepareNode();
-
+        
+        chunk.renderCache.node = node;
+        chunk.renderCache.done = true;
+        
         this.chunk = null;
-        return node;
     }
 
     private void renderChunkWork() {

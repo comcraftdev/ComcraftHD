@@ -38,6 +38,10 @@ public final class Chunk {
         this.chunkZ = chunkZ;
     }
     
+    public static int blockToChunkCoord(final int blockCoord) {
+        return blockCoord >> BLOCK_TO_CHUNK_SHIFT;
+    }
+    
     public void set(final int localBlockX, final int localBlockY, final int localBlockZ, final short value) {
         final int partitionY = (localBlockY >> Chunk.BLOCK_TO_PARTITION_SHIFT);
         final int localPartitionY = (localBlockY & Chunk.BLOCK_TO_PARTITION_AND);

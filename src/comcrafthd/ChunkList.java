@@ -52,12 +52,36 @@ public final class ChunkList {
         }
     }
 
+    public void dropAround(int blockX, int blockZ, int chunkRadius) {
+        final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
+        final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
+
+        final int chunkRadiusSqr = chunkRadius * chunkRadius;
+
+        for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
+            final Chunk chunk = (Chunk) e.nextElement();
+
+            final int x = chunk.chunkX - originChunkX;
+            final int z = chunk.chunkZ - originChunkZ;
+
+            if (x * x + z * z > chunkRadiusSqr) {
+                dropChunk(chunk);
+            }
+        }
+    }
+
+    public void dropChunk(final Chunk chunk) {
+        
+    }
+
     public void loadChunk(int chunkX, int chunkZ) {
-        Log.debug(this, "loadChunk() entered " + chunkX + ":" + chunkZ);
+//        Log.debug(this, "loadChunk() entered " + chunkX + ":" + chunkZ);
 
         if (chunkExists(chunkX, chunkZ)) {
             return;
         }
+
+        Log.debug(this, "loadChunk() loading " + chunkX + ":" + chunkZ);
 
         Chunk chunk = ComcraftGame.instance.chunkGenerator.generateChunk(chunkX, chunkZ);
 

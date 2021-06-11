@@ -49,39 +49,44 @@ public final class CameraMovement {
         if (keyboard.isPressed(mapping.moveRight)) {
             move(1f, 0, 0);
         }
+        
+        updateCamera(ComcraftGame.instance.renderer.camera);
     }
 
     private static final float ROT_SPEED_X = 60f;
     private static final float ROT_SPEED_Y = 60f;
 
-    private float currRotX = 0;
-    private float currRotY = 0;
+    public float rotationX = 0;
+    public float rotationY = 0;
 
     private void rotate(float x, float y) {
-        final Camera camera = ComcraftGame.instance.renderer.camera;
-
-        currRotX += x * Time.dt * ROT_SPEED_X;
-        currRotY += y * Time.dt * ROT_SPEED_Y;
-
-        camera.setOrientation(currRotY, 0f, 1f, 0f);
-        camera.postRotate(currRotX, 1f, 0f, 0f);
+        rotationX += x * Time.dt * ROT_SPEED_X;
+        rotationY += y * Time.dt * ROT_SPEED_Y;
     }
 
     private static final float MOVE_SPEED = 6f;
 
+    public float positionX;
+    public float positionY = 10;
+    public float positionZ;
+    
     private void move(float right, float up, float forward) {
-        final Camera camera = ComcraftGame.instance.renderer.camera;
+        final float forwardX = (float) -Math.sin(Math.toRadians(rotationY));
+        final float forwardZ = (float) -Math.cos(Math.toRadians(rotationY));
 
-        float forwardX = (float) -Math.sin(Math.toRadians(currRotY));
-        float forwardZ = (float) -Math.cos(Math.toRadians(currRotY));
+        final float rightX = (float) Math.sin(Math.toRadians(rotationY) + Math.PI * 0.5);
+        final float rightZ = (float) Math.cos(Math.toRadians(rotationY) + Math.PI * 0.5);
 
-        float rightX = (float) Math.sin(Math.toRadians(currRotY) + Math.PI * 0.5);
-        float rightZ = (float) Math.cos(Math.toRadians(currRotY) + Math.PI * 0.5);
-
-        camera.translate(
-                (forward * forwardX + right * rightX) * MOVE_SPEED * Time.dt,
-                up * MOVE_SPEED * Time.dt,
-                (forward * forwardZ + right * rightZ) * MOVE_SPEED * Time.dt);
+        positionX += (forward * forwardX + right * rightX) * MOVE_SPEED * Time.dt;
+        positionY += up * MOVE_SPEED * Time.dt;
+        positionZ += (forward * forwardZ + right * rightZ) * MOVE_SPEED * Time.dt;
+    }
+    
+    public void updateCamera(final Camera camera) {
+        camera.setOrientation(rotationY, 0f, 1f, 0f);
+        camera.postRotate(rotationX, 1f, 0f, 0f);
+        
+        camera.setTranslation(positionX, positionY, positionZ);
     }
 
 }
