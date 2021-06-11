@@ -92,12 +92,14 @@ public final class Renderer {
         
         chunk.renderCache.done = true;
     }
+    
+    public static final int SKY_COLOR = 0x87ceeb;
 
     private void initializeWorld() {
         Log.info(this, "initializeWorld() entered");
 
         Background background = new Background();
-        background.setColor(0x87ceeb);
+        background.setColor(SKY_COLOR);
         world.setBackground(background);
 
         Light ambientLigth = new Light();

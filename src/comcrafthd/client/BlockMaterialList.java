@@ -6,8 +6,10 @@
 
 package comcrafthd.client;
 
+import comcrafthd.Chunk;
 import java.io.IOException;
 import javax.microedition.m3g.Appearance;
+import javax.microedition.m3g.Fog;
 import javax.microedition.m3g.Image2D;
 import javax.microedition.m3g.Loader;
 import javax.microedition.m3g.Material;
@@ -37,6 +39,17 @@ public final class BlockMaterialList {
 
         Appearance apr = new Appearance();
         apr.setMaterial(mat);
+
+        if (ComcraftPrefs.instance.fogEnabled) {
+            Fog fog = new Fog();
+//            fog.setColor(0xFFFFFF);
+            fog.setColor(Renderer.SKY_COLOR);
+            fog.setLinear(
+                    ComcraftPrefs.instance.chunkRenderDistance * (Chunk.CHUNK_SIZE - 1), 
+                    ComcraftPrefs.instance.chunkRenderDistance * (Chunk.CHUNK_SIZE + 0));
+            
+            apr.setFog(fog);
+        }
         
         try {
             Image2D image = (Image2D) Loader.load("/terrain.png")[0];

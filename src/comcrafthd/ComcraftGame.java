@@ -49,15 +49,13 @@ public final class ComcraftGame {
         cameraMovement = new CameraMovement();
     }
 
-    private static final int DEFAULT_CHUNK_RADIUS = 5;
-
     public void initialize() {
         Log.info(this, "initialize() entered");
 
         blockList.initialize();
         renderer.initialize();
 
-        chunkList.loadAround(0, 0, DEFAULT_CHUNK_RADIUS);
+        chunkList.loadAround(0, 0, ComcraftPrefs.instance.chunkRenderDistance);
 
         System.gc();
 

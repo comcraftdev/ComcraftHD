@@ -6,6 +6,7 @@
 package comcrafthd.client.midlets;
 
 import comcrafthd.*;
+import comcrafthd.client.ComcraftPrefs;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import org.netbeans.microedition.lcdui.SplashScreen;
@@ -31,10 +32,15 @@ public final class ComcraftMIDlet extends MIDlet implements CommandListener {
     private Command okCommand1;
     private Command exitCommand2;
     private Command okCommand2;
+    private Command okCommand3;
+    private Command cancelCommand;
     private FileBrowser fileBrowser;
     private SplashScreen splashScreen;
     private List MainMenu;
     private ComcraftMIDPCanvas comcraftMIDPCanvas;
+    private Form Settings;
+    private TextField settingsTextFieldDistance;
+    private ChoiceGroup settingsChoiceGroupFog;
 //</editor-fold>//GEN-END:|fields|0|
 
     public ComcraftMIDlet() {
@@ -146,33 +152,44 @@ exitMIDlet();//GEN-LINE:|7-commandAction|4|58-postAction
                 // write pre-action user code here
 MainMenuAction();//GEN-LINE:|7-commandAction|6|73-postAction
                 // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|7|67-preAction
+}//GEN-BEGIN:|7-commandAction|7|84-preAction
+} else if (displayable == Settings) {
+    if (command == cancelCommand) {//GEN-END:|7-commandAction|7|84-preAction
+        // write pre-action user code here
+switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|8|84-postAction
+        // write post-action user code here
+} else if (command == okCommand3) {//GEN-LINE:|7-commandAction|9|81-preAction
+        // write pre-action user code here
+        saveSettings();
+        switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|10|81-postAction
+        // write post-action user code here
+}//GEN-BEGIN:|7-commandAction|11|67-preAction
 } else if (displayable == comcraftMIDPCanvas) {
-    if (command == exitCommand2) {//GEN-END:|7-commandAction|7|67-preAction
+    if (command == exitCommand2) {//GEN-END:|7-commandAction|11|67-preAction
         // write pre-action user code here
-switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|8|67-postAction
+switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|12|67-postAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|9|24-preAction
+}//GEN-BEGIN:|7-commandAction|13|24-preAction
 } else if (displayable == fileBrowser) {
-    if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|9|24-preAction
+    if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|13|24-preAction
         // write pre-action user code here
-//GEN-LINE:|7-commandAction|10|24-postAction
+//GEN-LINE:|7-commandAction|14|24-postAction
         // write post-action user code here
-} else if (command == backCommand) {//GEN-LINE:|7-commandAction|11|61-preAction
+} else if (command == backCommand) {//GEN-LINE:|7-commandAction|15|61-preAction
         // write pre-action user code here
-switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|12|61-postAction
+switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|16|61-postAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|13|27-preAction
+}//GEN-BEGIN:|7-commandAction|17|27-preAction
 } else if (displayable == splashScreen) {
-    if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|13|27-preAction
+    if (command == SplashScreen.DISMISS_COMMAND) {//GEN-END:|7-commandAction|17|27-preAction
         // write pre-action user code here
-switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|14|27-postAction
+switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|18|27-postAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|15|7-postCommandAction
-        }//GEN-END:|7-commandAction|15|7-postCommandAction
+}//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
+        }//GEN-END:|7-commandAction|19|7-postCommandAction
         // write post-action user code here
-}//GEN-BEGIN:|7-commandAction|16|
-//</editor-fold>//GEN-END:|7-commandAction|16|
+}//GEN-BEGIN:|7-commandAction|20|
+//</editor-fold>//GEN-END:|7-commandAction|20|
 
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
@@ -266,7 +283,7 @@ okCommand = new Command("Ok", Command.OK, 0);//GEN-LINE:|39-getter|1|39-postInit
             // write pre-init user code here
 MainMenu = new List("ComcraftHD", Choice.IMPLICIT);//GEN-BEGIN:|45-getter|1|45-postInit
             MainMenu.append("Singleplayer", null);
-            MainMenu.append("Options", null);
+            MainMenu.append("Settings", null);
             MainMenu.append("Info", null);
             MainMenu.addCommand(getExitCommand1());
             MainMenu.addCommand(getOkCommand2());
@@ -294,11 +311,12 @@ String __selectedString = getMainMenu().getString(getMainMenu().getSelectedIndex
 switchDisplayable(null, getComcraftMIDPCanvas());//GEN-LINE:|45-action|2|48-postAction
                 // write post-action user code here
                 startSingleplayerGame();
-            } else if (__selectedString.equals("Options")) {//GEN-LINE:|45-action|3|51-preAction
+            } else if (__selectedString.equals("Settings")) {//GEN-LINE:|45-action|3|51-preAction
                 // write pre-action user code here
-//GEN-LINE:|45-action|4|51-postAction
+switchDisplayable(null, getSettings());//GEN-LINE:|45-action|4|51-postAction
                 // write post-action user code here
-} else if (__selectedString.equals("Info")) {//GEN-LINE:|45-action|5|49-preAction
+                 loadSettings();
+            } else if (__selectedString.equals("Info")) {//GEN-LINE:|45-action|5|49-preAction
                 // write pre-action user code here
 //GEN-LINE:|45-action|6|49-postAction
                 // write post-action user code here
@@ -415,6 +433,103 @@ comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postIn
     }
 //</editor-fold>//GEN-END:|65-getter|2|
 
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: Settings ">//GEN-BEGIN:|75-getter|0|75-preInit
+    /**
+     * Returns an initialized instance of Settings component.
+     *
+     * @return the initialized component instance
+     */
+    public Form getSettings() {
+        if (Settings == null) {
+//GEN-END:|75-getter|0|75-preInit
+ // write pre-init user code here
+Settings = new Form("Settings", new Item[]{getSettingsTextFieldDistance(), getSettingsChoiceGroupFog()});//GEN-BEGIN:|75-getter|1|75-postInit
+            Settings.addCommand(getOkCommand3());
+            Settings.addCommand(getCancelCommand());
+            Settings.setCommandListener(this);//GEN-END:|75-getter|1|75-postInit
+ // write post-init user code here
+}//GEN-BEGIN:|75-getter|2|
+        return Settings;
+    }
+//</editor-fold>//GEN-END:|75-getter|2|
+
+
+
+
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand3 ">//GEN-BEGIN:|80-getter|0|80-preInit
+    /**
+     * Returns an initialized instance of okCommand3 component.
+     *
+     * @return the initialized component instance
+     */
+    public Command getOkCommand3() {
+        if (okCommand3 == null) {
+//GEN-END:|80-getter|0|80-preInit
+ // write pre-init user code here
+okCommand3 = new Command("Save", Command.OK, -1);//GEN-LINE:|80-getter|1|80-postInit
+ // write post-init user code here
+}//GEN-BEGIN:|80-getter|2|
+        return okCommand3;
+    }
+//</editor-fold>//GEN-END:|80-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: cancelCommand ">//GEN-BEGIN:|83-getter|0|83-preInit
+    /**
+     * Returns an initialized instance of cancelCommand component.
+     *
+     * @return the initialized component instance
+     */
+    public Command getCancelCommand() {
+        if (cancelCommand == null) {
+//GEN-END:|83-getter|0|83-preInit
+ // write pre-init user code here
+cancelCommand = new Command("Cancel", Command.CANCEL, 0);//GEN-LINE:|83-getter|1|83-postInit
+ // write post-init user code here
+}//GEN-BEGIN:|83-getter|2|
+        return cancelCommand;
+    }
+//</editor-fold>//GEN-END:|83-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: settingsTextFieldDistance ">//GEN-BEGIN:|77-getter|0|77-preInit
+    /**
+     * Returns an initialized instance of settingsTextFieldDistance component.
+     *
+     * @return the initialized component instance
+     */
+    public TextField getSettingsTextFieldDistance() {
+        if (settingsTextFieldDistance == null) {
+//GEN-END:|77-getter|0|77-preInit
+ // write pre-init user code here
+settingsTextFieldDistance = new TextField("Render distance", null, 2, TextField.NUMERIC);//GEN-BEGIN:|77-getter|1|77-postInit
+            settingsTextFieldDistance.setLayout(ImageItem.LAYOUT_DEFAULT | Item.LAYOUT_EXPAND);//GEN-END:|77-getter|1|77-postInit
+ // write post-init user code here
+}//GEN-BEGIN:|77-getter|2|
+        return settingsTextFieldDistance;
+    }
+//</editor-fold>//GEN-END:|77-getter|2|
+
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: settingsChoiceGroupFog ">//GEN-BEGIN:|79-getter|0|79-preInit
+    /**
+     * Returns an initialized instance of settingsChoiceGroupFog component.
+     *
+     * @return the initialized component instance
+     */
+    public ChoiceGroup getSettingsChoiceGroupFog() {
+        if (settingsChoiceGroupFog == null) {
+//GEN-END:|79-getter|0|79-preInit
+ // write pre-init user code here
+settingsChoiceGroupFog = new ChoiceGroup("Fog (experimental)", Choice.EXCLUSIVE);//GEN-BEGIN:|79-getter|1|79-postInit
+            settingsChoiceGroupFog.append("On", null);
+            settingsChoiceGroupFog.append("Off", null);
+            settingsChoiceGroupFog.setLayout(ImageItem.LAYOUT_DEFAULT | Item.LAYOUT_EXPAND);
+            settingsChoiceGroupFog.setSelectedFlags(new boolean[]{true, false});//GEN-END:|79-getter|1|79-postInit
+ // write post-init user code here
+}//GEN-BEGIN:|79-getter|2|
+        return settingsChoiceGroupFog;
+    }
+//</editor-fold>//GEN-END:|79-getter|2|
+
     /**
      * Returns a display instance.
      *
@@ -483,4 +598,22 @@ comcraftMIDPCanvas = new ComcraftMIDPCanvas();//GEN-BEGIN:|65-getter|1|65-postIn
         startGame(gameConfiguration);
     }
 
+    private void loadSettings() {
+        ComcraftPrefs.load();
+        
+        final ComcraftPrefs prefs = ComcraftPrefs.instance;
+        
+        settingsTextFieldDistance.setString("" + prefs.chunkRenderDistance);
+        settingsChoiceGroupFog.setSelectedIndex(prefs.fogEnabled ? 0 : 1 , true);
+    }
+    
+    private void saveSettings() {
+        final ComcraftPrefs prefs = ComcraftPrefs.instance;
+        
+        prefs.chunkRenderDistance = Integer.parseInt(settingsTextFieldDistance.getString());
+        prefs.fogEnabled = settingsChoiceGroupFog.getSelectedIndex() == 0;
+        
+        ComcraftPrefs.save();
+    }
+    
 }

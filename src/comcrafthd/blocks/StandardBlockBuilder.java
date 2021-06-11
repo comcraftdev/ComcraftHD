@@ -75,6 +75,16 @@ public final class StandardBlockBuilder {
         
         return this;
     }
+    
+    public StandardBlockBuilder setAllColor(int col) {
+        setColor(Block.SIDE_BACK, col);
+        setColor(Block.SIDE_BOTTOM, col);
+        setColor(Block.SIDE_FRONT, col);
+        setColor(Block.SIDE_LEFT, col);
+        setColor(Block.SIDE_RIGHT, col);
+        setColor(Block.SIDE_TOP, col);
+        return this;
+    }
 
     public Block build() {
         IBlockRenderer blockRenderer = new StandardBlockRenderer(

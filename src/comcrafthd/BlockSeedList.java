@@ -21,6 +21,8 @@ public final class BlockSeedList {
             .setAllTexture(2, 0)
             .setSidesTexture(3, 0)
             .setTexture(Block.SIDE_TOP, 0, 0)
-            .setColor(Block.SIDE_TOP, 0x79C05A)
+//            .setColor(Block.SIDE_TOP, 0x79C05A)
+//            .setColor(Block.SIDE_TOP, 0x90814D)
+            .setAllColor(0x90814D)
             .build();
 }
