@@ -56,6 +56,8 @@ public final class ChunkRendererThread implements Runnable {
         }
     }
 
+    private int oomCntr = 0;
+    
     private void runImpl() {
         Log.info(this, "runImpl() entered");
         
@@ -89,6 +91,8 @@ public final class ChunkRendererThread implements Runnable {
                 processChunk(chunk);
             }
 
+            oomCntr = 0;
+            
             Thread.yield();
         }
         
@@ -102,9 +106,13 @@ public final class ChunkRendererThread implements Runnable {
             try {
                 runImpl();
             } catch (OutOfMemoryError oom) {
+                if (++oomCntr > 3) {
+                    throw oom;
+                }
+                
                 oom.printStackTrace();
                 
-                System.gc();
+                ComcraftGame.instance.tidyUpMemory();
             }
         }
 

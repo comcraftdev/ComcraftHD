@@ -85,5 +85,9 @@ public final class ComcraftGame {
     public void clear() {
         instance = null;
     }
+    
+    public void tidyUpMemory() {
+        System.gc();
+    }
 
 }
