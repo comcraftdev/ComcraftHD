@@ -31,7 +31,7 @@ public final class ComcraftRenderer {
     public static final int TEXTURE_ATLAS_SIZE = 16;
 
     public final ChunkRenderer chunkRenderer;
-    public final ChunkRendererThread chunkRendererThread;
+    public final ComcraftRendererThread rendererThread;
 
     private final ComcraftMIDPCanvas comcraftCanvas;
     private final Graphics graphics;
@@ -47,17 +47,17 @@ public final class ComcraftRenderer {
         g3d = Graphics3D.getInstance();
 
         chunkRenderer = new ChunkRenderer();
-        chunkRendererThread = new ChunkRendererThread(this, chunkRenderer);
+        rendererThread = new ComcraftRendererThread(this, chunkRenderer);
 
         initializeWorld();
     }
 
     public void initialize() {
-        chunkRendererThread.start();
+        rendererThread.start();
     }
 
     public void stop() {
-        chunkRendererThread.stop();
+        rendererThread.stop();
     }
 
     public synchronized void render() {

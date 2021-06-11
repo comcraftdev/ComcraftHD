@@ -5,7 +5,7 @@
  */
 package comcrafthd;
 
-import comcrafthd.client.ChunkRendererThread;
+import comcrafthd.client.ComcraftRendererThread;
 import comcrafthd.client.ComcraftPrefs;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -77,7 +77,7 @@ public final class ChunkList {
         }
     }
 
-    public void dropAround(int blockX, int blockZ, int chunkRadius, final ChunkRendererThread listener) {
+    public void dropAround(int blockX, int blockZ, int chunkRadius, final ComcraftRendererThread listener) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
 

@@ -15,7 +15,7 @@ import comcrafthd.MathHelper;
  *
  * @author quead
  */
-public final class ChunkRendererThread implements Runnable {
+public final class ComcraftRendererThread implements Runnable {
 
     private final ComcraftRenderer renderer;
     private final ChunkRenderer chunkRenderer;
@@ -23,7 +23,7 @@ public final class ChunkRendererThread implements Runnable {
     private boolean stopped = false;
     private Thread thread;
 
-    public ChunkRendererThread(final ComcraftRenderer renderer, ChunkRenderer chunkRenderer) {
+    public ComcraftRendererThread(final ComcraftRenderer renderer, ChunkRenderer chunkRenderer) {
         this.renderer = renderer;
         this.chunkRenderer = chunkRenderer;
     }
