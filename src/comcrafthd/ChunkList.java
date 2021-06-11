@@ -31,7 +31,7 @@ public final class ChunkList {
     public void triggerRenderChunks(final ComcraftRenderer renderer) {
         for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
             final Chunk chunk = (Chunk) e.nextElement();
-            renderer.renderChunkCallback(chunk);
+            renderer.renderChunkListCallback(chunk);
         }
     }
 
@@ -71,7 +71,15 @@ public final class ChunkList {
     }
 
     public void dropChunk(final Chunk chunk) {
+        synchronized (chunk.renderCache) {
+            if (chunk.renderCache.isCacheBeingGenerated) {
+                return;
+            }
+        }
         
+        chunks.remove(getChunkKey(chunk.chunkX, chunk.chunkZ));
+        
+        ComcraftGame.instance.renderer.dropChunkListCallback(chunk);
     }
 
     public void loadChunk(int chunkX, int chunkZ) {

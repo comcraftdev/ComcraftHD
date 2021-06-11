@@ -102,6 +102,7 @@ public final class ComcraftGameThread implements Runnable {
             Thread.yield();
         }
 
+        game.stop();
         game.clear();
         
         this.gameThread = null;

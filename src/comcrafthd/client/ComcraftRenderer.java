@@ -30,6 +30,7 @@ public final class ComcraftRenderer {
     public static final int TEXTURE_ATLAS_SIZE = 16;
 
     public final ChunkRenderer chunkRenderer;
+    public final ChunkRendererThread chunkRendererThread;
 
     private final ComcraftMIDPCanvas comcraftCanvas;
     private final Graphics graphics;
@@ -40,21 +41,28 @@ public final class ComcraftRenderer {
     public Camera camera;
 
     public ComcraftRenderer() {
-        chunkRenderer = new ChunkRenderer();
-
         comcraftCanvas = ComcraftMIDPCanvas.instance;
         graphics = comcraftCanvas.getGraphics();
         g3d = Graphics3D.getInstance();
+
+        chunkRenderer = new ChunkRenderer();
+        chunkRendererThread = new ChunkRendererThread(chunkRenderer);
 
         initializeWorld();
     }
 
     public void initialize() {
-
+        chunkRendererThread.start();
     }
 
+    public void stop() {
+        chunkRendererThread.stop();
+    }
+    
     public void render() {
-        ComcraftGame.instance.chunkList.triggerRenderChunks(this);
+        if (chunkRendererThread.hasVaccancy) {
+            ComcraftGame.instance.chunkList.triggerRenderChunks(this);
+        }
 
         int hints = Graphics3D.OVERWRITE;
 
@@ -65,24 +73,26 @@ public final class ComcraftRenderer {
 
         comcraftCanvas.flushGraphics();
     }
-    
-    public void renderChunkCallback(final Chunk chunk) {
+
+    public synchronized void chunkRendererThreadCallback(final Chunk chunk) {
+        world.addChild(chunk.renderCache.node);
+    }
+
+    public void renderChunkListCallback(final Chunk chunk) {
         if (chunk.renderCache.done == false) {
-            renderChunkCache(chunk);
+            clearChunkRenderCache(chunk);
+
+            if (chunkRendererThread.hasVaccancy) {
+                chunkRendererThread.enqueue(chunk);
+            }
         }
     }
 
-    private void renderChunkCache(final Chunk chunk) {
-        dropChunkCallback(chunk);
-        
-        chunkRenderer.renderChunkCache(chunk);
-
-        if (chunk.renderCache.node != null) {
-            world.addChild(chunk.renderCache.node);
-        }
+    public void dropChunkListCallback(final Chunk chunk) {
+        clearChunkRenderCache(chunk);
     }
-
-    public void dropChunkCallback(final Chunk chunk) {
+    
+    private void clearChunkRenderCache(final Chunk chunk) {
         if (chunk.renderCache.node != null) {
             world.removeChild(chunk.renderCache.node);
             chunk.renderCache.clear();

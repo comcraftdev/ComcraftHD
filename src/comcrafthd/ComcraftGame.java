@@ -61,6 +61,10 @@ public final class ComcraftGame {
 
         Log.info(this, "initialize() finished");
     }
+    
+    public void stop() {
+        renderer.stop();
+    }
 
     public void tick() {
         cameraMovement.tick();

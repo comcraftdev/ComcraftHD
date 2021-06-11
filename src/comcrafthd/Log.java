@@ -24,6 +24,14 @@ public final class Log {
         System.out.println("INFO: [" + object.getClass().getName() + "] " + msg);
     }
     
+    public static void info(String cls, String msg) {
+        if (CURRENT_LOG_LEVEL > LEVEL_INFO) {
+            return;
+        }
+        
+        System.out.println("INFO: [" + cls + "] " + msg);
+    }
+    
     public static void debug(Object object, String msg) {
         if (CURRENT_LOG_LEVEL > LEVEL_DEBUG) {
             return;
