@@ -21,10 +21,6 @@ public final class Keyboard {
     private final boolean[] quickReleased = new boolean[MAX_KEY];
     
     public Keyboard() {
-        if (instance != null) {
-            throw new IllegalStateException("Keyboard");
-        }
-        
         instance = this;
     }
     

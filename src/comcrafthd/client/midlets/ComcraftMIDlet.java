@@ -167,8 +167,10 @@ switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|8|84-postAction
 } else if (displayable == comcraftMIDPCanvas) {
     if (command == exitCommand2) {//GEN-END:|7-commandAction|11|67-preAction
         // write pre-action user code here
+        stopGame();
 switchDisplayable(null, getMainMenu());//GEN-LINE:|7-commandAction|12|67-postAction
         // write post-action user code here
+        comcraftMIDPCanvas = null;
 }//GEN-BEGIN:|7-commandAction|13|24-preAction
 } else if (displayable == fileBrowser) {
     if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|13|24-preAction
