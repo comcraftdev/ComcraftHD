@@ -3,8 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package comcrafthd;
+
+import comcrafthd.client.ComcraftPrefs;
+import comcrafthd.client.ComcraftRenderer;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 /**
  *
@@ -12,64 +16,66 @@ package comcrafthd;
  */
 public final class ChunkList {
 
-    public static final int MAX_CHUNKS = 256;
-    
-    public final Chunk[] chunks = new Chunk[MAX_CHUNKS];
-    public int chunksSize = 0;
-    
+    public final Hashtable chunks = new Hashtable(getInitialSize());
+
+    private static Integer getChunkKey(final int chunkX, final int chunkZ) {
+        final short x = (short) chunkX;
+        final short z = (short) chunkZ;
+        return new Integer((x << 16) | (z & 0xFFFF));
+    }
+
+    private int getInitialSize() {
+        return (int) (ComcraftPrefs.instance.chunkRenderDistance * ComcraftPrefs.instance.chunkRenderDistance * 3.2f) + 1;
+    }
+
+    public void triggerRenderChunks(final ComcraftRenderer renderer) {
+        for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
+            final Chunk chunk = (Chunk) e.nextElement();
+            renderer.renderChunkCallback(chunk);
+        }
+    }
+
     public void loadAround(int blockX, int blockZ, int chunkRadius) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
 
         final int chunkRadiusSqr = chunkRadius * chunkRadius;
-        
+
         for (int x = -chunkRadius; x <= chunkRadius; ++x) {
             for (int z = -chunkRadius; z <= chunkRadius; ++z) {
                 if (x * x + z * z > chunkRadiusSqr) {
                     continue;
                 }
-                
+
                 loadChunk(originChunkX + x, originChunkZ + z);
             }
         }
     }
-    
+
     public void loadChunk(int chunkX, int chunkZ) {
         Log.debug(this, "loadChunk() entered " + chunkX + ":" + chunkZ);
-        
+
         if (chunkExists(chunkX, chunkZ)) {
             return;
         }
-        
-        if (chunksSize == MAX_CHUNKS) {
-            Log.debug(this, "loadChunk() max chunks");
-            return;
-        }
-        
+
         Chunk chunk = ComcraftGame.instance.chunkGenerator.generateChunk(chunkX, chunkZ);
-        chunks[chunksSize++] = chunk;
-        
+
+        addChunk(chunkX, chunkZ, chunk);
+
         Log.debug(this, "loadChunk() finished " + chunk);
     }
-    
+
     public boolean chunkExists(int chunkX, int chunkZ) {
-        for (int n = chunksSize - 1; n >= 0; --n) {
-            Chunk chunk = chunks[n];
-            if (chunk != null && chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
-                return true;
-            }
-        }
-        return false;
+        return chunks.containsKey(getChunkKey(chunkX, chunkZ));
     }
-    
+
     public Chunk getChunk(int chunkX, int chunkZ) {
-        for (int n = chunksSize - 1; n >= 0; --n) {
-            Chunk chunk = chunks[n];
-            if (chunk != null && chunk.chunkX == chunkX && chunk.chunkZ == chunkZ) {
-                return chunk;
-            }
-        }
-        return null;
+        return (Chunk) chunks.get(getChunkKey(chunkX, chunkZ));
     }
-    
+
+    private void addChunk(int chunkX, int chunkZ, Chunk chunk) {
+        chunks.put(getChunkKey(chunkX, chunkZ), chunk);
+    }
+
 }

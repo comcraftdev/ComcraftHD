@@ -140,9 +140,9 @@ public final class ChunkRenderer {
         final float[] bias = {chunk.chunkX * Chunk.CHUNK_SIZE, 0, chunk.chunkZ * Chunk.CHUNK_SIZE};
 
         VertexBuffer vertexBuffer = new VertexBuffer();
-        vertexBuffer.setPositions(vertArr, 1f / Renderer.BLOCK_RENDER_SIZE, bias);
+        vertexBuffer.setPositions(vertArr, 1f / ComcraftRenderer.BLOCK_RENDER_SIZE, bias);
         vertexBuffer.setNormals(normArr);
-        vertexBuffer.setTexCoords(0, texArr, 1f / Renderer.TEXTURE_ATLAS_SIZE, null);
+        vertexBuffer.setTexCoords(0, texArr, 1f / ComcraftRenderer.TEXTURE_ATLAS_SIZE, null);
         vertexBuffer.setColors(colArr);
 
         int usedMaterialCount = 0;
@@ -215,9 +215,9 @@ public final class ChunkRenderer {
 
         final int vertLen = vertices.length;
 
-        final int ox = (byte) (param.localBlockX * Renderer.BLOCK_RENDER_SIZE);
-        final int oy = (byte) (param.localBlockY * Renderer.BLOCK_RENDER_SIZE);
-        final int oz = (byte) (param.localBlockZ * Renderer.BLOCK_RENDER_SIZE);
+        final int ox = (byte) (param.localBlockX * ComcraftRenderer.BLOCK_RENDER_SIZE);
+        final int oy = (byte) (param.localBlockY * ComcraftRenderer.BLOCK_RENDER_SIZE);
+        final int oz = (byte) (param.localBlockZ * ComcraftRenderer.BLOCK_RENDER_SIZE);
 
         for (int n = 0; n < vertLen; n += 3) {
             this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + ox);

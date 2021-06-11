@@ -43,7 +43,7 @@ public final class BlockMaterialList {
         if (ComcraftPrefs.instance.fogEnabled) {
             Fog fog = new Fog();
 //            fog.setColor(0xFFFFFF);
-            fog.setColor(Renderer.SKY_COLOR);
+            fog.setColor(ComcraftRenderer.SKY_COLOR);
             fog.setLinear(
                     ComcraftPrefs.instance.chunkRenderDistance * (Chunk.CHUNK_SIZE - 1), 
                     ComcraftPrefs.instance.chunkRenderDistance * (Chunk.CHUNK_SIZE + 0));

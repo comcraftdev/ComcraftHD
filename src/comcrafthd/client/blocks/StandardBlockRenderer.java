@@ -13,7 +13,7 @@ import comcrafthd.client.BlockMaterial;
 import comcrafthd.client.BlockRenderParam;
 import comcrafthd.client.ChunkRenderer;
 import comcrafthd.client.IBlockRenderer;
-import comcrafthd.client.Renderer;
+import comcrafthd.client.ComcraftRenderer;
 
 /**
  *
@@ -35,7 +35,7 @@ public class StandardBlockRenderer implements IBlockRenderer {
     // 3 * * * * * 2
     // The ascii diagram above represents the vertices in the first line
     // (the first tri-strip)
-    private static final byte S = Renderer.BLOCK_RENDER_SIZE;
+    private static final byte S = ComcraftRenderer.BLOCK_RENDER_SIZE;
 
     private static final byte[][] VERT = {
         {S, S, S, 0, S, S, S, 0, S, 0, 0, S}, // front

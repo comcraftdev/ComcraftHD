@@ -23,7 +23,7 @@ import javax.microedition.m3g.World;
  *
  * @author quead
  */
-public final class Renderer {
+public final class ComcraftRenderer {
 
     public static final byte BLOCK_RENDER_SIZE = 8;
     
@@ -39,7 +39,7 @@ public final class Renderer {
     
     public Camera camera;
 
-    public Renderer() {
+    public ComcraftRenderer() {
         chunkRenderer = new ChunkRenderer();
 
         comcraftCanvas = ComcraftMIDPCanvas.instance;
@@ -54,7 +54,7 @@ public final class Renderer {
     }
 
     public void render() {
-        renderChunksCache();
+        ComcraftGame.instance.chunkList.triggerRenderChunks(this);
 
         int hints = Graphics3D.OVERWRITE;
 
@@ -66,18 +66,12 @@ public final class Renderer {
         comcraftCanvas.flushGraphics();
     }
 
-    private void renderChunksCache() {
-        ChunkList chunkList = ComcraftGame.instance.chunkList;
-
-        for (int n = chunkList.chunksSize - 1; n >= 0; --n) {
-            Chunk chunk = chunkList.chunks[n];
-
-            if (chunk.renderCache.done == false) {
+    public void renderChunkCallback(Chunk chunk) {
+        if (chunk.renderCache.done == false) {
                 renderChunkCache(chunk);
             }
-        }
     }
-
+    
     private void renderChunkCache(Chunk chunk) {
         if (chunk.renderCache.node != null) {
             world.removeChild(chunk.renderCache.node);

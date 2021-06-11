@@ -23,7 +23,7 @@ public final class ComcraftGame {
     public final ChunkWorld chunkWorld;
     public final BlockList blockList;
     public final BlockSeedList blockSeedList;
-    public final Renderer renderer;
+    public final ComcraftRenderer renderer;
     public final BlockMaterialList blockMaterials;
     public final KeyboardMapping keyboardMapping;
     public final CameraMovement cameraMovement;
@@ -44,7 +44,7 @@ public final class ComcraftGame {
         blockMaterials = new BlockMaterialList();
         blockList = new BlockList();
         blockSeedList = new BlockSeedList();
-        renderer = new Renderer();
+        renderer = new ComcraftRenderer();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
     }
