@@ -57,16 +57,20 @@ public final class ComcraftRendererThread implements Runnable {
         chunkList.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance, this);
         chunkList.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
 
-        final Chunk toRender = chunkList.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
-        if (toRender != null) {
-            chunkRenderer.renderChunkCache(toRender);
-            
-            renderer.threadCallbackAddChunk(toRender);
+        final Chunk chunkToRender = chunkList.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
+        if (chunkToRender != null) {
+            chunkRenderer.renderChunkCache(chunkToRender);
+
+            if (chunkToRender.renderCache.node != null) {
+                renderer.threadCallbackAddChunk(chunkToRender);
+            }
         }
     }
 
     public void dropChunkCallback(final Chunk chunk) {
-        renderer.threadCallbackRemoveChunk(chunk);
+        if (chunk.renderCache.node != null) {
+            renderer.threadCallbackRemoveChunk(chunk);
+        }
 
         chunk.renderCache.done = false;
         chunk.renderCache.node = null;

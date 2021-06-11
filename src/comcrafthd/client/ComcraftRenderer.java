@@ -37,7 +37,7 @@ public final class ComcraftRenderer {
     private final Graphics graphics;
     private final Graphics3D g3d;
 
-    public final World world = new World();
+    private final World world = new World();
 
     public Camera camera;
 
@@ -74,11 +74,9 @@ public final class ComcraftRenderer {
     public synchronized void threadCallbackAddChunk(final Chunk chunk) {
         world.addChild(chunk.renderCache.node);
     }
-    
+
     public synchronized void threadCallbackRemoveChunk(final Chunk chunk) {
-        if (chunk.renderCache.node != null) {
-            world.removeChild(chunk.renderCache.node);
-        }
+        world.removeChild(chunk.renderCache.node);
     }
 
     public static final int SKY_COLOR = 0x87ceeb;

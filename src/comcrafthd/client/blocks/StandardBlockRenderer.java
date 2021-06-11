@@ -111,7 +111,15 @@ public class StandardBlockRenderer implements IBlockRenderer {
     }
 
     private boolean isSideOccluded(final ChunkWorld chunkWorld, final BlockList blockList, final BlockRenderParam param, final int[] side) {
-        final short value = chunkWorld.get(param.blockX + side[0], param.blockY + side[1], param.blockZ + side[2]);
+        final int x = param.blockX + side[0];
+        final int y = param.blockY + side[1];
+        final int z = param.blockZ + side[2];
+        
+        if (y < 0) {
+            return true;
+        }
+        
+        final short value = chunkWorld.get(x, y, z);
         final Block block = blockList.get(value);
         return block == null ? false : block.occludesNeighbourFace;
     }
