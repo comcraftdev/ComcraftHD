@@ -47,7 +47,7 @@ public final class ComcraftRenderer {
         g3d = Graphics3D.getInstance();
 
         chunkRenderer = new ChunkRenderer();
-        chunkRendererThread = new ChunkRendererThread(chunkRenderer);
+        chunkRendererThread = new ChunkRendererThread(this, chunkRenderer);
 
         initializeWorld();
     }
@@ -60,9 +60,7 @@ public final class ComcraftRenderer {
         chunkRendererThread.stop();
     }
 
-    public void render() {
-        renderChunksCache();
-
+    public synchronized void render() {
         int hints = Graphics3D.OVERWRITE;
 
         g3d.bindTarget(graphics, true, hints);
@@ -73,37 +71,13 @@ public final class ComcraftRenderer {
         comcraftCanvas.flushGraphics();
     }
 
-    private void renderChunksCache() {
-        if (chunkRendererThread.hasVaccancy) {
-            final CameraMovement cameraMovement = ComcraftGame.instance.cameraMovement;
-
-            final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
-            final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
-
-            ComcraftGame.instance.chunkList.triggerRenderClosestChunk(this, centerBlockX, centerBlockZ);
-        }
-    }
-
-    public synchronized void chunkRendererThreadCallback(final Chunk chunk) {
+    public synchronized void threadCallbackAddChunk(final Chunk chunk) {
         world.addChild(chunk.renderCache.node);
     }
-
-    public void renderChunkListCallback(final Chunk chunk) {
-        clearChunkRenderCache(chunk);
-
-        if (chunkRendererThread.hasVaccancy) {
-            chunkRendererThread.enqueue(chunk);
-        }
-    }
-
-    public void dropChunkListCallback(final Chunk chunk) {
-        clearChunkRenderCache(chunk);
-    }
-
-    private void clearChunkRenderCache(final Chunk chunk) {
+    
+    public synchronized void threadCallbackRemoveChunk(final Chunk chunk) {
         if (chunk.renderCache.node != null) {
             world.removeChild(chunk.renderCache.node);
-            chunk.renderCache.clear();
         }
     }
 

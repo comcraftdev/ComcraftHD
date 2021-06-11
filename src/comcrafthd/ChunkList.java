@@ -5,8 +5,8 @@
  */
 package comcrafthd;
 
+import comcrafthd.client.ChunkRendererThread;
 import comcrafthd.client.ComcraftPrefs;
-import comcrafthd.client.ComcraftRenderer;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -28,7 +28,7 @@ public final class ChunkList {
         return (int) (ComcraftPrefs.instance.chunkRenderDistance * ComcraftPrefs.instance.chunkRenderDistance * 3.2f) + 1;
     }
 
-    public void triggerRenderClosestChunk(final ComcraftRenderer renderer, int blockX, int blockZ) {
+    public Chunk getClosestNotRenderedChunk(int blockX, int blockZ) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
 
@@ -38,14 +38,12 @@ public final class ChunkList {
         for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
             final Chunk chunk = (Chunk) e.nextElement();
 
-            if (!areNeighboursLoaded(chunk.chunkX, chunk.chunkZ)) {
+            if (chunk.renderCache.done) {
                 continue;
             }
             
-            synchronized (chunk.renderCache) {
-                if (chunk.renderCache.done || chunk.renderCache.isCacheBeingGenerated) {
-                    continue;
-                }
+            if (!areNeighboursLoaded(chunk.chunkX, chunk.chunkZ)) {
+                continue;
             }
 
             final int x = chunk.chunkX - originChunkX;
@@ -59,9 +57,7 @@ public final class ChunkList {
             }
         }
 
-        if (closest != null) {
-            renderer.renderChunkListCallback(closest);
-        }
+        return closest;
     }
 
     public void loadAround(int blockX, int blockZ, int chunkRadius) {
@@ -81,7 +77,7 @@ public final class ChunkList {
         }
     }
 
-    public void dropAround(int blockX, int blockZ, int chunkRadius) {
+    public void dropAround(int blockX, int blockZ, int chunkRadius, final ChunkRendererThread listener) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
 
@@ -94,21 +90,11 @@ public final class ChunkList {
             final int z = chunk.chunkZ - originChunkZ;
 
             if (x * x + z * z > chunkRadiusSqr) {
-                dropChunk(chunk);
+                chunks.remove(getChunkKey(chunk.chunkX, chunk.chunkZ));
+
+                listener.dropChunkCallback(chunk);
             }
         }
-    }
-
-    public void dropChunk(final Chunk chunk) {
-        synchronized (chunk.renderCache) {
-            if (chunk.renderCache.isCacheBeingGenerated) {
-                return;
-            }
-        }
-
-        chunks.remove(getChunkKey(chunk.chunkX, chunk.chunkZ));
-
-        ComcraftGame.instance.renderer.dropChunkListCallback(chunk);
     }
 
     public void loadChunk(int chunkX, int chunkZ) {
@@ -138,7 +124,7 @@ public final class ChunkList {
     private void addChunk(int chunkX, int chunkZ, Chunk chunk) {
         chunks.put(getChunkKey(chunkX, chunkZ), chunk);
     }
-    
+
     public boolean areNeighboursLoaded(int chunkX, int chunkZ) {
         if (!chunkExists(chunkX - 1, chunkZ)) {
             return false;

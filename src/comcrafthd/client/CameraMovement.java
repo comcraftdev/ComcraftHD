@@ -14,7 +14,7 @@ import javax.microedition.m3g.Camera;
  */
 public final class CameraMovement {
 
-    public void tick() {
+    public synchronized void tick() {
         final KeyboardMapping mapping = ComcraftGame.instance.keyboardMapping;
         final Keyboard keyboard = Keyboard.instance;
 

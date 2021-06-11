@@ -16,8 +16,6 @@ public final class ChunkRenderCache {
     public boolean done = false;
     public Node node;
 
-    public boolean isCacheBeingGenerated = false;
-    
     public void clear() {
         done = false;
         node = null;

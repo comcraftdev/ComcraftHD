@@ -6,8 +6,10 @@
 package comcrafthd.client;
 
 import comcrafthd.Chunk;
+import comcrafthd.ChunkList;
 import comcrafthd.ComcraftGame;
 import comcrafthd.Log;
+import comcrafthd.MathHelper;
 
 /**
  *
@@ -15,15 +17,14 @@ import comcrafthd.Log;
  */
 public final class ChunkRendererThread implements Runnable {
 
+    private final ComcraftRenderer renderer;
     private final ChunkRenderer chunkRenderer;
 
-    private Thread thread;
     private boolean stopped = false;
+    private Thread thread;
 
-    private Chunk nextChunk;
-    public boolean hasVaccancy = false;
-
-    public ChunkRendererThread(ChunkRenderer chunkRenderer) {
+    public ChunkRendererThread(final ComcraftRenderer renderer, ChunkRenderer chunkRenderer) {
+        this.renderer = renderer;
         this.chunkRenderer = chunkRenderer;
     }
 
@@ -36,99 +37,65 @@ public final class ChunkRendererThread implements Runnable {
 
     public synchronized void stop() {
         stopped = true;
+
         notify();
-    }
 
-    public synchronized void enqueue(final Chunk chunk) {
-        if (nextChunk == null) {
-
-            synchronized (chunk.renderCache) {
-                if (chunk.renderCache.isCacheBeingGenerated) {
-                    return;
-                }
-                chunk.renderCache.isCacheBeingGenerated = true;
-            }
-
-            nextChunk = chunk;
-            hasVaccancy = false;
-
-            notify();
+        try {
+            thread.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 
-    private int oomCntr = 0;
-    
-    private void runImpl() {
-        Log.info(this, "runImpl() entered");
-        
-        while (true) {
-            Chunk chunk;
+    private void tick() {
+        final ChunkList chunkList = ComcraftGame.instance.chunkList;
+        final CameraMovement cameraMovement = ComcraftGame.instance.cameraMovement;
 
-            synchronized (this) {
-                if (stopped) {
-                    break;
-                }
+        final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
+        final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
 
-                hasVaccancy = true;
+        chunkList.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance, this);
+        chunkList.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
 
-                if (nextChunk == null) {
-                    try {
-                        wait();
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                chunk = nextChunk;
-                nextChunk = null;
-            }
-
-            if (chunk != null) {
-                if (chunk.renderCache.done) {
-                    throw new IllegalStateException("ChunkRendererThread chunk.renderCache.done == true");
-                }
-
-                processChunk(chunk);
-            }
-
-            oomCntr = 0;
+        final Chunk toRender = chunkList.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
+        if (toRender != null) {
+            chunkRenderer.renderChunkCache(toRender);
             
-            Thread.yield();
+            renderer.threadCallbackAddChunk(toRender);
         }
-        
-        Log.info(this, "runImpl() finished");
+    }
+
+    public void dropChunkCallback(final Chunk chunk) {
+        renderer.threadCallbackRemoveChunk(chunk);
+
+        chunk.renderCache.done = false;
+        chunk.renderCache.node = null;
     }
 
     public void run() {
         Log.info(this, "run() entered");
 
+        int oomCntr = 0;
+
         while (!stopped) {
             try {
-                runImpl();
+                tick();
+
+                oomCntr = 0;
+
+                Thread.yield();
             } catch (OutOfMemoryError oom) {
                 if (++oomCntr > 3) {
                     throw oom;
                 }
-                
+
                 oom.printStackTrace();
-                
+
                 ComcraftGame.instance.tidyUpMemory();
             }
         }
 
         Log.info(this, "run() finished");
-    }
-
-    private void processChunk(final Chunk chunk) {
-        try {
-            chunkRenderer.renderChunkCache(chunk);
-
-            ComcraftGame.instance.renderer.chunkRendererThreadCallback(chunk);
-        } finally {
-            synchronized (chunk.renderCache) {
-                chunk.renderCache.isCacheBeingGenerated = false;
-            }
-        }
     }
 
 }
