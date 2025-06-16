@@ -52,7 +52,7 @@ public final class ComcraftGame {
     public void initialize() {
         Log.info(this, "initialize() entered");
 
-        blockList.initialize();
+        blockRegistry.initialize();
         renderer.initialize();
 
         System.gc();
