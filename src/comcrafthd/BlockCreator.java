@@ -25,7 +25,7 @@ public final class BlockCreator {
         blocks[id].addElement(block);
     }
 
-    public void registerVariants(BlockList blockList) {
+    public void registerVariants(BlockRegistry blockRegistry) {
         for (int n = blocks.length - 1; n >= 0; --n) {
             Vector list = blocks[n];
             if (list == null) {
@@ -41,7 +41,7 @@ public final class BlockCreator {
                 variants.set((byte) k, (Block) list.elementAt(k));
             }
 
-            blockList.registerVariant(variants);
+            blockRegistry.registerVariant(variants);
 
             list.removeAllElements();
             blocks[n] = null;

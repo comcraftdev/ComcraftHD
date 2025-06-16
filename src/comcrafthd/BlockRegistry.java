@@ -9,7 +9,7 @@ package comcrafthd;
  *
  * @author quead
  */
-public final class BlockList {
+public final class BlockRegistry {
 
     public static final int MAX_BLOCKS = 512;
     
@@ -41,7 +41,7 @@ public final class BlockList {
 
     public void registerBlock(Block block) {
         if (allBlocksCount >= MAX_BLOCKS) {
-            throw new IllegalStateException("BlockList register block");
+            throw new IllegalStateException("BlockRegistry register block");
         }
         
         allBlocks[allBlocksCount++] = block;

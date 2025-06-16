@@ -21,8 +21,8 @@ public final class ComcraftGame {
     public final ChunkGenerator chunkGenerator;
     public final ChunkList chunkList;
     public final ChunkWorld chunkWorld;
-    public final BlockList blockList;
-    public final BlockSeedList blockSeedList;
+    public final BlockRegistry blockRegistry;
+    public final BlockDefinitions blockDefinitions;
     public final ComcraftRenderer renderer;
     public final BlockMaterialList blockMaterials;
     public final KeyboardMapping keyboardMapping;
@@ -42,8 +42,8 @@ public final class ComcraftGame {
         chunkList = new ChunkList();
         chunkWorld = new ChunkWorld();
         blockMaterials = new BlockMaterialList();
-        blockList = new BlockList();
-        blockSeedList = new BlockSeedList();
+        blockRegistry = new BlockRegistry();
+        blockDefinitions = new BlockDefinitions();
         renderer = new ComcraftRenderer();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();

@@ -33,7 +33,7 @@ public final class ChunkGenerator {
 
     private void generateImpl() {
         final Chunk chunk = this.chunk;
-        final BlockSeedList blocks = ComcraftGame.instance.blockSeedList;
+        final BlockDefinitions blocks = ComcraftGame.instance.blockDefinitions;
 
         final int offsetX = chunk.chunkX * Chunk.CHUNK_SIZE;
         final int offsetZ = chunk.chunkZ * Chunk.CHUNK_SIZE;
@@ -54,7 +54,7 @@ public final class ChunkGenerator {
     }
 
     private void generateImplTest() {
-        final BlockSeedList blocks = ComcraftGame.instance.blockSeedList;
+        final BlockDefinitions blocks = ComcraftGame.instance.blockDefinitions;
 
         fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, blocks.stone.fullId);
 

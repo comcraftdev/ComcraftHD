@@ -11,7 +11,7 @@ import comcrafthd.blocks.StandardBlockBuilder;
  *
  * @author quead
  */
-public final class BlockSeedList {
+public final class BlockDefinitions {
 
     public final Block stone = StandardBlockBuilder.create(1, 0)
             .setAllTexture(1, 0)

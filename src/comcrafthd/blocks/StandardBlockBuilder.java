@@ -95,7 +95,7 @@ public final class StandardBlockBuilder {
 
         Block block = new Block((byte) id, (byte) variant, blockRenderer);
 
-        ComcraftGame.instance.blockList.registerBlock(block);
+        ComcraftGame.instance.blockRegistry.registerBlock(block);
         return block;
     }
 
