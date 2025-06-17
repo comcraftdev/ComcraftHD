@@ -14,16 +14,12 @@ import javax.microedition.lcdui.*;
  */
 public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
-    public static GameCanvas instance;
-
     private final Keyboard keyboard = new Keyboard();
-    private final ComcraftGameThread gameThread;
+    private final CanvasVisibilityListener visibilityListener;
 
-    public GameCanvas(ComcraftGameThread gameThread) {
+    public GameCanvas(CanvasVisibilityListener visibilityListener) {
         super(false);
-        
-        this.gameThread = gameThread;
-        instance = this;
+        this.visibilityListener = visibilityListener;
     }
 
     public Graphics getGraphics() {
@@ -35,14 +31,14 @@ public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     }
 
     protected void showNotify() {
-        if (gameThread != null) {
-            gameThread.resume();
+        if (visibilityListener != null) {
+            visibilityListener.onCanvasShown();
         }
     }
 
     protected void hideNotify() {
-        if (gameThread != null) {
-            gameThread.pause();
+        if (visibilityListener != null) {
+            visibilityListener.onCanvasHidden();
         }
     }
     

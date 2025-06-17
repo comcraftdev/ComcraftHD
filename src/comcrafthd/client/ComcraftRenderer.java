@@ -33,7 +33,7 @@ public final class ComcraftRenderer {
     public final ChunkRenderer chunkRenderer;
     public final ComcraftRendererThread rendererThread;
 
-    private final GameCanvas comcraftCanvas;
+    private final GameCanvas canvas;
     private final Graphics graphics;
     private final Graphics3D g3d;
 
@@ -41,9 +41,9 @@ public final class ComcraftRenderer {
 
     public Camera camera;
 
-    public ComcraftRenderer() {
-        comcraftCanvas = GameCanvas.instance;
-        graphics = comcraftCanvas.getGraphics();
+    public ComcraftRenderer(GameCanvas canvas) {
+        this.canvas = canvas;
+        graphics = canvas.getGraphics();
         g3d = Graphics3D.getInstance();
 
         chunkRenderer = new ChunkRenderer();
@@ -68,7 +68,7 @@ public final class ComcraftRenderer {
         g3d.render(world);
         g3d.releaseTarget();
 
-        comcraftCanvas.flushGraphics();
+        canvas.flushGraphics();
     }
 
     public synchronized void threadCallbackAddChunk(final Chunk chunk) {
@@ -107,7 +107,7 @@ public final class ComcraftRenderer {
 
         camera = new Camera();
         camera.setPerspective(90.0f, // field of view
-                (float) comcraftCanvas.getWidth() / (float) comcraftCanvas.getHeight(), // aspectRatio
+                (float) canvas.getWidth() / (float) canvas.getHeight(), // aspectRatio
                 0.1f, // near clipping plane
                 1000.0f); // far clipping plan
 

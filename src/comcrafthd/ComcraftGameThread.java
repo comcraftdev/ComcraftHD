@@ -14,23 +14,15 @@ import comcrafthd.client.Time;
  */
 public final class ComcraftGameThread implements Runnable {
 
-    public static ComcraftGameThread instance;
-    
     public boolean gamePaused = false;
     public boolean gameStopped = false;
 
     private Thread gameThread;
     
-    private final ComcraftGameConfiguration gameConfiguration;
+    private final ComcraftGame game;
     
-    public ComcraftGameThread(ComcraftGameConfiguration gameConfiguration) {
-        if (instance != null) {
-            throw new IllegalStateException("ComcraftGameThread instance is not null");
-        }
-        
-        instance = this;
-        
-        this.gameConfiguration = gameConfiguration;
+    public ComcraftGameThread(ComcraftGame game) {
+        this.game = game;
         
         gameThread = new Thread(this);
     }
@@ -68,10 +60,6 @@ public final class ComcraftGameThread implements Runnable {
 
     public void run() {
         Log.info(this, "run() entered");
-
-        final ComcraftGame game = new ComcraftGame(gameConfiguration);
-        
-        Log.info(this, "run() game created");
         
         Time.reset();
 
@@ -106,8 +94,6 @@ public final class ComcraftGameThread implements Runnable {
         game.clear();
         
         this.gameThread = null;
-        
-        instance = null;
         
         Log.info(this, "run() finished");
     }

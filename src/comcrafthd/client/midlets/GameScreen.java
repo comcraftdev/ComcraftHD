@@ -2,10 +2,12 @@ package comcrafthd.client.midlets;
 
 import javax.microedition.lcdui.*;
 import comcrafthd.*;
+import comcrafthd.client.*;
 
-public class GameScreen extends ScreenBase {
+public class GameScreen extends ScreenBase implements CanvasVisibilityListener {
     
     private Command exitCommand;
+    private ComcraftGame game;
     private ComcraftGameThread gameThread;
     
     public GameScreen(ComcraftMIDlet midlet, ScreenManager screenManager) {
@@ -15,12 +17,16 @@ public class GameScreen extends ScreenBase {
     
     protected Displayable createDisplayable() {
         ComcraftGameConfiguration gameConfiguration = new ComcraftGameConfiguration();
-        gameThread = new ComcraftGameThread(gameConfiguration);
-        
-        GameCanvas gameCanvas = new GameCanvas(gameThread);
+
+        GameCanvas gameCanvas = new GameCanvas(this);
         gameCanvas.setTitle("ComcraftHD");
         gameCanvas.addCommand(exitCommand);
         gameCanvas.setFullScreenMode(true);
+        
+        ComcraftRenderer renderer = new ComcraftRenderer(gameCanvas);
+        game = new ComcraftGame(gameConfiguration, renderer);
+        gameThread = new ComcraftGameThread(game);
+        
         return gameCanvas;
     }
     
@@ -34,6 +40,7 @@ public class GameScreen extends ScreenBase {
     protected void handleCommand(Command command, Displayable displayable) {
         if (command == exitCommand) {
             stopGame();
+            
             MainMenuScreen mainMenu = new MainMenuScreen(midlet, screenManager);
             mainMenu.show();
         }
@@ -43,6 +50,23 @@ public class GameScreen extends ScreenBase {
         if (gameThread != null) {
             gameThread.stop();
             gameThread = null;
+        }
+        if (game != null) {
+            game.stop();
+            game.clear();
+            game = null;
+        }
+    }
+    
+    public void onCanvasShown() {
+        if (gameThread != null) {
+            gameThread.resume();
+        }
+    }
+    
+    public void onCanvasHidden() {
+        if (gameThread != null) {
+            gameThread.pause();
         }
     }
 }
