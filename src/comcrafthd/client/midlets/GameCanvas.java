@@ -17,10 +17,12 @@ public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     public static GameCanvas instance;
 
     private final Keyboard keyboard = new Keyboard();
+    private final ComcraftGameThread gameThread;
 
-    public GameCanvas() {
+    public GameCanvas(ComcraftGameThread gameThread) {
         super(false);
-
+        
+        this.gameThread = gameThread;
         instance = this;
     }
 
@@ -33,11 +35,15 @@ public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     }
 
     protected void showNotify() {
-        ComcraftGameThread.instance.resume();
+        if (gameThread != null) {
+            gameThread.resume();
+        }
     }
 
     protected void hideNotify() {
-        ComcraftGameThread.instance.pause();
+        if (gameThread != null) {
+            gameThread.pause();
+        }
     }
     
     protected void keyRepeated(int keyCode) {

@@ -40,7 +40,6 @@ public class MainMenuScreen extends ScreenBase {
             if (selectedString.equals("Singleplayer")) {
                 GameScreen gameScreen = new GameScreen(midlet, screenManager);
                 gameScreen.show();
-                midlet.startSingleplayerGame();
             } else if (selectedString.equals("Settings")) {
                 SettingsScreen settingsScreen = new SettingsScreen(midlet, screenManager);
                 settingsScreen.show();

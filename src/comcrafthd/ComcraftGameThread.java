@@ -25,7 +25,7 @@ public final class ComcraftGameThread implements Runnable {
     
     public ComcraftGameThread(ComcraftGameConfiguration gameConfiguration) {
         if (instance != null) {
-            throw new IllegalStateException("ComcraftGameThread");
+            throw new IllegalStateException("ComcraftGameThread instance is not null");
         }
         
         instance = this;
