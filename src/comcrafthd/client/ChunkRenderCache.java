@@ -5,13 +5,14 @@
  */
 package comcrafthd.client;
 
+import comcrafthd.RenderState;
 import javax.microedition.m3g.Node;
 
 /**
  *
  * @author quead
  */
-public final class ChunkRenderCache {
+public final class ChunkRenderCache implements RenderState {
 
     public boolean done = false;
     public Node node;
@@ -19,6 +20,10 @@ public final class ChunkRenderCache {
     public void clear() {
         done = false;
         node = null;
+    }
+    
+    public boolean isRenderDone() {
+        return done;
     }
         
 }

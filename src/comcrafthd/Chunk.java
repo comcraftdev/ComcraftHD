@@ -6,8 +6,6 @@
 
 package comcrafthd;
 
-import comcrafthd.client.ChunkRenderCache;
-
 /**
  *
  * @author quead
@@ -31,7 +29,7 @@ public final class Chunk {
     public final short chunkX;
     public final short chunkZ;
     
-    public final ChunkRenderCache renderCache = new ChunkRenderCache();
+    public RenderState renderCache;
     
     public Chunk(short chunkX, short chunkZ) {
         this.chunkX = chunkX;
