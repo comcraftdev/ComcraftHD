@@ -39,11 +39,9 @@ public final class ChunkRenderer {
     private final int[] stripsIndicesCount = new int[BlockMaterialList.MAX_MATERIALS];
     private final int[] stripsLengthsCount = new int[BlockMaterialList.MAX_MATERIALS];
 
-    private Chunk chunk;
-
     private boolean overflow;
 
-    private void clearCounts() {
+    private void reset() {
         vertCountX3 = 0;
         texCountX2 = 0;
         overflow = false;
@@ -57,14 +55,10 @@ public final class ChunkRenderer {
     }
 
     public ChunkRenderCache renderChunk(final Chunk chunk) {
-        clearCounts();
+        reset();
+        renderChunkImpl(chunk);
+        Node node = finalizeNode(chunk);
 
-        this.chunk = chunk;
-
-        renderChunkWork();
-
-        Node node = prepareNode();
-        
         ChunkRenderCache cache;
         if (chunk.renderCache == null) {
             cache = new ChunkRenderCache();
@@ -74,14 +68,11 @@ public final class ChunkRenderer {
         }
         cache.node = node;
         cache.done = true;
-        
-        this.chunk = null;
 
         return cache;
     }
 
-    private void renderChunkWork() {
-        final Chunk chunk = this.chunk;
+    private void renderChunkImpl(final Chunk chunk) {
         final BlockRegistry blockRegistry = ComcraftGame.instance.blockRegistry;
 
         final BlockRenderParam param = new BlockRenderParam();
@@ -123,15 +114,14 @@ public final class ChunkRenderer {
         }
     }
 
-    private Node prepareNode() {
-        Log.debug(this, "prepareNode() entered");
+    private Node finalizeNode(final Chunk chunk) {
+        Log.debug(this, "finalizeNode() entered");
 
         if (vertCountX3 == 0) {
-            Log.debug(this, "prepareNode() empty");
+            Log.debug(this, "finalizeNode() empty");
             return null;
         }
 
-        final Chunk chunk = this.chunk;
         final BlockMaterialList materialList = ComcraftGame.instance.blockMaterials;
 
         final int vertCount = vertCountX3 / 3;
@@ -147,7 +137,7 @@ public final class ChunkRenderer {
 
         VertexArray colArr = new VertexArray(vertCount, 3, 1);
         colArr.set(0, vertCount, colors);
-        
+
         final float[] bias = {chunk.chunkX * Chunk.CHUNK_SIZE, 0, chunk.chunkZ * Chunk.CHUNK_SIZE};
 
         VertexBuffer vertexBuffer = new VertexBuffer();
@@ -190,7 +180,7 @@ public final class ChunkRenderer {
             ++stripsArrsIdx;
         }
 
-        Log.debug(this, "prepareNode() finishing");
+        Log.debug(this, "finalizeNode() finishing");
 
         Mesh mesh = new Mesh(vertexBuffer, stripsArrs, apprArr);
         return mesh;
@@ -207,7 +197,7 @@ public final class ChunkRenderer {
             final int[] stripIndices,
             final int[] stripLengths,
             final BlockMaterial material) {
-        
+
         final int matIdx = material.id;
 
         if (vertices.length + vertCountX3 > MAX_VERTICES) {
