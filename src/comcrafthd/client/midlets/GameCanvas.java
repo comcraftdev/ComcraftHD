@@ -8,18 +8,17 @@ package comcrafthd.client.midlets;
 import comcrafthd.ComcraftGameThread;
 import comcrafthd.client.Keyboard;
 import javax.microedition.lcdui.*;
-import javax.microedition.lcdui.game.GameCanvas;
 
 /**
  * @author quead
  */
-public final class ComcraftMIDPCanvas extends GameCanvas {
+public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
-    public static ComcraftMIDPCanvas instance;
+    public static GameCanvas instance;
 
     private final Keyboard keyboard = new Keyboard();
 
-    public ComcraftMIDPCanvas() {
+    public GameCanvas() {
         super(false);
 
         instance = this;

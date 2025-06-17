@@ -10,7 +10,7 @@ import comcrafthd.ChunkList;
 import comcrafthd.ComcraftGame;
 import comcrafthd.Log;
 import comcrafthd.MathHelper;
-import comcrafthd.client.midlets.ComcraftMIDPCanvas;
+import comcrafthd.client.midlets.GameCanvas;
 import java.io.IOException;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.m3g.Background;
@@ -33,7 +33,7 @@ public final class ComcraftRenderer {
     public final ChunkRenderer chunkRenderer;
     public final ComcraftRendererThread rendererThread;
 
-    private final ComcraftMIDPCanvas comcraftCanvas;
+    private final GameCanvas comcraftCanvas;
     private final Graphics graphics;
     private final Graphics3D g3d;
 
@@ -42,7 +42,7 @@ public final class ComcraftRenderer {
     public Camera camera;
 
     public ComcraftRenderer() {
-        comcraftCanvas = ComcraftMIDPCanvas.instance;
+        comcraftCanvas = GameCanvas.instance;
         graphics = comcraftCanvas.getGraphics();
         g3d = Graphics3D.getInstance();
 
