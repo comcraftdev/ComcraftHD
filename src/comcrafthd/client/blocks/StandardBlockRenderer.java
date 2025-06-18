@@ -119,7 +119,7 @@ public class StandardBlockRenderer implements IBlockRenderer {
         }
         
         final short value = chunkWorld.get(x, y, z);
-        final Block block = BlockDefinitions.get(Block.getId(value));
+        final Block block = BlockDefinitions.blocks[Block.getIndex(value)];
         return block == null ? false : block.occludesNeighbourFace;
     }
 

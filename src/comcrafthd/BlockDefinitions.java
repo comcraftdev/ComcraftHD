@@ -14,8 +14,7 @@ public final class BlockDefinitions {
 
     public static final int MAX_BLOCKS = 256;
     
-    private static final Block[] allBlocks = new Block[MAX_BLOCKS];
-    private static int allBlocksCount = 0;
+    public static final Block[] blocks = new Block[MAX_BLOCKS];
     
     public static final Block stone = create(1)
             .setAllTexture(1, 0)
@@ -35,17 +34,10 @@ public final class BlockDefinitions {
         return BlockBuilder.create(id);
     }
     
-    
-    public static Block get(byte id) {
-        return allBlocks[id];
-    }
-
     public static void register(Block block) {
-        if (allBlocksCount >= MAX_BLOCKS) {
-            throw new IllegalStateException("BlockDefinitions register block");
+        if (blocks[block.id] != null) {
+            throw new IllegalStateException("block " + block.id + " already exists");
         }
-        
-        allBlocks[block.getId()] = block;
-        allBlocksCount++;
+        blocks[block.id] = block;
     }
 }

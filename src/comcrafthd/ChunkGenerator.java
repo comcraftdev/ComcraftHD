@@ -47,16 +47,20 @@ public final class ChunkGenerator {
                 final float noiseVal = noise.getPerlin(globalX, globalZ);
                 final float height = 28 + noiseVal * 15;
 
-                fillRect(x, 0, z, 1, (int) height, 1, BlockDefinitions.grass.fullId);
+                fillRect(x, 0, z, 1, (int) height, 1, BlockDefinitions.grass.id);
             }
         }
     }
 
     private void generateImplTest() {
 
-        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, BlockDefinitions.stone.fullId);
+        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, BlockDefinitions.stone.id);
 
-        fillRect(0, 3, 0, Chunk.CHUNK_SIZE, 5, Chunk.CHUNK_SIZE, BlockDefinitions.grass.fullId);
+        fillRect(0, 3, 0, Chunk.CHUNK_SIZE, 5, Chunk.CHUNK_SIZE, BlockDefinitions.grass.id);
+    }
+
+    private void fillRect(final int localBlockX, final int localBlockY, final int localBlockZ, final int width, final int height, final int depth, final byte blockId) {
+        fillRect(localBlockX, localBlockY, localBlockZ, width, height, depth, (short) blockId);
     }
 
     private void fillRect(final int localBlockX, final int localBlockY, final int localBlockZ, final int width, final int height, final int depth, final short value) {

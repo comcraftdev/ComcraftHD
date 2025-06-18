@@ -19,8 +19,6 @@ public class Block {
     public static final short BLOCK_META_MASK = (short) 0xFF00;
     public static final int BLOCK_META_SHIFT = 8;
     
-    public static final short BLOCK_METAID_MASK = (short) 0x000F;
-
     public static final int MAX_SIDES = 6;
     
     public static final int SIDE_FRONT = 0;
@@ -39,40 +37,31 @@ public class Block {
         {0, -1, 0} // bottom
     };
     
-    public final short fullId;
+    public final byte id;
 
     public final IBlockRenderer blockRenderer;
     
     public final boolean occludesNeighbourFace = true;
     
-    public Block(byte id, byte metaId, IBlockRenderer blockRenderer) {
-        fullId = (short) ((metaId << BLOCK_META_SHIFT) | id);
-        
+    public Block(byte id, IBlockRenderer blockRenderer) {
+        this.id = id;
         this.blockRenderer = blockRenderer;
     }
     
     public String toString() {
-        return "Block(id:" + getId() + ", metaId:" + getMetaId() + ")";
+        return "Block(" + id + ")";
     }
 
-    public byte getId() {
-        return getId(fullId);
+    public static byte getId(short data) {
+        return (byte) (data & BLOCK_ID_MASK);
     }
 
-    public byte getMetaId() {
-        return (byte) (getMeta(fullId) & BLOCK_METAID_MASK);
+    public static int getIndex(short data) {
+        return (data & BLOCK_ID_MASK); // Avoids unnecessary cast to byte
     }
     
-    public static byte getId(short val) {
-        return (byte) (val & BLOCK_ID_MASK);
+    public static byte getMeta(short data) {
+        return (byte) ((data >> BLOCK_META_SHIFT) & BLOCK_META_MASK);
     }
     
-    public static byte getMeta(short val) {
-        return (byte) ((val >> BLOCK_META_SHIFT) & BLOCK_META_MASK);
-    }
-    
-    public static byte getMetaIdFromMeta(byte meta) {
-        return (byte) (meta & BLOCK_METAID_MASK);
-    }
-
 }

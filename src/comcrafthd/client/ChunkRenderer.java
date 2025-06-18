@@ -94,7 +94,7 @@ public final class ChunkRenderer {
                     final byte id = Block.getId(val);
                     final byte meta = Block.getMeta(val);
 
-                    final Block block = BlockDefinitions.get(id);
+                    final Block block = BlockDefinitions.blocks[id];
                     if (block == null) {
                         continue;
                     }

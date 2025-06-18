@@ -89,7 +89,7 @@ public final class BlockBuilder {
                 texY,
                 colors == null ? StandardBlockRenderer.DEFAULT_COLORS : colors);
 
-        Block block = new Block((byte) id, (byte) 0, blockRenderer);
+        Block block = new Block((byte) id, blockRenderer);
 
         BlockDefinitions.register(block);
         return block;
