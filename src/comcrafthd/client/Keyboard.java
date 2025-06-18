@@ -10,6 +10,7 @@ public final class Keyboard {
     private final boolean[] pressed = new boolean[MAX_KEY];
     private final long[] pressedTime = new long[MAX_KEY];
     private final boolean[] quickReleased = new boolean[MAX_KEY];
+    private final boolean[] pressedOnce = new boolean[MAX_KEY];
 
     public Keyboard() {
         instance = this;
@@ -27,6 +28,9 @@ public final class Keyboard {
     }
 
     public synchronized void notifyKeyPressed(int keyCode) {
+        if (!pressed[keyCode]) {
+            pressedOnce[keyCode] = true;
+        }
         pressed[keyCode] = true;
         pressedTime[keyCode] = System.currentTimeMillis();
     }
@@ -49,6 +53,18 @@ public final class Keyboard {
 
     public synchronized void clearHeld(int keyCode) {
         pressedTime[keyCode] = System.currentTimeMillis();
+    }
+    
+    public static synchronized boolean isKeyPressedOnce(int keyCode) {
+        if (instance == null) {
+            return false;
+        }
+        
+        boolean result = instance.pressedOnce[keyCode];
+        if (result) {
+            instance.pressedOnce[keyCode] = false; // Clear the flag after reading
+        }
+        return result;
     }
 
 }

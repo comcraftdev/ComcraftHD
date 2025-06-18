@@ -8,20 +8,18 @@ import javax.microedition.m3g.*;
 
 public final class ComcraftRenderer {
 
-    public static final byte BLOCK_RENDER_SIZE = 8;
-
-    public static final int TEXTURE_ATLAS_SIZE = 16;
-
     public final ChunkRenderer chunkRenderer;
     public final ComcraftRendererThread rendererThread;
 
-    private final GameCanvas canvas;
+    public final GameCanvas canvas;
     private final Graphics graphics;
     private final Graphics3D g3d;
 
-    private final World world = new World();
+    public final World world = new World();
 
     public Camera camera;
+    private SelectionRenderer selectionRenderer;
+    public BlockPicker blockPicker;
 
     public ComcraftRenderer(GameCanvas canvas) {
         this.canvas = canvas;
@@ -30,6 +28,8 @@ public final class ComcraftRenderer {
 
         chunkRenderer = new ChunkRenderer();
         rendererThread = new ComcraftRendererThread(this, chunkRenderer);
+        selectionRenderer = new SelectionRenderer();
+        blockPicker = new BlockPicker();
 
         initializeWorld();
     }
@@ -48,7 +48,19 @@ public final class ComcraftRenderer {
         g3d.bindTarget(graphics, true, hints);
         g3d.clear(null);
         g3d.render(world);
+        
+        // World raycasting need to run on the render thread
+        blockPicker.updatePicking(world, camera);
+        
+        // Render selection box
+        if (blockPicker.hasTarget) {
+            selectionRenderer.render(g3d, blockPicker);
+        }
+        
         g3d.releaseTarget();
+        
+        // Draw HUD
+        drawHUD(graphics);
 
         canvas.flushGraphics();
     }
@@ -110,6 +122,33 @@ public final class ComcraftRenderer {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    private void drawHUD(Graphics g) {
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        
+        // Draw crosshair
+        g.setColor(0xFFFFFF);
+        int centerX = width / 2;
+        int centerY = height / 2;
+        int crosshairSize = 10;
+        
+        // Horizontal line
+        g.drawLine(centerX - crosshairSize, centerY, centerX + crosshairSize, centerY);
+        // Vertical line
+        g.drawLine(centerX, centerY - crosshairSize, centerX, centerY + crosshairSize);
+        
+        // Draw selected block info
+        if (ComcraftGame.instance != null && ComcraftGame.instance.playerInventory != null) {
+            String blockName = ComcraftGame.instance.playerInventory.getSelectedBlockName();
+            g.setColor(0xFFFFFF);
+            g.drawString(blockName, 5, 5, Graphics.TOP | Graphics.LEFT);
+        }
+        
+        // Draw controls hint
+        g.setColor(0xFFFFFF);
+        g.drawString("7:Remove 9:Place 0:Next *:Prev", 5, height - 5, Graphics.BOTTOM | Graphics.LEFT);
     }
 
 }

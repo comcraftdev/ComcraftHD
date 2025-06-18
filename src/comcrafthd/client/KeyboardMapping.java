@@ -15,5 +15,10 @@ public final class KeyboardMapping {
     public int moveRight = Canvas.KEY_NUM6;
     public int moveFront = Canvas.KEY_NUM2;
     public int moveBack = Canvas.KEY_NUM8;
+    
+    public int destroyBlock = Canvas.KEY_NUM7;
+    public int placeBlock = Canvas.KEY_NUM9;
+    public int nextBlock = Canvas.KEY_NUM0;
+    public int previousBlock = Canvas.KEY_STAR;
 
 }

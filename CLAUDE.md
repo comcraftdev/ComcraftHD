@@ -68,3 +68,4 @@ The game uses multiple threads:
 - Resources are in `res/` directory (textures, icons)
 - Build outputs go to `build/` and `dist/` (both gitignored)
 - Prefer `import comcrafthd.*;`, `import comcrafthd.client.*;` etc. for comcraft related imports for simplicity
+- Math.round() doesn't work in J2ME, use MathHelper.roundToInt() instead

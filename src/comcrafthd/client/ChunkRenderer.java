@@ -5,6 +5,17 @@ import javax.microedition.m3g.*;
 
 public final class ChunkRenderer {
 
+    /*
+    * Submitted byte coordinates are divided by BLOCK_RENDER_SIZE to convert to world coordinates.
+    */
+    public static final byte BLOCK_RENDER_SIZE = 8;
+
+    /**
+     * The size of the texture atlas used for block textures.
+     * Submitted byte texture coordinates are divided by this value to convert to texture coordinates.
+     */
+    public static final int TEXTURE_ATLAS_SIZE = 16;
+
     private static final int MAX_VERTICES = 1024 * 16;
     private static final int MAX_STRIPS = MAX_VERTICES / 2;
 
@@ -121,9 +132,9 @@ public final class ChunkRenderer {
         final float[] bias = {chunk.chunkX * Chunk.CHUNK_SIZE, 0, chunk.chunkZ * Chunk.CHUNK_SIZE};
 
         VertexBuffer vertexBuffer = new VertexBuffer();
-        vertexBuffer.setPositions(vertArr, 1f / ComcraftRenderer.BLOCK_RENDER_SIZE, bias);
+        vertexBuffer.setPositions(vertArr, 1f / ChunkRenderer.BLOCK_RENDER_SIZE, bias);
         vertexBuffer.setNormals(normArr);
-        vertexBuffer.setTexCoords(0, texArr, 1f / ComcraftRenderer.TEXTURE_ATLAS_SIZE, null);
+        vertexBuffer.setTexCoords(0, texArr, 1f / ChunkRenderer.TEXTURE_ATLAS_SIZE, null);
         vertexBuffer.setColors(colArr);
 
         int usedMaterialCount = 0;
@@ -196,9 +207,9 @@ public final class ChunkRenderer {
 
         final int vertLen = vertices.length;
 
-        final int ox = (byte) (param.localBlockX * ComcraftRenderer.BLOCK_RENDER_SIZE);
-        final int oy = (byte) (param.localBlockY * ComcraftRenderer.BLOCK_RENDER_SIZE);
-        final int oz = (byte) (param.localBlockZ * ComcraftRenderer.BLOCK_RENDER_SIZE);
+        final int ox = (byte) (param.localBlockX * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final int oy = (byte) (param.localBlockY * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final int oz = (byte) (param.localBlockZ * ChunkRenderer.BLOCK_RENDER_SIZE);
 
         for (int n = 0; n < vertLen; n += 3) {
             this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + ox);
