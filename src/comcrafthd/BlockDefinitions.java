@@ -5,6 +5,11 @@ public final class BlockDefinitions {
     public static final int MAX_BLOCKS = 256;
 
     public static final Block[] blocks = new Block[MAX_BLOCKS];
+    
+    /*
+     * Block renderer IDs
+     */
+    public static final int RENDERER_STANDARD = 0;
 
     public static final Block stone = create(1)
             .setAllTexture(1, 0)

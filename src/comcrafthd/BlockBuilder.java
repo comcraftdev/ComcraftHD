@@ -1,15 +1,28 @@
 package comcrafthd;
 
-import comcrafthd.client.*;
-import comcrafthd.client.blocks.*;
-
 public final class BlockBuilder {
 
+    private static final byte W = (byte) 0xFF;
+
+    public static final byte[][] DEFAULT_COLORS = createDefaultColorArray();
+
+    public static byte[][] createDefaultColorArray() {
+        byte[][] arr = {
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W},
+            {W, W, W, W, W, W, W, W, W, W, W, W}
+        };
+        return arr;
+    }
+
     private int id;
+    private int rendererIndex = BlockDefinitions.RENDERER_STANDARD;
 
     private byte[] texX = new byte[Block.MAX_SIDES];
     private byte[] texY = new byte[Block.MAX_SIDES];
-
     private byte[][] colors;
 
     private BlockBuilder() {
@@ -47,7 +60,7 @@ public final class BlockBuilder {
 
     public BlockBuilder setColor(int side, int col) {
         if (colors == null) {
-            colors = StandardBlockRenderer.createDefaultColorArray();
+            colors = createDefaultColorArray();
         }
 
         final byte r = (byte) ((col >> (8 * 2)) & 0xFF);
@@ -74,14 +87,7 @@ public final class BlockBuilder {
     }
 
     public Block build() {
-        IBlockRenderer blockRenderer = new StandardBlockRenderer(
-                ComcraftGame.instance.blockMaterials.standardMat,
-                texX,
-                texY,
-                colors == null ? StandardBlockRenderer.DEFAULT_COLORS : colors);
-
-        Block block = new Block((byte) id, blockRenderer);
-
+        Block block = new Block((byte) id, (byte) rendererIndex, texX, texY, colors == null ? DEFAULT_COLORS : colors);
         BlockDefinitions.register(block);
         return block;
     }

@@ -84,7 +84,8 @@ public final class ChunkRenderer {
                     param.meta = meta;
                     param.block = block;
 
-                    block.blockRenderer.render(this, param);
+                    BlockRenderer renderer = BlockRendererDefinitions.renderers[block.rendererIndex];
+                    renderer.render(this, param);
 
                     if (overflow) {
                         return;

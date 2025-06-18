@@ -1,6 +1,5 @@
 package comcrafthd;
 
-import comcrafthd.client.*;
 
 public class Block {
 
@@ -28,15 +27,23 @@ public class Block {
         {0, -1, 0} // bottom
     };
 
-    public final byte id;
+    /* */
 
-    public final IBlockRenderer blockRenderer;
+    public final byte id;
+    public final byte rendererIndex;
+
+    public final byte[] texX;
+    public final byte[] texY;
+    public final byte[][] colors;
 
     public final boolean occludesNeighbourFace = true;
 
-    public Block(byte id, IBlockRenderer blockRenderer) {
+    public Block(byte id, byte rendererIndex, byte[] texX, byte[] texY, byte[][] colors) {
         this.id = id;
-        this.blockRenderer = blockRenderer;
+        this.rendererIndex = rendererIndex;
+        this.texX = texX;
+        this.texY = texY;
+        this.colors = colors;
     }
 
     public String toString() {

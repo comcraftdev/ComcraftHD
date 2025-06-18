@@ -3,7 +3,7 @@ package comcrafthd.client.blocks;
 import comcrafthd.*;
 import comcrafthd.client.*;
 
-public class StandardBlockRenderer implements IBlockRenderer {
+public class StandardBlockRenderer extends BlockRenderer {
 
     // In this case
     // Front is positive z axis
@@ -50,37 +50,14 @@ public class StandardBlockRenderer implements IBlockRenderer {
         {1, 0, 0, 0, 1, 1, 0, 1}};
 
     private static final int[] STRIP_IND = {0, 1, 2, 3};
-
     private static final int[] STRIP_LEN = {4};
 
-    private static final byte W = (byte) 0xFF;
-
-    public static final byte[][] DEFAULT_COLORS = createDefaultColorArray();
-
-    public static byte[][] createDefaultColorArray() {
-        byte[][] arr = {
-            {W, W, W, W, W, W, W, W, W, W, W, W},
-            {W, W, W, W, W, W, W, W, W, W, W, W},
-            {W, W, W, W, W, W, W, W, W, W, W, W},
-            {W, W, W, W, W, W, W, W, W, W, W, W},
-            {W, W, W, W, W, W, W, W, W, W, W, W},
-            {W, W, W, W, W, W, W, W, W, W, W, W}
-        };
-        return arr;
-    }
+    /* */
 
     private final BlockMaterial blockMaterial;
 
-    private final byte[] texX;
-    private final byte[] texY;
-
-    private final byte[][] colors;
-
-    public StandardBlockRenderer(BlockMaterial blockMaterial, byte[] texX, byte[] texY, byte[][] colors) {
+    public StandardBlockRenderer(BlockMaterial blockMaterial) {
         this.blockMaterial = blockMaterial;
-        this.texX = texX;
-        this.texY = texY;
-        this.colors = colors;
     }
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
@@ -88,7 +65,7 @@ public class StandardBlockRenderer implements IBlockRenderer {
 
         for (int side = 0; side < Block.MAX_SIDES; ++side) {
             if (!isSideOccluded(chunkWorld, param, Block.SIDE_OFFSETS[side])) {
-                chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], texX[side], texY[side], colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
+                chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], param.block.texX[side], param.block.texY[side], param.block.colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
             }
         }
     }

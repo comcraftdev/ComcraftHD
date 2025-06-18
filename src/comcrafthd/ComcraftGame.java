@@ -40,6 +40,7 @@ public final class ComcraftGame {
         Log.info(this, "initialize() entered");
 
         renderer.initialize();
+        BlockRendererDefinitions.initialize(blockMaterials);
 
         System.gc();
 

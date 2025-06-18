@@ -14,7 +14,7 @@ public final class BlockMaterialList {
 
     private BlockMaterial createTestMaterial(int idx) {
         if (materials[idx] != null) {
-            throw new RuntimeException("Material exists: " + idx);
+            throw new RuntimeException("material exists: " + idx);
         }
 
         Material mat = new Material();
