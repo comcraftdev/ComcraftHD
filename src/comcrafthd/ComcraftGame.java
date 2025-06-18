@@ -49,7 +49,6 @@ public final class ComcraftGame {
     public void initialize() {
         Log.info(this, "initialize() entered");
 
-        BlockDefinitions.initialize();
         renderer.initialize();
 
         System.gc();

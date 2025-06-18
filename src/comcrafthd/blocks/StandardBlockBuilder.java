@@ -18,7 +18,6 @@ import comcrafthd.client.blocks.StandardBlockRenderer;
 public final class StandardBlockBuilder {
 
     private int id;
-    private int variant;
 
     private byte[] texX = new byte[Block.MAX_SIDES];
     private byte[] texY = new byte[Block.MAX_SIDES];
@@ -28,10 +27,9 @@ public final class StandardBlockBuilder {
     private StandardBlockBuilder() {
     }
 
-    public static StandardBlockBuilder create(int id, int variant) {
+    public static StandardBlockBuilder create(int id) {
         StandardBlockBuilder builder = new StandardBlockBuilder();
         builder.id = id;
-        builder.variant = variant;
         return builder;
     }
 
@@ -94,9 +92,9 @@ public final class StandardBlockBuilder {
                 texY,
                 colors == null ? StandardBlockRenderer.DEFAULT_COLORS : colors);
 
-        Block block = new Block((byte) id, (byte) variant, blockRenderer);
+        Block block = new Block((byte) id, (byte) 0, blockRenderer);
 
-        BlockDefinitions.registerBlock(block);
+        BlockDefinitions.register(block);
         return block;
     }
 

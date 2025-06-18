@@ -67,4 +67,4 @@ The game uses multiple threads:
 - Obfuscation is enabled for release builds (level 9)
 - Resources are in `res/` directory (textures, icons)
 - Build outputs go to `build/` and `dist/` (both gitignored)
-- Current branch: `develop`
+- Prefer `import comcrafthd.*;`, `import comcrafthd.client.*;` etc. for comcraft related imports for simplicity

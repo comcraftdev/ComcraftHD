@@ -33,31 +33,20 @@ public final class BlockDefinitions {
             .build();
     
     private static StandardBlockBuilder create(int id) {
-        return StandardBlockBuilder.create(id, 0);
+        return StandardBlockBuilder.create(id);
     }
     
-    public static void initialize() {
-        // No initialization needed without variants
-    }
-
-    public static Block get(short value) {
-        return get(Block.getId(value));
-    }
     
     public static Block get(byte id) {
-        for (int i = 0; i < allBlocksCount; i++) {
-            if (allBlocks[i].getId() == id) {
-                return allBlocks[i];
-            }
-        }
-        return null;
+        return allBlocks[id];
     }
 
-    public static void registerBlock(Block block) {
+    public static void register(Block block) {
         if (allBlocksCount >= MAX_BLOCKS) {
             throw new IllegalStateException("BlockDefinitions register block");
         }
         
-        allBlocks[allBlocksCount++] = block;
+        allBlocks[block.getId()] = block;
+        allBlocksCount++;
     }
 }
