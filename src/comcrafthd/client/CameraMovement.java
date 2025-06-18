@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client;
 
-import comcrafthd.ComcraftGame;
-import javax.microedition.m3g.Camera;
+import comcrafthd.*;
+import javax.microedition.m3g.*;
 
-/**
- *
- * @author quead
- */
 public final class CameraMovement {
 
     public synchronized void tick() {
@@ -49,7 +40,7 @@ public final class CameraMovement {
         if (keyboard.isPressed(mapping.moveRight)) {
             move(1f, 0, 0);
         }
-        
+
         updateCamera(ComcraftGame.instance.renderer.camera);
     }
 
@@ -69,7 +60,7 @@ public final class CameraMovement {
     public float positionX;
     public float positionY = 10;
     public float positionZ;
-    
+
     private void move(float right, float up, float forward) {
         final float forwardX = (float) -Math.sin(Math.toRadians(rotationY));
         final float forwardZ = (float) -Math.cos(Math.toRadians(rotationY));
@@ -81,11 +72,11 @@ public final class CameraMovement {
         positionY += up * MOVE_SPEED * Time.dt;
         positionZ += (forward * forwardZ + right * rightZ) * MOVE_SPEED * Time.dt;
     }
-    
+
     public void updateCamera(final Camera camera) {
         camera.setOrientation(rotationY, 0f, 1f, 0f);
         camera.postRotate(rotationX, 1f, 0f, 0f);
-        
+
         camera.setTranslation(positionX, positionY, positionZ);
     }
 

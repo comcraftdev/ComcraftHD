@@ -1,24 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client.blocks;
 
-import comcrafthd.Block;
-import comcrafthd.BlockDefinitions;
-import comcrafthd.ChunkWorld;
-import comcrafthd.ComcraftGame;
-import comcrafthd.client.BlockMaterial;
-import comcrafthd.client.BlockRenderParam;
-import comcrafthd.client.ChunkRenderer;
-import comcrafthd.client.IBlockRenderer;
-import comcrafthd.client.ComcraftRenderer;
+import comcrafthd.*;
+import comcrafthd.client.*;
 
-/**
- *
- * @author quead
- */
 public class StandardBlockRenderer implements IBlockRenderer {
 
     // In this case
@@ -113,11 +97,11 @@ public class StandardBlockRenderer implements IBlockRenderer {
         final int x = param.blockX + side[0];
         final int y = param.blockY + side[1];
         final int z = param.blockZ + side[2];
-        
+
         if (y < 0) {
             return true;
         }
-        
+
         final short value = chunkWorld.get(x, y, z);
         final Block block = BlockDefinitions.blocks[Block.getIndex(value)];
         return block == null ? false : block.occludesNeighbourFace;

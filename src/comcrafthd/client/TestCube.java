@@ -1,27 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client;
 
-import java.io.IOException;
-import javax.microedition.lcdui.Image;
-import javax.microedition.m3g.Appearance;
-import javax.microedition.m3g.Image2D;
-import javax.microedition.m3g.IndexBuffer;
-import javax.microedition.m3g.Material;
-import javax.microedition.m3g.Mesh;
-import javax.microedition.m3g.Node;
-import javax.microedition.m3g.Texture2D;
-import javax.microedition.m3g.TriangleStripArray;
-import javax.microedition.m3g.VertexArray;
-import javax.microedition.m3g.VertexBuffer;
+import java.io.*;
+import javax.microedition.lcdui.*;
+import javax.microedition.m3g.*;
 
-/**
- *
- * @author quead
- */
 public final class TestCube {
 
     public static Node getTestCube() throws IOException {
@@ -46,7 +28,7 @@ public final class TestCube {
 
         VertexArray normArray = new VertexArray(norm.length / 3, 3, 1);
         normArray.set(0, norm.length / 3, norm);
-        
+
         // per vertex texture coordinates
         short[] tex = {
             1, 0, 0, 0, 1, 1, 0, 1,
@@ -55,7 +37,7 @@ public final class TestCube {
             1, 0, 0, 0, 1, 1, 0, 1,
             1, 0, 0, 0, 1, 1, 0, 1,
             1, 0, 0, 0, 1, 1, 0, 1};
-        
+
         // create a vertex array for the texture coordinates of the object
         VertexArray texArray = new VertexArray(tex.length / 2, 2, 2);
         texArray.set(0, tex.length / 2, tex);

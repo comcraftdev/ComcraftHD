@@ -3,16 +3,16 @@ package comcrafthd.client.midlets;
 import javax.microedition.lcdui.*;
 
 public class MainMenuScreen extends ScreenBase {
-    
+
     private Command exitCommand;
     private Command okCommand;
-    
+
     public MainMenuScreen(ComcraftMIDlet midlet, ScreenManager screenManager) {
         super(midlet, screenManager);
         exitCommand = new Command("Exit", Command.EXIT, 0);
         okCommand = new Command("Ok", Command.OK, 0);
     }
-    
+
     protected Displayable createDisplayable() {
         List mainMenu = new List("ComcraftHD", Choice.IMPLICIT);
         mainMenu.append("Singleplayer", null);
@@ -24,7 +24,7 @@ public class MainMenuScreen extends ScreenBase {
         mainMenu.setSelectedFlags(new boolean[]{false, false, false});
         return mainMenu;
     }
-    
+
     protected void handleCommand(Command command, Displayable displayable) {
         if (command == exitCommand) {
             midlet.exitMIDlet();
@@ -32,7 +32,7 @@ public class MainMenuScreen extends ScreenBase {
             handleMenuAction();
         }
     }
-    
+
     private void handleMenuAction() {
         List mainMenu = (List) getDisplayable();
         String selectedString = mainMenu.getString(mainMenu.getSelectedIndex());

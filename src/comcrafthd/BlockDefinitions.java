@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd;
 
-
-/**
- *
- * @author quead
- */
 public final class BlockDefinitions {
 
     public static final int MAX_BLOCKS = 256;
-    
+
     public static final Block[] blocks = new Block[MAX_BLOCKS];
-    
+
     public static final Block stone = create(1)
             .setAllTexture(1, 0)
             .build();
@@ -24,16 +14,16 @@ public final class BlockDefinitions {
             .setAllTexture(2, 0)
             .setSidesTexture(3, 0)
             .setTexture(Block.SIDE_TOP, 0, 0)
-//            .setColor(Block.SIDE_TOP, 0x79C05A)
-//            .setColor(Block.SIDE_TOP, 0x90814D)
+            //            .setColor(Block.SIDE_TOP, 0x79C05A)
+            //            .setColor(Block.SIDE_TOP, 0x90814D)
             .setAllColor(0x79C05A)
-//            .setAllColor(0x90814D)
+            //            .setAllColor(0x90814D)
             .build();
-    
+
     private static BlockBuilder create(int id) {
         return BlockBuilder.create(id);
     }
-    
+
     public static void register(Block block) {
         if (blocks[block.id] != null) {
             throw new IllegalStateException("block " + block.id + " already exists");

@@ -1,17 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd;
 
-import comcrafthd.*;
 import comcrafthd.client.*;
 
-/**
- *
- * @author quead
- */
 public final class ComcraftGame {
 
     public static ComcraftGame instance;
@@ -55,7 +45,7 @@ public final class ComcraftGame {
 
         Log.info(this, "initialize() finished");
     }
-    
+
     public void stop() {
         renderer.stop();
     }
@@ -69,7 +59,7 @@ public final class ComcraftGame {
     public void clear() {
         instance = null;
     }
-    
+
     public void tidyUpMemory() {
         System.gc();
     }

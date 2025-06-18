@@ -1,20 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client;
 
-import comcrafthd.Chunk;
-import comcrafthd.ChunkList;
-import comcrafthd.ComcraftGame;
-import comcrafthd.Log;
-import comcrafthd.MathHelper;
+import comcrafthd.*;
+import comcrafthd.util.*;
 
-/**
- *
- * @author quead
- */
 public final class ComcraftRendererThread implements Runnable {
 
     private final ComcraftRenderer renderer;

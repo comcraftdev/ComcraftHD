@@ -1,29 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client;
 
-import comcrafthd.Chunk;
-import comcrafthd.ChunkList;
-import comcrafthd.ComcraftGame;
-import comcrafthd.Log;
-import comcrafthd.MathHelper;
-import comcrafthd.client.midlets.GameCanvas;
-import java.io.IOException;
-import javax.microedition.lcdui.Graphics;
-import javax.microedition.m3g.Background;
-import javax.microedition.m3g.Camera;
-import javax.microedition.m3g.Graphics3D;
-import javax.microedition.m3g.Light;
-import javax.microedition.m3g.Node;
-import javax.microedition.m3g.World;
+import comcrafthd.*;
+import comcrafthd.client.midlets.*;
+import java.io.*;
+import javax.microedition.lcdui.*;
+import javax.microedition.m3g.*;
 
-/**
- *
- * @author quead
- */
 public final class ComcraftRenderer {
 
     public static final byte BLOCK_RENDER_SIZE = 8;

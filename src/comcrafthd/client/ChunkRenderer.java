@@ -1,27 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client;
 
-import comcrafthd.Block;
-import comcrafthd.BlockDefinitions;
-import comcrafthd.Chunk;
-import comcrafthd.ComcraftGame;
-import comcrafthd.Log;
-import javax.microedition.m3g.Appearance;
-import javax.microedition.m3g.Group;
-import javax.microedition.m3g.Mesh;
-import javax.microedition.m3g.Node;
-import javax.microedition.m3g.TriangleStripArray;
-import javax.microedition.m3g.VertexArray;
-import javax.microedition.m3g.VertexBuffer;
+import comcrafthd.*;
+import javax.microedition.m3g.*;
 
-/**
- *
- * @author quead
- */
 public final class ChunkRenderer {
 
     private static final int MAX_VERTICES = 1024 * 16;

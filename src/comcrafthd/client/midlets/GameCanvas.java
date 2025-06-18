@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd.client.midlets;
 
-import comcrafthd.ComcraftGameThread;
-import comcrafthd.client.Keyboard;
+import comcrafthd.*;
+import comcrafthd.client.*;
 import javax.microedition.lcdui.*;
 
-/**
- * @author quead
- */
 public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
 
     private final Keyboard keyboard = new Keyboard();
@@ -41,7 +33,7 @@ public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
             visibilityListener.onCanvasHidden();
         }
     }
-    
+
     protected void keyRepeated(int keyCode) {
 //        keyboard.notifyKeyRepeated(keyCode);
     }
@@ -53,5 +45,5 @@ public final class GameCanvas extends javax.microedition.lcdui.game.GameCanvas {
     protected void keyPressed(int keyCode) {
         keyboard.notifyKeyPressed(keyCode > 0 ? keyCode : getGameAction(keyCode));
     }
-    
+
 }

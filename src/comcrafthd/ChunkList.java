@@ -1,19 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd;
 
-import comcrafthd.client.ComcraftRendererThread;
-import comcrafthd.client.ComcraftPrefs;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import comcrafthd.client.*;
+import java.util.*;
 
-/**
- *
- * @author quead
- */
 public final class ChunkList {
 
     public final Hashtable chunks = new Hashtable(getInitialSize());
@@ -41,7 +30,7 @@ public final class ChunkList {
             if (chunk.renderCache != null && chunk.renderCache.isRenderDone()) {
                 continue;
             }
-            
+
             if (!areNeighboursLoaded(chunk.chunkX, chunk.chunkZ)) {
                 continue;
             }

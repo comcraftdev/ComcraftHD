@@ -1,32 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package comcrafthd;
 
-import comcrafthd.client.Time;
+import comcrafthd.client.*;
 
-/**
- *
- * @author quead
- */
 public final class ComcraftGameThread implements Runnable {
 
     public boolean gamePaused = false;
     public boolean gameStopped = false;
 
     private Thread gameThread;
-    
+
     private final ComcraftGame game;
-    
+
     public ComcraftGameThread(ComcraftGame game) {
         this.game = game;
-        
+
         gameThread = new Thread(this);
     }
-    
+
     private boolean gameStarted = false;
 
     public void start() {
@@ -39,9 +29,9 @@ public final class ComcraftGameThread implements Runnable {
     public synchronized void stop() {
         gameStopped = true;
         gamePaused = false;
-        
+
         notify();
-        
+
         try {
             gameThread.join();
         } catch (InterruptedException ex) {
@@ -60,7 +50,7 @@ public final class ComcraftGameThread implements Runnable {
 
     public void run() {
         Log.info(this, "run() entered");
-        
+
         Time.reset();
 
         game.initialize();
@@ -92,10 +82,10 @@ public final class ComcraftGameThread implements Runnable {
 
         game.stop();
         game.clear();
-        
+
         this.gameThread = null;
-        
+
         Log.info(this, "run() finished");
     }
-    
+
 }

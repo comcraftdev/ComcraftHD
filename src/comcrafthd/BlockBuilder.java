@@ -1,17 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd;
 
 import comcrafthd.client.*;
-import comcrafthd.client.blocks.StandardBlockRenderer;
+import comcrafthd.client.blocks.*;
 
-/**
- *
- * @author quead
- */
 public final class BlockBuilder {
 
     private int id;
@@ -53,25 +44,25 @@ public final class BlockBuilder {
         setTexture(Block.SIDE_BOTTOM, x, y);
         return this;
     }
-    
+
     public BlockBuilder setColor(int side, int col) {
         if (colors == null) {
             colors = StandardBlockRenderer.createDefaultColorArray();
         }
-        
+
         final byte r = (byte) ((col >> (8 * 2)) & 0xFF);
         final byte g = (byte) ((col >> (8 * 1)) & 0xFF);
         final byte b = (byte) ((col >> (8 * 0)) & 0xFF);
-        
+
         for (int n = 0; n < colors[side].length; n += 3) {
             colors[side][n + 0] = r;
             colors[side][n + 1] = g;
             colors[side][n + 2] = b;
         }
-        
+
         return this;
     }
-    
+
     public BlockBuilder setAllColor(int col) {
         setColor(Block.SIDE_BACK, col);
         setColor(Block.SIDE_BOTTOM, col);

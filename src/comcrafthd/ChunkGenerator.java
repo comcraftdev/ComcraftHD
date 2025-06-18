@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comcrafthd;
 
-import make.some.noise.Noise;
+import make.some.noise.*;
 
-/**
- *
- * @author quead
- */
 public final class ChunkGenerator {
 
     private Chunk chunk;
@@ -19,11 +10,11 @@ public final class ChunkGenerator {
         chunk = new Chunk((short) chunkX, (short) chunkZ);
 
         Log.debug(this, "before generateImpl()");
-        
+
         generateImpl();
 
         Log.debug(this, "after generateImpl()");
-        
+
         Chunk res = chunk;
         chunk = null;
         return res;
