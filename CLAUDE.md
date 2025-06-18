@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ComcraftHD is a J2ME (Java ME) voxel-based mobile game similar to Minecraft, targeting MIDP 2.0 devices. It uses NetBeans as the IDE and Apache Ant as the build system.
+ComcraftHD is a J2ME (Java ME) voxel-based mobile game similar to Minecraft, targeting MIDP 2.0 devices. It uses NetBeans as the IDE and Apache Ant as the build system. It is designed to run on devices with limited resources, such as older mobile phones. For this reason, it requires careful management of memory and performance, avoiding unnecessary overhead and sticking to the constraints of old Java dialect.
 
 ## Build Commands
+
+You currently don't have access to build commands, but here are the common command that user can run to build and run the project. If you need to check if the project builds successfully, you can ask the user to run these commands in their terminal:
 
 ```bash
 # Build the JAR file
