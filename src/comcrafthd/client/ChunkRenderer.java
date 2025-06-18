@@ -103,7 +103,6 @@ public final class ChunkRenderer {
             return null;
         }
 
-        final BlockMaterialDefinitions materialList = ComcraftGame.instance.blockMaterials;
 
         final int vertCount = vertCountX3 / 3;
 
@@ -156,7 +155,7 @@ public final class ChunkRenderer {
             TriangleStripArray triArr = new TriangleStripArray(tempStripIndices, tempStripLengths);
             stripsArrs[stripsArrsIdx] = triArr;
 
-            apprArr[stripsArrsIdx] = materialList.materials[matIdx].appearance;
+            apprArr[stripsArrsIdx] = BlockMaterialDefinitions.materials[matIdx].appearance;
 
             ++stripsArrsIdx;
         }

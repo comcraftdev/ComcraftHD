@@ -16,9 +16,9 @@ public final class BlockRendererDefinitions {
         renderers[rendererId] = renderer;
     }
 
-    public static void initialize(BlockMaterialDefinitions blockMaterials) {
+    public static void initialize() {
         // Register the standard block renderer at index 0
-        register(0, new StandardBlockRenderer(blockMaterials.standardMat));
+        register(0, new StandardBlockRenderer(BlockMaterialDefinitions.standardMat));
     }
 
 }

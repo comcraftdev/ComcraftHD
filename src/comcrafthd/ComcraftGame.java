@@ -13,7 +13,6 @@ public final class ComcraftGame {
     public final ChunkGenerator chunkGenerator;
     public final ChunkList chunkList;
     public final ChunkWorld chunkWorld;
-    public final BlockMaterialDefinitions blockMaterials;
     public final KeyboardMapping keyboardMapping;
     public final CameraMovement cameraMovement;
 
@@ -31,7 +30,6 @@ public final class ComcraftGame {
         chunkGenerator = new ChunkGenerator();
         chunkList = new ChunkList();
         chunkWorld = new ChunkWorld();
-        blockMaterials = new BlockMaterialDefinitions();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
     }
@@ -39,8 +37,10 @@ public final class ComcraftGame {
     public void initialize() {
         Log.info(this, "initialize() entered");
 
-        renderer.initialize();
-        BlockRendererDefinitions.initialize(blockMaterials);
+        BlockMaterialDefinitions.initialize();
+        BlockRendererDefinitions.initialize();
+
+        renderer.start();
 
         System.gc();
 

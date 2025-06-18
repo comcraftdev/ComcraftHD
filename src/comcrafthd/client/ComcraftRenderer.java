@@ -34,7 +34,7 @@ public final class ComcraftRenderer {
         initializeWorld();
     }
 
-    public void initialize() {
+    public void start() {
         rendererThread.start();
     }
 

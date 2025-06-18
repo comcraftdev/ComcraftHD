@@ -8,11 +8,15 @@ public final class BlockMaterialDefinitions {
 
     public static final int MAX_MATERIALS = 4;
 
-    public final BlockMaterial[] materials = new BlockMaterial[MAX_MATERIALS];
+    public static final BlockMaterial[] materials = new BlockMaterial[MAX_MATERIALS];
 
-    public final BlockMaterial standardMat = createTestMaterial(0);
+    public static BlockMaterial standardMat;
 
-    private BlockMaterial createTestMaterial(int idx) {
+    public static void initialize() {
+        standardMat = createMaterial(0);
+    }
+
+    private static BlockMaterial createMaterial(int idx) {
         if (materials[idx] != null) {
             throw new RuntimeException("material exists: " + idx);
         }
@@ -47,6 +51,10 @@ public final class BlockMaterialDefinitions {
 
         materials[idx] = blockMat;
         return blockMat;
+    }
+
+    private BlockMaterialDefinitions() {
+        // Prevent instantiation
     }
 
 }
