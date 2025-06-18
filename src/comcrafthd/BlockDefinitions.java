@@ -5,7 +5,6 @@
  */
 package comcrafthd;
 
-import comcrafthd.blocks.StandardBlockBuilder;
 
 /**
  *
@@ -32,8 +31,8 @@ public final class BlockDefinitions {
 //            .setAllColor(0x90814D)
             .build();
     
-    private static StandardBlockBuilder create(int id) {
-        return StandardBlockBuilder.create(id);
+    private static BlockBuilder create(int id) {
+        return BlockBuilder.create(id);
     }
     
     

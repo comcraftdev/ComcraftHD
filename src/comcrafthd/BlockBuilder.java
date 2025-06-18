@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package comcrafthd.blocks;
+package comcrafthd;
 
-import comcrafthd.Block;
-import comcrafthd.BlockDefinitions;
-import comcrafthd.ComcraftGame;
-import comcrafthd.client.IBlockRenderer;
+import comcrafthd.client.*;
 import comcrafthd.client.blocks.StandardBlockRenderer;
 
 /**
  *
  * @author quead
  */
-public final class StandardBlockBuilder {
+public final class BlockBuilder {
 
     private int id;
 
@@ -24,22 +21,22 @@ public final class StandardBlockBuilder {
 
     private byte[][] colors;
 
-    private StandardBlockBuilder() {
+    private BlockBuilder() {
     }
 
-    public static StandardBlockBuilder create(int id) {
-        StandardBlockBuilder builder = new StandardBlockBuilder();
+    public static BlockBuilder create(int id) {
+        BlockBuilder builder = new BlockBuilder();
         builder.id = id;
         return builder;
     }
 
-    public StandardBlockBuilder setTexture(int side, int x, int y) {
+    public BlockBuilder setTexture(int side, int x, int y) {
         texX[side] = (byte) x;
         texY[side] = (byte) y;
         return this;
     }
 
-    public StandardBlockBuilder setSidesTexture(int x, int y) {
+    public BlockBuilder setSidesTexture(int x, int y) {
         setTexture(Block.SIDE_BACK, x, y);
         setTexture(Block.SIDE_FRONT, x, y);
         setTexture(Block.SIDE_LEFT, x, y);
@@ -47,7 +44,7 @@ public final class StandardBlockBuilder {
         return this;
     }
 
-    public StandardBlockBuilder setAllTexture(int x, int y) {
+    public BlockBuilder setAllTexture(int x, int y) {
         setTexture(Block.SIDE_BACK, x, y);
         setTexture(Block.SIDE_FRONT, x, y);
         setTexture(Block.SIDE_LEFT, x, y);
@@ -57,7 +54,7 @@ public final class StandardBlockBuilder {
         return this;
     }
     
-    public StandardBlockBuilder setColor(int side, int col) {
+    public BlockBuilder setColor(int side, int col) {
         if (colors == null) {
             colors = StandardBlockRenderer.createDefaultColorArray();
         }
@@ -75,7 +72,7 @@ public final class StandardBlockBuilder {
         return this;
     }
     
-    public StandardBlockBuilder setAllColor(int col) {
+    public BlockBuilder setAllColor(int col) {
         setColor(Block.SIDE_BACK, col);
         setColor(Block.SIDE_BOTTOM, col);
         setColor(Block.SIDE_FRONT, col);
