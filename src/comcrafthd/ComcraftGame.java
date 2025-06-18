@@ -5,6 +5,7 @@
  */
 package comcrafthd;
 
+import comcrafthd.*;
 import comcrafthd.client.*;
 
 /**
@@ -22,8 +23,6 @@ public final class ComcraftGame {
     public final ChunkGenerator chunkGenerator;
     public final ChunkList chunkList;
     public final ChunkWorld chunkWorld;
-    public final BlockRegistry blockRegistry;
-    public final BlockDefinitions blockDefinitions;
     public final BlockMaterialList blockMaterials;
     public final KeyboardMapping keyboardMapping;
     public final CameraMovement cameraMovement;
@@ -43,8 +42,6 @@ public final class ComcraftGame {
         chunkList = new ChunkList();
         chunkWorld = new ChunkWorld();
         blockMaterials = new BlockMaterialList();
-        blockRegistry = new BlockRegistry();
-        blockDefinitions = new BlockDefinitions();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
     }
@@ -52,7 +49,7 @@ public final class ComcraftGame {
     public void initialize() {
         Log.info(this, "initialize() entered");
 
-        blockRegistry.initialize();
+        BlockDefinitions.initialize();
         renderer.initialize();
 
         System.gc();

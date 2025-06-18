@@ -6,6 +6,7 @@
 package comcrafthd.blocks;
 
 import comcrafthd.Block;
+import comcrafthd.BlockDefinitions;
 import comcrafthd.ComcraftGame;
 import comcrafthd.client.IBlockRenderer;
 import comcrafthd.client.blocks.StandardBlockRenderer;
@@ -95,7 +96,7 @@ public final class StandardBlockBuilder {
 
         Block block = new Block((byte) id, (byte) variant, blockRenderer);
 
-        ComcraftGame.instance.blockRegistry.registerBlock(block);
+        BlockDefinitions.registerBlock(block);
         return block;
     }
 

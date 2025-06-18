@@ -6,7 +6,7 @@
 package comcrafthd.client;
 
 import comcrafthd.Block;
-import comcrafthd.BlockRegistry;
+import comcrafthd.BlockDefinitions;
 import comcrafthd.Chunk;
 import comcrafthd.ComcraftGame;
 import comcrafthd.Log;
@@ -73,7 +73,6 @@ public final class ChunkRenderer {
     }
 
     private void renderChunkImpl(final Chunk chunk) {
-        final BlockRegistry blockRegistry = ComcraftGame.instance.blockRegistry;
 
         final BlockRenderParam param = new BlockRenderParam();
 
@@ -95,7 +94,7 @@ public final class ChunkRenderer {
                     final byte id = Block.getId(val);
                     final byte meta = Block.getMeta(val);
 
-                    final Block block = blockRegistry.get(id, meta);
+                    final Block block = BlockDefinitions.get(id);
                     if (block == null) {
                         continue;
                     }

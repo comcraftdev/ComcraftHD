@@ -6,7 +6,7 @@
 package comcrafthd.client.blocks;
 
 import comcrafthd.Block;
-import comcrafthd.BlockRegistry;
+import comcrafthd.BlockDefinitions;
 import comcrafthd.ChunkWorld;
 import comcrafthd.ComcraftGame;
 import comcrafthd.client.BlockMaterial;
@@ -101,16 +101,15 @@ public class StandardBlockRenderer implements IBlockRenderer {
 
     public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
         final ChunkWorld chunkWorld = ComcraftGame.instance.chunkWorld;
-        final BlockRegistry blockRegistry = ComcraftGame.instance.blockRegistry;
 
         for (int side = 0; side < Block.MAX_SIDES; ++side) {
-            if (!isSideOccluded(chunkWorld, blockRegistry, param, Block.SIDE_OFFSETS[side])) {
+            if (!isSideOccluded(chunkWorld, param, Block.SIDE_OFFSETS[side])) {
                 chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], texX[side], texY[side], colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
             }
         }
     }
 
-    private boolean isSideOccluded(final ChunkWorld chunkWorld, final BlockRegistry blockRegistry, final BlockRenderParam param, final int[] side) {
+    private boolean isSideOccluded(final ChunkWorld chunkWorld, final BlockRenderParam param, final int[] side) {
         final int x = param.blockX + side[0];
         final int y = param.blockY + side[1];
         final int z = param.blockZ + side[2];
@@ -120,7 +119,7 @@ public class StandardBlockRenderer implements IBlockRenderer {
         }
         
         final short value = chunkWorld.get(x, y, z);
-        final Block block = blockRegistry.get(value);
+        final Block block = BlockDefinitions.get(value);
         return block == null ? false : block.occludesNeighbourFace;
     }
 

@@ -33,7 +33,6 @@ public final class ChunkGenerator {
 
     private void generateImpl() {
         final Chunk chunk = this.chunk;
-        final BlockDefinitions blocks = ComcraftGame.instance.blockDefinitions;
 
         final int offsetX = chunk.chunkX * Chunk.CHUNK_SIZE;
         final int offsetZ = chunk.chunkZ * Chunk.CHUNK_SIZE;
@@ -48,17 +47,16 @@ public final class ChunkGenerator {
                 final float noiseVal = noise.getPerlin(globalX, globalZ);
                 final float height = 28 + noiseVal * 15;
 
-                fillRect(x, 0, z, 1, (int) height, 1, blocks.grass.fullId);
+                fillRect(x, 0, z, 1, (int) height, 1, BlockDefinitions.grass.fullId);
             }
         }
     }
 
     private void generateImplTest() {
-        final BlockDefinitions blocks = ComcraftGame.instance.blockDefinitions;
 
-        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, blocks.stone.fullId);
+        fillRect(0, 0, 0, Chunk.CHUNK_SIZE, 3, Chunk.CHUNK_SIZE, BlockDefinitions.stone.fullId);
 
-        fillRect(0, 3, 0, Chunk.CHUNK_SIZE, 5, Chunk.CHUNK_SIZE, blocks.grass.fullId);
+        fillRect(0, 3, 0, Chunk.CHUNK_SIZE, 5, Chunk.CHUNK_SIZE, BlockDefinitions.grass.fullId);
     }
 
     private void fillRect(final int localBlockX, final int localBlockY, final int localBlockZ, final int width, final int height, final int depth, final short value) {
