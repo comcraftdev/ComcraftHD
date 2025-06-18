@@ -1,7 +1,7 @@
 package comcrafthd.client;
 
 import comcrafthd.*;
-import comcrafthd.client.blocks.*;
+import comcrafthd.client.renderers.*;
 
 public final class BlockRendererDefinitions {
 

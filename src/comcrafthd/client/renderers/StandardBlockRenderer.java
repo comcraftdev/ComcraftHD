@@ -1,4 +1,4 @@
-package comcrafthd.client.blocks;
+package comcrafthd.client.renderers;
 
 import comcrafthd.*;
 import comcrafthd.client.*;
