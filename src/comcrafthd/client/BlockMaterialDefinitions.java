@@ -4,7 +4,7 @@ import comcrafthd.*;
 import java.io.*;
 import javax.microedition.m3g.*;
 
-public final class BlockMaterialList {
+public final class BlockMaterialDefinitions {
 
     public static final int MAX_MATERIALS = 4;
 

@@ -15,10 +15,10 @@ public final class ChunkRenderer {
     private int vertCountX3;
     private int texCountX2;
 
-    private final int[][] stripIndices = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
-    private final int[][] stripLengths = new int[BlockMaterialList.MAX_MATERIALS][MAX_STRIPS];
-    private final int[] stripsIndicesCount = new int[BlockMaterialList.MAX_MATERIALS];
-    private final int[] stripsLengthsCount = new int[BlockMaterialList.MAX_MATERIALS];
+    private final int[][] stripIndices = new int[BlockMaterialDefinitions.MAX_MATERIALS][MAX_STRIPS];
+    private final int[][] stripLengths = new int[BlockMaterialDefinitions.MAX_MATERIALS][MAX_STRIPS];
+    private final int[] stripsIndicesCount = new int[BlockMaterialDefinitions.MAX_MATERIALS];
+    private final int[] stripsLengthsCount = new int[BlockMaterialDefinitions.MAX_MATERIALS];
 
     private boolean overflow;
 
@@ -103,7 +103,7 @@ public final class ChunkRenderer {
             return null;
         }
 
-        final BlockMaterialList materialList = ComcraftGame.instance.blockMaterials;
+        final BlockMaterialDefinitions materialList = ComcraftGame.instance.blockMaterials;
 
         final int vertCount = vertCountX3 / 3;
 
@@ -129,7 +129,7 @@ public final class ChunkRenderer {
 
         int usedMaterialCount = 0;
 
-        for (int n = BlockMaterialList.MAX_MATERIALS - 1; n >= 0; --n) {
+        for (int n = BlockMaterialDefinitions.MAX_MATERIALS - 1; n >= 0; --n) {
             if (stripsIndicesCount[n] > 0) {
                 usedMaterialCount++;
             }
@@ -139,7 +139,7 @@ public final class ChunkRenderer {
         final TriangleStripArray[] stripsArrs = new TriangleStripArray[usedMaterialCount];
         int stripsArrsIdx = 0;
 
-        for (int matIdx = BlockMaterialList.MAX_MATERIALS - 1; matIdx >= 0; --matIdx) {
+        for (int matIdx = BlockMaterialDefinitions.MAX_MATERIALS - 1; matIdx >= 0; --matIdx) {
             final int indicesCount = stripsIndicesCount[matIdx];
             final int lengthsCount = stripsLengthsCount[matIdx];
 
