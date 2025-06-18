@@ -2,6 +2,10 @@ package comcrafthd.client;
 
 import comcrafthd.*;
 
+/**
+ * Reusable parameter object allocated once per chunk to avoid excessive
+ * method parameters and stack usage on J2ME platforms.
+ */
 public final class BlockRenderParam {
 
     public int blockX;
