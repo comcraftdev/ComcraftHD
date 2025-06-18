@@ -11,9 +11,31 @@ public final class BlockMaterialDefinitions {
     public static final BlockMaterial[] materials = new BlockMaterial[MAX_MATERIALS];
 
     public static BlockMaterial standardMat;
+    
+    private static boolean initialized = false;
+    private static boolean dirty = false;
 
     public static void initialize() {
+        if (initialized && !dirty) {
+            return;
+        }
+        
+        // Clear existing materials if dirty
+        if (dirty) {
+            for (int i = 0; i < materials.length; i++) {
+                materials[i] = null;
+            }
+            System.gc();
+        }
+        
         standardMat = createMaterial(0);
+        
+        initialized = true;
+        dirty = false;
+    }
+    
+    public static void setDirty() {
+        dirty = true;
     }
 
     private static BlockMaterial createMaterial(int idx) {
