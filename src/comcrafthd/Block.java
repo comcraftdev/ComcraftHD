@@ -10,7 +10,7 @@ public class Block {
      * The last 4 bits are reserved for lighting.
      */
     public static final short BLOCK_ID_MASK = (short) 0x00FF;
-    public static final short BLOCK_META_MASK = (short) 0x0F00;
+    public static final short BLOCK_META_MASK = (short) 0x0F;
     public static final int BLOCK_META_SHIFT = 8;
 
     public static final int MAX_SIDES = 6;
