@@ -94,6 +94,7 @@ public final class ComcraftGame {
                 }
                 
                 if (canBreak) {
+                    Log.info(this, "Breaking block at " + picker.targetX + "," + picker.targetY + "," + picker.targetZ + " (ID: " + blockId + ")");
                     chunkWorld.set(picker.targetX, picker.targetY, picker.targetZ, (short)0);
                     updateChunkAt(picker.targetX, picker.targetY, picker.targetZ);
                     
@@ -122,6 +123,7 @@ public final class ComcraftGame {
                         
                         int blockId = playerInventory.getSelectedBlockId();
                         short blockData = (short)(blockId & 0xFF);
+                        Log.info(this, "Placing block at " + placementPos[0] + "," + placementPos[1] + "," + placementPos[2] + " (ID: " + blockId + ")");
                         chunkWorld.set(placementPos[0], placementPos[1], placementPos[2], blockData);
                         updateChunkAt(placementPos[0], placementPos[1], placementPos[2]);
                         
