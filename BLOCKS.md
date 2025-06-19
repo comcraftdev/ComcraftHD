@@ -273,3 +273,160 @@ In classic Minecraft (pre-1.13), blocks use:
    - Simplified physics
    - Reduced metadata usage
    - Efficient rendering for common blocks
+
+## Texture Atlas System
+
+ComcraftHD uses a texture atlas system following standard Minecraft conventions for efficient texture management on J2ME devices.
+
+### Atlas Structure
+
+- **File**: `res/terrain.png`
+- **Grid**: 16x16 tiles (256 textures total)
+- **Tile Size**: Each tile is 1/16th of the atlas width/height
+- **Coordinate System**: Uses (x, y) grid coordinates where:
+  - x = 0-15 (left to right)
+  - y = 0-15 (top to bottom)
+  - (0, 0) is the top-left corner
+
+### Texture Coordinate Reference
+
+Following the standard Minecraft texture atlas layout:
+
+#### Row 0 (y=0)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Grass top | Grass block top |
+| 1 | Stone | Stone |
+| 2 | Dirt | Dirt, Grass block bottom |
+| 3 | Grass side | Grass block sides |
+| 4 | Wooden planks | Oak planks |
+| 5 | Stone slab side | Double stone slab sides |
+| 6 | Stone slab top | Double stone slab top/bottom |
+| 7 | Brick | Brick block |
+| 8 | TNT side | TNT sides |
+| 9 | TNT top | TNT top |
+| 10 | TNT bottom | TNT bottom |
+| 11 | Cobweb | Cobweb |
+| 12 | Rose | Rose (old flower) |
+| 13 | Dandelion | Dandelion |
+| 14 | Water | Water (unused in portal) |
+| 15 | Sapling | Oak sapling |
+
+#### Row 1 (y=1)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Cobblestone | Cobblestone |
+| 1 | Bedrock | Bedrock |
+| 2 | Sand | Sand |
+| 3 | Gravel | Gravel |
+| 4 | Log side | Oak log sides |
+| 5 | Log top | Oak log top/bottom |
+| 6 | Iron block | Iron block |
+| 7 | Gold block | Gold block |
+| 8 | Diamond block | Diamond block |
+| 9 | Emerald block | Emerald block |
+| 10 | Redstone block | Redstone block |
+| 11 | Mushroom red | Red mushroom |
+| 12 | Mushroom brown | Brown mushroom |
+| 13 | Jungle sapling | Jungle sapling |
+| 14 | Fire | Fire (animated) |
+| 15 | Redstone dust | Redstone wire |
+
+#### Row 2 (y=2)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Gold ore | Gold ore |
+| 1 | Iron ore | Iron ore |
+| 2 | Coal ore | Coal ore |
+| 3 | Bookshelf | Bookshelf |
+| 4 | Mossy cobblestone | Mossy cobblestone |
+| 5 | Obsidian | Obsidian |
+| 6 | Tall grass | Tall grass |
+| 7 | Tall grass top | Tall grass (top part) |
+| 8 | Beacon | Beacon |
+| 9 | Crafting table top | Crafting table top |
+| 10 | Furnace front | Furnace front |
+| 11 | Furnace side | Furnace side/back/top |
+| 12 | Dispenser front | Dispenser front |
+| 13 | Pumpkin front | Pumpkin front |
+| 14 | Pumpkin side | Pumpkin side |
+| 15 | Pumpkin top | Pumpkin top/bottom |
+
+#### Row 3 (y=3)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Sponge | Sponge |
+| 1 | Glass | Glass |
+| 2 | Diamond ore | Diamond ore |
+| 3 | Redstone ore | Redstone ore |
+| 4 | Oak leaves | Oak leaves |
+| 5 | Dark oak leaves | Dark oak leaves |
+| 6 | Stone brick | Stone brick |
+| 7 | Dead bush | Dead bush |
+| 8 | Fern | Fern |
+| 9 | Crafting table side | Crafting table side |
+| 10 | Crafting table front | Crafting table front |
+| 11 | Furnace front lit | Furnace front (active) |
+| 12 | Furnace top | Furnace top |
+| 13 | Spruce sapling | Spruce sapling |
+| 14 | White wool | White wool |
+| 15 | Mob spawner | Monster spawner |
+
+#### Row 4 (y=4)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Snow | Snow layer/block |
+| 1 | Ice | Ice |
+| 2 | Snow grass side | Grass block side (snowy) |
+| 3 | Cactus top | Cactus top |
+| 4 | Cactus side | Cactus side |
+| 5 | Cactus bottom | Cactus bottom |
+| 6 | Clay | Clay block |
+| 7 | Sugar cane | Sugar cane |
+| 8 | Jukebox side | Jukebox side |
+| 9 | Jukebox top | Jukebox top |
+| 10 | Lily pad | Lily pad |
+| 11 | Mycelium side | Mycelium side |
+| 12 | Mycelium top | Mycelium top |
+| 13 | Birch sapling | Birch sapling |
+| 14 | Torch | Torch |
+| 15 | Oak door top | Oak door (upper) |
+
+#### Row 5 (y=5)
+| x | Texture | Block |
+|---|---------|-------|
+| 0 | Iron door top | Iron door (upper) |
+| 1 | Iron door bottom | Iron door (lower) |
+| 2 | Ladder | Ladder |
+| 3 | Trapdoor | Trapdoor |
+| 4 | Iron bars | Iron bars |
+| 5 | Farmland wet | Farmland (moist) |
+| 6 | Farmland dry | Farmland (dry) |
+| 7 | Wheat stage 0 | Wheat (stage 0) |
+| 8 | Wheat stage 1 | Wheat (stage 1) |
+| 9 | Wheat stage 2 | Wheat (stage 2) |
+| 10 | Wheat stage 3 | Wheat (stage 3) |
+| 11 | Wheat stage 4 | Wheat (stage 4) |
+| 12 | Wheat stage 5 | Wheat (stage 5) |
+| 13 | Wheat stage 6 | Wheat (stage 6) |
+| 14 | Wheat stage 7 | Wheat (stage 7) |
+| 15 | Lever | Lever |
+
+### Implementation Details
+
+#### Special Texture Handling
+
+1. **Animated Textures**: Water, lava, fire, and portal blocks can have animated textures
+
+2. **Biome Coloring**: Grass and leaves can be tinted based on biome
+
+3. **Connected Textures**: Glass panes and similar blocks can have connected textures
+
+4. **Rotated Textures**: Logs and pillars can have rotated textures based on orientation
+
+#### Performance Considerations
+
+- All block textures are stored in a single atlas to minimize texture switching
+- The 16x16 grid allows for 256 unique textures, sufficient for core Minecraft blocks
+- Texture coordinates are stored as bytes (0-255) for memory efficiency
+- The atlas is loaded once and reused for all block rendering
