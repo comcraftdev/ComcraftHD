@@ -22,7 +22,7 @@ public final class ChunkWorld {
     }
 
     public short get(final int blockX, final int blockY, final int blockZ) {
-        if (blockY < 0 || blockY > Chunk.CHUNK_HEIGHT) {
+        if (blockY < 0 || blockY >= Chunk.CHUNK_HEIGHT) {
             return 0;
         }
 
