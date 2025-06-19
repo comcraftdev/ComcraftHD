@@ -19,7 +19,7 @@ public final class ChunkRenderer {
     private static final int MAX_VERTICES = 1024 * 16;
     private static final int MAX_STRIPS = MAX_VERTICES / 2;
 
-    private final byte[] vertices = new byte[3 * MAX_VERTICES];
+    private final short[] vertices = new short[3 * MAX_VERTICES];
     private final byte[] normals = new byte[3 * MAX_VERTICES];
     private final byte[] texes = new byte[2 * MAX_VERTICES];
     private final byte[] colors = new byte[3 * MAX_VERTICES];
@@ -117,7 +117,7 @@ public final class ChunkRenderer {
 
         final int vertCount = vertCountX3 / 3;
 
-        VertexArray vertArr = new VertexArray(vertCount, 3, 1);
+        VertexArray vertArr = new VertexArray(vertCount, 3, 2);
         vertArr.set(0, vertCount, vertices);
 
         VertexArray normArr = new VertexArray(vertCount, 3, 1);
@@ -207,14 +207,14 @@ public final class ChunkRenderer {
 
         final int vertLen = vertices.length;
 
-        final int ox = (byte) (param.localBlockX * ChunkRenderer.BLOCK_RENDER_SIZE);
-        final int oy = (byte) (param.localBlockY * ChunkRenderer.BLOCK_RENDER_SIZE);
-        final int oz = (byte) (param.localBlockZ * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final short ox = (short) (param.localBlockX * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final short oy = (short) (param.localBlockY * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final short oz = (short) (param.localBlockZ * ChunkRenderer.BLOCK_RENDER_SIZE);
 
         for (int n = 0; n < vertLen; n += 3) {
-            this.vertices[startingVertIdx + n + 0] = (byte) (vertices[n + 0] + ox);
-            this.vertices[startingVertIdx + n + 1] = (byte) (vertices[n + 1] + oy);
-            this.vertices[startingVertIdx + n + 2] = (byte) (vertices[n + 2] + oz);
+            this.vertices[startingVertIdx + n + 0] = (short) (vertices[n + 0] + ox);
+            this.vertices[startingVertIdx + n + 1] = (short) (vertices[n + 1] + oy);
+            this.vertices[startingVertIdx + n + 2] = (short) (vertices[n + 2] + oz);
         }
 
         System.arraycopy(normals, 0, this.normals, vertCountX3, vertLen);
