@@ -3,8 +3,17 @@ package comcrafthd;
 public class PlayerInventory {
     
     private static final byte[] AVAILABLE_BLOCKS = {
-        1, // stone
-        2  // grass
+        1,  // stone
+        2,  // grass
+        3,  // dirt
+        4,  // cobblestone
+        5,  // planks
+        12, // sand
+        13, // gravel
+        17, // log
+        20, // glass
+        45, // bricks
+        89  // glowstone
     };
     
     private int selectedIndex = 0;
@@ -26,10 +35,10 @@ public class PlayerInventory {
     
     public String getSelectedBlockName() {
         byte id = getSelectedBlockId();
-        switch (id) {
-            case 1: return "Stone";
-            case 2: return "Grass";
-            default: return "Block " + id;
+        Block block = BlockDefinitions.blocks[id];
+        if (block != null && block.name != null) {
+            return block.name;
         }
+        return "Block " + id;
     }
 }

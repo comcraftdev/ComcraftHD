@@ -24,6 +24,13 @@ public final class BlockBuilder {
     private byte[] texX = new byte[Block.MAX_SIDES];
     private byte[] texY = new byte[Block.MAX_SIDES];
     private byte[][] colors;
+    
+    private boolean occludesNeighbourFace = true;
+    private boolean isTransparent = false;
+    private byte lightLevel = 0;
+    private float hardness = 1.0f;
+    private byte material = Block.MATERIAL_SOLID;
+    private String name = null;
 
     private BlockBuilder() {
     }
@@ -85,9 +92,53 @@ public final class BlockBuilder {
         setColor(Block.SIDE_TOP, col);
         return this;
     }
+    
+    public BlockBuilder setOccludesNeighbourFace(boolean occludes) {
+        this.occludesNeighbourFace = occludes;
+        return this;
+    }
+    
+    public BlockBuilder setTransparent(boolean transparent) {
+        this.isTransparent = transparent;
+        if (transparent) {
+            this.occludesNeighbourFace = false;
+        }
+        return this;
+    }
+    
+    public BlockBuilder setLightLevel(int level) {
+        this.lightLevel = (byte) level;
+        return this;
+    }
+    
+    public BlockBuilder setHardness(float hardness) {
+        this.hardness = hardness;
+        return this;
+    }
+    
+    public BlockBuilder setMaterial(byte material) {
+        this.material = material;
+        return this;
+    }
+    
+    public BlockBuilder setName(String name) {
+        this.name = name;
+        return this;
+    }
+    
+    public BlockBuilder setRendererIndex(int rendererIndex) {
+        this.rendererIndex = rendererIndex;
+        return this;
+    }
 
     public Block build() {
-        Block block = new Block((byte) id, (byte) rendererIndex, texX, texY, colors == null ? DEFAULT_COLORS : colors);
+        if (name == null) {
+            name = "block_" + id;
+        }
+        Block block = new Block((byte) id, (byte) rendererIndex, texX, texY, 
+                               colors == null ? DEFAULT_COLORS : colors,
+                               occludesNeighbourFace, isTransparent, lightLevel,
+                               hardness, material, name);
         BlockDefinitions.register(block);
         return block;
     }

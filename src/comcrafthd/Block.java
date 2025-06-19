@@ -40,14 +40,44 @@ public class Block {
     public final byte[] texY;
     public final byte[][] colors;
 
-    public final boolean occludesNeighbourFace = true;
+    public final boolean occludesNeighbourFace;
+    public final boolean isTransparent;
+    public final byte lightLevel;
+    public final float hardness;
+    public final byte material; // 0=solid, 1=liquid, 2=plant, 3=glass, etc
+    public final String name;
+    
+    // Material type constants
+    public static final byte MATERIAL_SOLID = 0;
+    public static final byte MATERIAL_LIQUID = 1;
+    public static final byte MATERIAL_PLANT = 2;
+    public static final byte MATERIAL_GLASS = 3;
+    public static final byte MATERIAL_LEAVES = 4;
+    public static final byte MATERIAL_WOOL = 5;
+    public static final byte MATERIAL_SAND = 6;
+    public static final byte MATERIAL_WOOD = 7;
+    public static final byte MATERIAL_STONE = 8;
+    public static final byte MATERIAL_METAL = 9;
 
-    public Block(byte id, byte rendererIndex, byte[] texX, byte[] texY, byte[][] colors) {
+    public Block(byte id, byte rendererIndex, byte[] texX, byte[] texY, byte[][] colors,
+                 boolean occludesNeighbourFace, boolean isTransparent, byte lightLevel,
+                 float hardness, byte material, String name) {
         this.id = id;
         this.rendererIndex = rendererIndex;
         this.texX = texX;
         this.texY = texY;
         this.colors = colors;
+        this.occludesNeighbourFace = occludesNeighbourFace;
+        this.isTransparent = isTransparent;
+        this.lightLevel = lightLevel;
+        this.hardness = hardness;
+        this.material = material;
+        this.name = name;
+    }
+    
+    // Backward compatibility constructor
+    public Block(byte id, byte rendererIndex, byte[] texX, byte[] texY, byte[][] colors) {
+        this(id, rendererIndex, texX, texY, colors, true, false, (byte)0, 1.0f, MATERIAL_SOLID, "block_" + id);
     }
 
     public String toString() {
