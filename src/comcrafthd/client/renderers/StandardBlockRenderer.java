@@ -75,9 +75,9 @@ public class StandardBlockRenderer extends BlockRenderer {
         final int y = param.blockY + side[1];
         final int z = param.blockZ + side[2];
 
-        if (y < 0) {
-            return true;
-        }
+        // if (y < 0) {
+        //     return true;
+        // }
 
         final short value = chunkWorld.get(x, y, z);
         final Block block = BlockDefinitions.blocks[Block.getId(value)];
