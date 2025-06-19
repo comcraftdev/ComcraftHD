@@ -14,8 +14,8 @@ public final class BlockRenderParam {
     public int localBlockX;
     public int localBlockY;
     public int localBlockZ;
-    public byte id;
-    public byte meta;
+    public int id;
+    public int meta;
     public Block block;
 
 }

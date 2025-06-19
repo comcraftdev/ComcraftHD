@@ -1,12 +1,16 @@
 package comcrafthd;
 
-
 public class Block {
 
     public static final int BLOCK_MAX_ID = 256;
 
+    /**
+     * Bit masks for block data.
+     * The first 8 bits are used for the block ID, and the next 4 bits are used for metadata.
+     * The last 4 bits are reserved for lighting.
+     */
     public static final short BLOCK_ID_MASK = (short) 0x00FF;
-    public static final short BLOCK_META_MASK = (short) 0xFF00;
+    public static final short BLOCK_META_MASK = (short) 0x0F00;
     public static final int BLOCK_META_SHIFT = 8;
 
     public static final int MAX_SIDES = 6;
@@ -50,16 +54,12 @@ public class Block {
         return "Block(" + id + ")";
     }
 
-    public static byte getId(short data) {
-        return (byte) (data & BLOCK_ID_MASK);
+    public static int getId(short data) {
+        return (data & BLOCK_ID_MASK);
     }
 
-    public static int getIndex(short data) {
-        return (data & BLOCK_ID_MASK); // Avoids unnecessary cast to byte
-    }
-
-    public static byte getMeta(short data) {
-        return (byte) ((data >> BLOCK_META_SHIFT) & BLOCK_META_MASK);
+    public static int getMeta(short data) {
+        return ((data >> BLOCK_META_SHIFT) & BLOCK_META_MASK);
     }
 
 }

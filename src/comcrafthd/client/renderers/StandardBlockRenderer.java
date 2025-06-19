@@ -80,7 +80,7 @@ public class StandardBlockRenderer extends BlockRenderer {
         }
 
         final short value = chunkWorld.get(x, y, z);
-        final Block block = BlockDefinitions.blocks[Block.getIndex(value)];
+        final Block block = BlockDefinitions.blocks[Block.getId(value)];
         return block == null ? false : block.occludesNeighbourFace;
     }
 
