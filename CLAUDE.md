@@ -8,27 +8,7 @@ ComcraftHD is a J2ME (Java ME) voxel-based mobile game similar to Minecraft, tar
 
 ## Build Commands
 
-You currently don't have access to build commands, but here are the common command that user can run to build and run the project. If you need to check if the project builds successfully, you can ask the user to run these commands in their terminal:
-
-```bash
-# Build the JAR file
-ant jar
-
-# Clean and build
-ant clean jar
-
-# Run in emulator
-ant run
-
-# Debug in emulator
-ant debug
-
-# Build release version (optimized, obfuscated)
-ant -Dconfig.active=Release jar
-
-# Clean all configurations
-ant clean-all
-```
+You currently don't have access to build commands, but here are the common command that user can run to build and run the project. If you need to check if the project builds successfully, ask the user to build the project for you.
 
 ## Architecture
 
@@ -42,15 +22,17 @@ ant clean-all
   - `ChunkWorld.java` - World management
   - `ChunkGenerator.java` - Terrain generation
 - **Block System**: 
-  - `BlockList.java` - Block registry
-  - `BlockCreator.java` - Block creation logic
+  - `Block.java` - Base class for all blocks
+  - `BlockDefinitions.java` - Block registry
   - `blocks/` - Individual block implementations
+  - `client/renderers/` - Block renderers
 
 ### Threading Model
 
 The game uses multiple threads:
 - Game thread - Game logic updates
 - Renderer thread - 3D rendering
+- World loading/generation thread - Asynchronous world loading
 - Proper thread synchronization is critical for J2ME performance
 
 ### J2ME Constraints
