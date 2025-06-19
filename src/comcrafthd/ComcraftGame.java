@@ -156,8 +156,41 @@ public final class ComcraftGame {
         
         Chunk chunk = chunkList.getChunk(chunkX, chunkZ);
         if (chunk != null) {
+            // Remove old render cache from world if it exists
+            if (chunk.renderCache != null) {
+                renderer.threadCallbackRemoveChunk(chunk);
+            }
             // Invalidate render cache to force re-render
             chunk.renderCache = null;
+            Log.debug(this, "Updated chunk at " + chunkX + "," + chunkZ);
+        }
+        
+        // Check if block is at chunk boundary and update neighboring chunks
+        int localX = x & Chunk.BLOCK_TO_CHUNK_AND;
+        int localZ = z & Chunk.BLOCK_TO_CHUNK_AND;
+        
+        // Update neighboring chunks if at boundaries
+        if (localX == 0) {
+            updateChunkOnly(chunkX - 1, chunkZ);
+        } else if (localX == Chunk.CHUNK_SIZE - 1) {
+            updateChunkOnly(chunkX + 1, chunkZ);
+        }
+        
+        if (localZ == 0) {
+            updateChunkOnly(chunkX, chunkZ - 1);
+        } else if (localZ == Chunk.CHUNK_SIZE - 1) {
+            updateChunkOnly(chunkX, chunkZ + 1);
+        }
+    }
+    
+    private void updateChunkOnly(int chunkX, int chunkZ) {
+        Chunk chunk = chunkList.getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            if (chunk.renderCache != null) {
+                renderer.threadCallbackRemoveChunk(chunk);
+            }
+            chunk.renderCache = null;
+            Log.debug(this, "Updated neighboring chunk at " + chunkX + "," + chunkZ);
         }
     }
 
