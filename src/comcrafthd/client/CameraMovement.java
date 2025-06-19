@@ -57,9 +57,9 @@ public final class CameraMovement {
 
     private static final float MOVE_SPEED = 6f;
 
-    public float positionX;
+    public float positionX = 0;
     public float positionY = 10;
-    public float positionZ;
+    public float positionZ = 0;
 
     private void move(float right, float up, float forward) {
         final float forwardX = (float) -Math.sin(Math.toRadians(rotationY));
@@ -71,6 +71,8 @@ public final class CameraMovement {
         positionX += (forward * forwardX + right * rightX) * MOVE_SPEED * Time.dt;
         positionY += up * MOVE_SPEED * Time.dt;
         positionZ += (forward * forwardZ + right * rightZ) * MOVE_SPEED * Time.dt;
+
+        Log.debug(this, "Camera position: " + positionX + ", " + positionY + ", " + positionZ);
     }
 
     public void updateCamera(final Camera camera) {
