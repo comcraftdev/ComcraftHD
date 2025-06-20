@@ -19,7 +19,7 @@ public class StandardBlockRenderer extends BlockRenderer {
     // 3 * * * * * 2
     // The ascii diagram above represents the vertices in the first line
     // (the first tri-strip)
-    private static final byte S = ChunkRenderer.BLOCK_RENDER_SIZE;
+    private static final byte S = ChunkMesher.BLOCK_RENDER_SIZE;
 
     private static final byte[][] VERT = {
         {S, S, S, 0, S, S, S, 0, S, 0, 0, S}, // front
@@ -60,12 +60,12 @@ public class StandardBlockRenderer extends BlockRenderer {
         this.blockMaterial = blockMaterial;
     }
 
-    public void render(final ChunkRenderer chunkRenderer, final BlockRenderParam param) {
+    public void render(final ChunkMesher chunkMesher, final BlockRenderParam param) {
         final ChunkWorld chunkWorld = ComcraftGame.instance.chunkWorld;
 
         for (int side = 0; side < Block.MAX_SIDES; ++side) {
             if (!isSideOccluded(chunkWorld, param, Block.SIDE_OFFSETS[side])) {
-                chunkRenderer.render(param, VERT[side], NORM[side], TEX[side], param.block.texX[side], param.block.texY[side], param.block.colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
+                chunkMesher.render(param, VERT[side], NORM[side], TEX[side], param.block.texX[side], param.block.texY[side], param.block.colors[side], STRIP_IND, STRIP_LEN, blockMaterial);
             }
         }
     }

@@ -3,7 +3,7 @@ package comcrafthd.client;
 import comcrafthd.*;
 import javax.microedition.m3g.*;
 
-public final class ChunkRenderer {
+public final class ChunkMesher {
 
     /*
     * Submitted byte coordinates are divided by BLOCK_RENDER_SIZE to convert to world coordinates.
@@ -46,15 +46,15 @@ public final class ChunkRenderer {
         }
     }
 
-    public boolean renderChunk(final Chunk chunk) {
+    public boolean meshChunk(final Chunk chunk) {
         reset();
-        renderChunkImpl(chunk);
+        meshChunkImpl(chunk);
         Node node = finalizeNode(chunk);
 
         return chunk.renderCache.set(node);
     }
 
-    private void renderChunkImpl(final Chunk chunk) {
+    private void meshChunkImpl(final Chunk chunk) {
 
         final BlockRenderParam param = new BlockRenderParam();
 
@@ -122,9 +122,9 @@ public final class ChunkRenderer {
         final float[] bias = {chunk.chunkX * Chunk.CHUNK_SIZE, 0, chunk.chunkZ * Chunk.CHUNK_SIZE};
 
         VertexBuffer vertexBuffer = new VertexBuffer();
-        vertexBuffer.setPositions(vertArr, 1f / ChunkRenderer.BLOCK_RENDER_SIZE, bias);
+        vertexBuffer.setPositions(vertArr, 1f / ChunkMesher.BLOCK_RENDER_SIZE, bias);
         vertexBuffer.setNormals(normArr);
-        vertexBuffer.setTexCoords(0, texArr, 1f / ChunkRenderer.TEXTURE_ATLAS_SIZE, null);
+        vertexBuffer.setTexCoords(0, texArr, 1f / ChunkMesher.TEXTURE_ATLAS_SIZE, null);
         vertexBuffer.setColors(colArr);
 
         int usedMaterialCount = 0;
@@ -197,9 +197,9 @@ public final class ChunkRenderer {
 
         final int vertLen = vertices.length;
 
-        final short ox = (short) (param.localBlockX * ChunkRenderer.BLOCK_RENDER_SIZE);
-        final short oy = (short) (param.localBlockY * ChunkRenderer.BLOCK_RENDER_SIZE);
-        final short oz = (short) (param.localBlockZ * ChunkRenderer.BLOCK_RENDER_SIZE);
+        final short ox = (short) (param.localBlockX * ChunkMesher.BLOCK_RENDER_SIZE);
+        final short oy = (short) (param.localBlockY * ChunkMesher.BLOCK_RENDER_SIZE);
+        final short oz = (short) (param.localBlockZ * ChunkMesher.BLOCK_RENDER_SIZE);
 
         for (int n = 0; n < vertLen; n += 3) {
             this.vertices[startingVertIdx + n + 0] = (short) (vertices[n + 0] + ox);

@@ -3,17 +3,17 @@ package comcrafthd.client;
 import comcrafthd.*;
 import comcrafthd.util.*;
 
-public final class ComcraftRendererThread implements Runnable {
+public final class ChunkMesherThread implements Runnable {
 
     private final ComcraftRenderer renderer;
-    private final ChunkRenderer chunkRenderer;
+    private final ChunkMesher chunkMesher;
 
     private boolean stopped = false;
     private Thread thread;
 
-    public ComcraftRendererThread(final ComcraftRenderer renderer, ChunkRenderer chunkRenderer) {
+    public ChunkMesherThread(final ComcraftRenderer renderer, ChunkMesher chunkMesher) {
         this.renderer = renderer;
-        this.chunkRenderer = chunkRenderer;
+        this.chunkMesher = chunkMesher;
     }
 
     public void start() {
@@ -44,7 +44,7 @@ public final class ComcraftRendererThread implements Runnable {
 
         final Chunk chunkToRender = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
         if (chunkToRender != null) {
-            if (chunkRenderer.renderChunk(chunkToRender)) {
+            if (chunkMesher.meshChunk(chunkToRender)) {
                 renderer.threadCallbackAddRenderCache(chunkToRender.renderCache);
             }
         }

@@ -8,8 +8,8 @@ import javax.microedition.m3g.*;
 
 public final class ComcraftRenderer {
 
-    public final ChunkRenderer chunkRenderer;
-    public final ComcraftRendererThread rendererThread;
+    public final ChunkMesher chunkMesher;
+    public final ChunkMesherThread mesherThread;
 
     public final GameCanvas canvas;
     private final Graphics graphics;
@@ -26,8 +26,8 @@ public final class ComcraftRenderer {
         graphics = canvas.getGraphics();
         g3d = Graphics3D.getInstance();
 
-        chunkRenderer = new ChunkRenderer();
-        rendererThread = new ComcraftRendererThread(this, chunkRenderer);
+        chunkMesher = new ChunkMesher();
+        mesherThread = new ChunkMesherThread(this, chunkMesher);
         selectionRenderer = new SelectionRenderer();
         blockPicker = new BlockPicker();
 
@@ -35,11 +35,11 @@ public final class ComcraftRenderer {
     }
 
     public void start() {
-        rendererThread.start();
+        mesherThread.start();
     }
 
     public void stop() {
-        rendererThread.stop();
+        mesherThread.stop();
     }
 
     public synchronized void render() {
