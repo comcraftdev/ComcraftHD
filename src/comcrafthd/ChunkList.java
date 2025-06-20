@@ -27,7 +27,7 @@ public final class ChunkList {
         for (final Enumeration e = chunks.elements(); e.hasMoreElements();) {
             final Chunk chunk = (Chunk) e.nextElement();
 
-            if (chunk.renderCache != null && chunk.renderCache.isRenderDone()) {
+            if (chunk.renderCache.isDone()) {
                 continue;
             }
 

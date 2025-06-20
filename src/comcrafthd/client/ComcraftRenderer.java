@@ -66,13 +66,13 @@ public final class ComcraftRenderer {
     }
 
     public synchronized void threadCallbackAddChunk(final Chunk chunk) {
-        ChunkRenderCache cache = (ChunkRenderCache) chunk.renderCache;
-        world.addChild(cache.node);
+        Node node = (Node) chunk.renderCache.get();
+        world.addChild(node);
     }
 
     public synchronized void threadCallbackRemoveChunk(final Chunk chunk) {
-        ChunkRenderCache cache = (ChunkRenderCache) chunk.renderCache;
-        world.removeChild(cache.node);
+        Node node = (Node) chunk.renderCache.get();
+        world.removeChild(node);
     }
 
     public static final int SKY_COLOR = 0x87ceeb;

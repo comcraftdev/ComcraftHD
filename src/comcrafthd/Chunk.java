@@ -19,7 +19,7 @@ public final class Chunk {
     public final short chunkX;
     public final short chunkZ;
 
-    public RenderState renderCache;
+    public final RenderCache renderCache = new RenderCache();
 
     public Chunk(short chunkX, short chunkZ) {
         this.chunkX = chunkX;

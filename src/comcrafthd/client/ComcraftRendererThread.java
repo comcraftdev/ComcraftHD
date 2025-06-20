@@ -49,23 +49,18 @@ public final class ComcraftRendererThread implements Runnable {
         if (chunkToRender != null) {
             chunkRenderer.renderChunk(chunkToRender);
 
-            ChunkRenderCache cache = (ChunkRenderCache) chunkToRender.renderCache;
-            if (cache != null && cache.node != null) {
+            if (chunkToRender.renderCache.get() != null) {
                 renderer.threadCallbackAddChunk(chunkToRender);
             }
         }
     }
 
     public void dropChunkCallback(final Chunk chunk) {
-        ChunkRenderCache cache = (ChunkRenderCache) chunk.renderCache;
-        if (cache != null && cache.node != null) {
+        if (chunk.renderCache.get() != null) {
             renderer.threadCallbackRemoveChunk(chunk);
         }
 
-        if (cache != null) {
-            cache.done = false;
-            cache.node = null;
-        }
+        chunk.renderCache.clear();
     }
 
     public void run() {
