@@ -67,14 +67,14 @@ public final class ComcraftRenderer {
         canvas.flushGraphics();
     }
 
-    public synchronized void threadCallbackAddRenderCache(final RenderCache renderCache) {
+    public synchronized void addMeshedChunk(final RenderCache renderCache) {
         Node node = (Node) renderCache.get();
         if (node != null) {
             world.addChild(node);
         }
     }
 
-    public synchronized void threadCallbackRemoveRenderCache(final RenderCache renderCache) {
+    public synchronized void removeMeshedChunk(final RenderCache renderCache) {
         Node node = (Node) renderCache.get();
         if (node != null) {
             world.removeChild(node);

@@ -41,7 +41,7 @@ public final class ChunkMesherThread implements Runnable {
             if (chunkMesher.meshChunk(chunkToMesh)) {
                 long meshTime = System.currentTimeMillis() - startTime;
                 Log.debug(this, "Meshed chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ + " in " + meshTime + "ms");
-                renderer.threadCallbackAddRenderCache(chunkToMesh.renderCache);
+                renderer.addMeshedChunk(chunkToMesh.renderCache);
             } else {
                 Log.debug(this, "Chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ + " was cancelled during meshing");
             }
