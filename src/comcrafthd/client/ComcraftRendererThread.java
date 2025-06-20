@@ -36,16 +36,16 @@ public final class ComcraftRendererThread implements Runnable {
     }
 
     private void tick() {
-        final ChunkList chunkList = ComcraftGame.instance.chunkList;
+        final ChunkWorld chunkWorld = ComcraftGame.instance.chunkWorld;
         final CameraMovement cameraMovement = ComcraftGame.instance.cameraMovement;
 
         final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
         final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
 
-        chunkList.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance, this);
-        chunkList.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
+        chunkWorld.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance, this);
+        chunkWorld.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
 
-        final Chunk chunkToRender = chunkList.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
+        final Chunk chunkToRender = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
         if (chunkToRender != null) {
             chunkRenderer.renderChunk(chunkToRender);
 

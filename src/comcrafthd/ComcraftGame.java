@@ -14,7 +14,6 @@ public final class ComcraftGame {
 
     public final ChunkPartitionPool chunkPartitionPool;
     public final ChunkGenerator chunkGenerator;
-    public final ChunkList chunkList;
     public final ChunkWorld chunkWorld;
     public final KeyboardMapping keyboardMapping;
     public final CameraMovement cameraMovement;
@@ -36,7 +35,6 @@ public final class ComcraftGame {
 
         chunkPartitionPool = new ChunkPartitionPool();
         chunkGenerator = new ChunkGenerator();
-        chunkList = new ChunkList();
         chunkWorld = new ChunkWorld();
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
@@ -154,7 +152,7 @@ public final class ComcraftGame {
         int chunkY = y >> Chunk.BLOCK_TO_CHUNK_SHIFT;
         int chunkZ = z >> Chunk.BLOCK_TO_CHUNK_SHIFT;
         
-        Chunk chunk = chunkList.getChunk(chunkX, chunkZ);
+        Chunk chunk = chunkWorld.getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Remove old render cache from world if it exists
             renderer.threadCallbackRemoveChunk(chunk);
@@ -182,7 +180,7 @@ public final class ComcraftGame {
     }
     
     private void updateChunkOnly(int chunkX, int chunkZ) {
-        Chunk chunk = chunkList.getChunk(chunkX, chunkZ);
+        Chunk chunk = chunkWorld.getChunk(chunkX, chunkZ);
         if (chunk != null) {
             renderer.threadCallbackRemoveChunk(chunk);
             chunk.renderCache.clear();
