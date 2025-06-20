@@ -6,6 +6,7 @@ import java.util.*;
 public final class ChunkWorld {
 
     public final Hashtable chunks = new Hashtable(getInitialSize());
+    
     private final ChunkGenerator chunkGenerator;
     private final ChunkWorldListener listener;
 
@@ -19,7 +20,6 @@ public final class ChunkWorld {
         return (int) (ComcraftPrefs.instance.chunkRenderDistance * ComcraftPrefs.instance.chunkRenderDistance * 3.2f) + 1;
     }
 
-    // Block access methods (from old ChunkWorld)
     public ChunkWorld(ChunkGenerator chunkGenerator, ChunkWorldListener listener) {
         this.chunkGenerator = chunkGenerator;
         this.listener = listener;
@@ -62,7 +62,6 @@ public final class ChunkWorld {
         return 0;
     }
 
-    // Chunk management methods (from old ChunkList)
     public Chunk getClosestNotRenderedChunk(int blockX, int blockZ) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);

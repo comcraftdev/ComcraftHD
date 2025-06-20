@@ -81,6 +81,12 @@ public final class ComcraftGame implements ChunkWorldListener {
         
         chunkWorld.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
         chunkWorld.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
+        
+        // Find next chunk that needs meshing
+        Chunk chunkToMesh = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
+        if (chunkToMesh != null) {
+            renderer.setNextChunkToMesh(chunkToMesh);
+        }
     }
     
     private void handleBlockInteractions() {

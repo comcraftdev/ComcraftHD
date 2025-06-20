@@ -1,14 +1,13 @@
 package comcrafthd.client;
 
 import comcrafthd.*;
-import comcrafthd.util.*;
 
 public final class ChunkMesherThread implements Runnable {
 
     private final ComcraftRenderer renderer;
     private final ChunkMesher chunkMesher;
 
-    private boolean stopped = false;
+    private volatile boolean stopped = false;
     private Thread thread;
 
     public ChunkMesherThread(final ComcraftRenderer renderer, ChunkMesher chunkMesher) {
@@ -25,45 +24,45 @@ public final class ChunkMesherThread implements Runnable {
 
     public synchronized void stop() {
         stopped = true;
-
-        notify();
-
+        thread.interrupt(); // Wake up the thread
         try {
             thread.join();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
     }
-
-    private void tick() {
-        final ChunkWorld chunkWorld = ComcraftGame.instance.chunkWorld;
-        final CameraMovement cameraMovement = ComcraftGame.instance.cameraMovement;
-
-        final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
-        final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
-
-        final Chunk chunkToRender = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
-        if (chunkToRender != null) {
-            if (chunkMesher.meshChunk(chunkToRender)) {
-                renderer.threadCallbackAddRenderCache(chunkToRender.renderCache);
+    
+    private void tick() throws InterruptedException {
+        Chunk chunkToMesh = renderer.getNextChunkToMesh();
+        if (chunkToMesh != null && !chunkToMesh.renderCache.isDone()) {
+            long startTime = System.currentTimeMillis();
+            Log.debug(this, "Meshing chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ);
+            
+            if (chunkMesher.meshChunk(chunkToMesh)) {
+                long meshTime = System.currentTimeMillis() - startTime;
+                Log.debug(this, "Meshed chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ + " in " + meshTime + "ms");
+                renderer.threadCallbackAddRenderCache(chunkToMesh.renderCache);
+            } else {
+                Log.debug(this, "Chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ + " was cancelled during meshing");
             }
         }
     }
 
-
     public void run() {
-        Log.info(this, "run() entered");
+        Log.info(this, "Thread started");
 
         int oomCntr = 0;
 
         while (!stopped) {
             try {
                 tick();
-
                 oomCntr = 0;
-
-                Thread.yield();
+            } catch (InterruptedException ie) {
+                // Thread was interrupted, check if we should stop
+                continue;
             } catch (OutOfMemoryError oom) {
+                Log.info(this, "OutOfMemoryError during chunk meshing, counting: " + oomCntr);
+
                 if (++oomCntr > 3) {
                     throw oom;
                 }
@@ -74,7 +73,7 @@ public final class ChunkMesherThread implements Runnable {
             }
         }
 
-        Log.info(this, "run() finished");
+        Log.info(this, "Thread stopped");
     }
 
 }
