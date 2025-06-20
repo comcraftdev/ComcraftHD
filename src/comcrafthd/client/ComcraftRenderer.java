@@ -65,14 +65,18 @@ public final class ComcraftRenderer {
         canvas.flushGraphics();
     }
 
-    public synchronized void threadCallbackAddChunk(final Chunk chunk) {
-        Node node = (Node) chunk.renderCache.get();
-        world.addChild(node);
+    public synchronized void threadCallbackAddRenderCache(final RenderCache renderCache) {
+        Node node = (Node) renderCache.get();
+        if (node != null) {
+            world.addChild(node);
+        }
     }
 
-    public synchronized void threadCallbackRemoveChunk(final Chunk chunk) {
-        Node node = (Node) chunk.renderCache.get();
-        world.removeChild(node);
+    public synchronized void threadCallbackRemoveRenderCache(final RenderCache renderCache) {
+        Node node = (Node) renderCache.get();
+        if (node != null) {
+            world.removeChild(node);
+        }
     }
 
     public static final int SKY_COLOR = 0x87ceeb;

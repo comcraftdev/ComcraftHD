@@ -19,6 +19,9 @@ public final class RenderCache {
     }
 
     public synchronized void set(Object node) {
+        if (done) {
+            throw new IllegalStateException("renderCache not empty");
+        }
         this.node = node;
         done = true;
     }

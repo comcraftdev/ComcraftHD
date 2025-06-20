@@ -42,26 +42,14 @@ public final class ComcraftRendererThread implements Runnable {
         final int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
         final int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
 
-        chunkWorld.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance, this);
-        chunkWorld.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
-
         final Chunk chunkToRender = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
         if (chunkToRender != null) {
             chunkRenderer.renderChunk(chunkToRender);
 
-            if (chunkToRender.renderCache.get() != null) {
-                renderer.threadCallbackAddChunk(chunkToRender);
-            }
+            renderer.threadCallbackAddRenderCache(chunkToRender.renderCache);
         }
     }
 
-    public void dropChunkCallback(final Chunk chunk) {
-        if (chunk.renderCache.get() != null) {
-            renderer.threadCallbackRemoveChunk(chunk);
-        }
-
-        chunk.renderCache.clear();
-    }
 
     public void run() {
         Log.info(this, "run() entered");

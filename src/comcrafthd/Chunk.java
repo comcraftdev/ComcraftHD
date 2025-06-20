@@ -38,7 +38,7 @@ public final class Chunk {
             if (value == 0) {
                 return;
             }
-            partitions[partitionY] = ComcraftGame.instance.chunkPartitionPool.get();
+            partitions[partitionY] = ChunkPartitionPool.get();
         }
 
         partitions[partitionY].set(localBlockX, localPartitionY, localBlockZ, value);

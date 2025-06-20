@@ -2,17 +2,17 @@ package comcrafthd;
 
 import comcrafthd.client.*;
 import comcrafthd.blocks.*;
+import comcrafthd.util.*;
 import javax.microedition.m3g.*;
 import java.util.Vector;
 
-public final class ComcraftGame {
+public final class ComcraftGame implements ChunkWorldListener {
 
     public static ComcraftGame instance;
 
     public final ComcraftGameConfiguration gameConfiguration;
     public final ComcraftRenderer renderer;
 
-    public final ChunkPartitionPool chunkPartitionPool;
     public final ChunkGenerator chunkGenerator;
     public final ChunkWorld chunkWorld;
     public final KeyboardMapping keyboardMapping;
@@ -33,9 +33,8 @@ public final class ComcraftGame {
         this.gameConfiguration = gameConfiguration;
         this.renderer = renderer;
 
-        chunkPartitionPool = new ChunkPartitionPool();
         chunkGenerator = new ChunkGenerator();
-        chunkWorld = new ChunkWorld();
+        chunkWorld = new ChunkWorld(chunkGenerator, this);
         keyboardMapping = new KeyboardMapping();
         cameraMovement = new CameraMovement();
         playerInventory = new PlayerInventory();
@@ -70,9 +69,18 @@ public final class ComcraftGame {
         lastTickTime = currentTime;
         
         cameraMovement.tick();
+        updateChunks();
         handleBlockInteractions();
         updateEntities(dt);
         renderer.render();
+    }
+    
+    private void updateChunks() {
+        int centerBlockX = MathHelper.roundToInt(cameraMovement.positionX);
+        int centerBlockZ = MathHelper.roundToInt(cameraMovement.positionZ);
+        
+        chunkWorld.dropAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
+        chunkWorld.loadAround(centerBlockX, centerBlockZ, ComcraftPrefs.instance.chunkRenderDistance);
     }
     
     private void handleBlockInteractions() {
@@ -94,7 +102,6 @@ public final class ComcraftGame {
                 if (canBreak) {
                     Log.info(this, "Breaking block at " + picker.targetX + "," + picker.targetY + "," + picker.targetZ + " (ID: " + blockId + ")");
                     chunkWorld.set(picker.targetX, picker.targetY, picker.targetZ, (short)0);
-                    updateChunkAt(picker.targetX, picker.targetY, picker.targetZ);
                     
                     // Notify neighbors
                     notifyNeighbors(picker.targetX, picker.targetY, picker.targetZ);
@@ -123,7 +130,6 @@ public final class ComcraftGame {
                         short blockData = (short)(blockId & 0xFF);
                         Log.info(this, "Placing block at " + placementPos[0] + "," + placementPos[1] + "," + placementPos[2] + " (ID: " + blockId + ")");
                         chunkWorld.set(placementPos[0], placementPos[1], placementPos[2], blockData);
-                        updateChunkAt(placementPos[0], placementPos[1], placementPos[2]);
                         
                         // Trigger block placed behavior
                         BlockBehavior behavior = BehaviorRegistry.getBehavior(blockId);
@@ -147,45 +153,19 @@ public final class ComcraftGame {
         }
     }
     
-    private void updateChunkAt(int x, int y, int z) {
-        int chunkX = x >> Chunk.BLOCK_TO_CHUNK_SHIFT;
-        int chunkY = y >> Chunk.BLOCK_TO_CHUNK_SHIFT;
-        int chunkZ = z >> Chunk.BLOCK_TO_CHUNK_SHIFT;
-        
-        Chunk chunk = chunkWorld.getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            // Remove old render cache from world if it exists
-            renderer.threadCallbackRemoveChunk(chunk);
-            // Invalidate render cache to force re-render
-            chunk.renderCache.clear();
-            Log.debug(this, "Updated chunk at " + chunkX + "," + chunkZ);
-        }
-        
-        // Check if block is at chunk boundary and update neighboring chunks
-        int localX = x & Chunk.BLOCK_TO_CHUNK_AND;
-        int localZ = z & Chunk.BLOCK_TO_CHUNK_AND;
-        
-        // Update neighboring chunks if at boundaries
-        if (localX == 0) {
-            updateChunkOnly(chunkX - 1, chunkZ);
-        } else if (localX == Chunk.CHUNK_SIZE - 1) {
-            updateChunkOnly(chunkX + 1, chunkZ);
-        }
-        
-        if (localZ == 0) {
-            updateChunkOnly(chunkX, chunkZ - 1);
-        } else if (localZ == Chunk.CHUNK_SIZE - 1) {
-            updateChunkOnly(chunkX, chunkZ + 1);
-        }
+    public void onChunkLoaded(Chunk chunk) {
+        // Chunks will be added to renderer by ComcraftRendererThread after rendering
     }
     
-    private void updateChunkOnly(int chunkX, int chunkZ) {
-        Chunk chunk = chunkWorld.getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            renderer.threadCallbackRemoveChunk(chunk);
-            chunk.renderCache.clear();
-            Log.debug(this, "Updated neighboring chunk at " + chunkX + "," + chunkZ);
-        }
+    public void onChunkUnloaded(Chunk chunk) {
+        renderer.threadCallbackRemoveRenderCache(chunk.renderCache);
+        chunk.renderCache.clear();
+    }
+    
+    public void onChunkModified(Chunk chunk) {
+        // Remove from renderer and force re-render
+        renderer.threadCallbackRemoveRenderCache(chunk.renderCache);
+        chunk.renderCache.clear();
     }
 
     public void clear() {

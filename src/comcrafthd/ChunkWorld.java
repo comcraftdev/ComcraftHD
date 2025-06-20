@@ -6,6 +6,8 @@ import java.util.*;
 public final class ChunkWorld {
 
     public final Hashtable chunks = new Hashtable(getInitialSize());
+    private final ChunkGenerator chunkGenerator;
+    private final ChunkWorldListener listener;
 
     private static Integer getChunkKey(final int chunkX, final int chunkZ) {
         final short x = (short) chunkX;
@@ -18,6 +20,11 @@ public final class ChunkWorld {
     }
 
     // Block access methods (from old ChunkWorld)
+    public ChunkWorld(ChunkGenerator chunkGenerator, ChunkWorldListener listener) {
+        this.chunkGenerator = chunkGenerator;
+        this.listener = listener;
+    }
+
     public void set(final int blockX, final int blockY, final int blockZ, final short value) {
         if (blockY < 0 || blockY >= Chunk.CHUNK_HEIGHT) {
             return;
@@ -32,6 +39,7 @@ public final class ChunkWorld {
             final int localZ = blockZ & Chunk.BLOCK_TO_CHUNK_AND;
 
             chunk.set(localX, blockY, localZ, value);
+            invalidateChunkAt(blockX, blockY, blockZ);
         }
     }
 
@@ -104,7 +112,7 @@ public final class ChunkWorld {
         }
     }
 
-    public void dropAround(int blockX, int blockZ, int chunkRadius, final ComcraftRendererThread listener) {
+    public void dropAround(int blockX, int blockZ, int chunkRadius) {
         final short originChunkX = (short) (blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT);
         final short originChunkZ = (short) (blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT);
 
@@ -119,7 +127,7 @@ public final class ChunkWorld {
             if (x * x + z * z > chunkRadiusSqr) {
                 chunks.remove(getChunkKey(chunk.chunkX, chunk.chunkZ));
 
-                listener.dropChunkCallback(chunk);
+                listener.onChunkUnloaded(chunk);
             }
         }
     }
@@ -133,9 +141,11 @@ public final class ChunkWorld {
 
         Log.debug(this, "loadChunk() loading " + chunkX + ":" + chunkZ);
 
-        Chunk chunk = ComcraftGame.instance.chunkGenerator.generateChunk(chunkX, chunkZ);
+        Chunk chunk = chunkGenerator.generateChunk(chunkX, chunkZ);
 
         addChunk(chunkX, chunkZ, chunk);
+        
+        listener.onChunkLoaded(chunk);
 
         Log.debug(this, "loadChunk() finished " + chunk);
     }
@@ -166,6 +176,37 @@ public final class ChunkWorld {
             return false;
         }
         return true;
+    }
+    
+    public void invalidateChunk(int chunkX, int chunkZ) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            listener.onChunkModified(chunk);
+        }
+    }
+    
+    public void invalidateChunkAt(int blockX, int blockY, int blockZ) {
+        int chunkX = blockX >> Chunk.BLOCK_TO_CHUNK_SHIFT;
+        int chunkZ = blockZ >> Chunk.BLOCK_TO_CHUNK_SHIFT;
+        
+        // Invalidate the chunk containing the block
+        invalidateChunk(chunkX, chunkZ);
+        
+        // Check if block is at chunk boundary and invalidate neighboring chunks
+        int localX = blockX & Chunk.BLOCK_TO_CHUNK_AND;
+        int localZ = blockZ & Chunk.BLOCK_TO_CHUNK_AND;
+        
+        if (localX == 0) {
+            invalidateChunk(chunkX - 1, chunkZ);
+        } else if (localX == Chunk.CHUNK_SIZE - 1) {
+            invalidateChunk(chunkX + 1, chunkZ);
+        }
+        
+        if (localZ == 0) {
+            invalidateChunk(chunkX, chunkZ - 1);
+        } else if (localZ == Chunk.CHUNK_SIZE - 1) {
+            invalidateChunk(chunkX, chunkZ + 1);
+        }
     }
 
 }
