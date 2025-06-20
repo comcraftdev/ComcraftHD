@@ -46,12 +46,12 @@ public final class ChunkRenderer {
         }
     }
 
-    public void renderChunk(final Chunk chunk) {
+    public boolean renderChunk(final Chunk chunk) {
         reset();
         renderChunkImpl(chunk);
         Node node = finalizeNode(chunk);
 
-        chunk.renderCache.set(node);
+        return chunk.renderCache.set(node);
     }
 
     private void renderChunkImpl(final Chunk chunk) {

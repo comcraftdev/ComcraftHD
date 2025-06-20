@@ -7,6 +7,7 @@ package comcrafthd;
 public final class RenderCache {
 
     private boolean done = false;
+    private boolean cancelled = false;
     private Object node;
 
     public synchronized boolean isDone() {
@@ -15,15 +16,25 @@ public final class RenderCache {
 
     public synchronized void clear() {
         done = false;
+        cancelled = false;
+        node = null;
+    }
+    
+    public synchronized void cancel() {
+        cancelled = true;
         node = null;
     }
 
-    public synchronized void set(Object node) {
+    public synchronized boolean set(Object node) {
+        if (cancelled) {
+            return false;
+        }
         if (done) {
             throw new IllegalStateException("renderCache not empty");
         }
         this.node = node;
         done = true;
+        return true;
     }
 
     public synchronized Object get() {

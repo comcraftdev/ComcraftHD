@@ -159,7 +159,7 @@ public final class ComcraftGame implements ChunkWorldListener {
     
     public void onChunkUnloaded(Chunk chunk) {
         renderer.threadCallbackRemoveRenderCache(chunk.renderCache);
-        chunk.renderCache.clear();
+        chunk.renderCache.cancel();
     }
     
     public void onChunkModified(Chunk chunk) {
