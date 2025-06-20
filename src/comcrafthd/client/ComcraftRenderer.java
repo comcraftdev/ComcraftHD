@@ -10,6 +10,7 @@ public final class ComcraftRenderer {
 
     public final ChunkMesher chunkMesher;
     public final ChunkMesherThread mesherThread;
+    public final ChunkMeshQueue meshQueue;
 
     public final GameCanvas canvas;
     private final Graphics graphics;
@@ -20,16 +21,15 @@ public final class ComcraftRenderer {
     public Camera camera;
     private SelectionRenderer selectionRenderer;
     public BlockPicker blockPicker;
-    
-    private Chunk nextChunkToMesh = null;
 
     public ComcraftRenderer(GameCanvas canvas) {
         this.canvas = canvas;
         graphics = canvas.getGraphics();
         g3d = Graphics3D.getInstance();
 
+        meshQueue = new ChunkMeshQueue();
         chunkMesher = new ChunkMesher();
-        mesherThread = new ChunkMesherThread(this, chunkMesher);
+        mesherThread = new ChunkMesherThread(this, chunkMesher, meshQueue);
         selectionRenderer = new SelectionRenderer();
         blockPicker = new BlockPicker();
 
@@ -79,20 +79,6 @@ public final class ComcraftRenderer {
         if (node != null) {
             world.removeChild(node);
         }
-    }
-    
-    public synchronized void setNextChunkToMesh(Chunk chunk) {
-        nextChunkToMesh = chunk;
-        notifyAll();
-    }
-    
-    public synchronized Chunk getNextChunkToMesh() throws InterruptedException {
-        while (nextChunkToMesh == null) {
-            wait();
-        }
-        Chunk chunk = nextChunkToMesh;
-        nextChunkToMesh = null;
-        return chunk;
     }
 
     public static final int SKY_COLOR = 0x87ceeb;

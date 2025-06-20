@@ -85,7 +85,7 @@ public final class ComcraftGame implements ChunkWorldListener {
         // Find next chunk that needs meshing
         Chunk chunkToMesh = chunkWorld.getClosestNotRenderedChunk(centerBlockX, centerBlockZ);
         if (chunkToMesh != null) {
-            renderer.setNextChunkToMesh(chunkToMesh);
+            renderer.meshQueue.setNext(chunkToMesh);
         }
     }
     

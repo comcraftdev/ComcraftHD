@@ -6,13 +6,15 @@ public final class ChunkMesherThread implements Runnable {
 
     private final ComcraftRenderer renderer;
     private final ChunkMesher chunkMesher;
+    private final ChunkMeshQueue meshQueue;
 
     private volatile boolean stopped = false;
     private Thread thread;
 
-    public ChunkMesherThread(final ComcraftRenderer renderer, ChunkMesher chunkMesher) {
+    public ChunkMesherThread(final ComcraftRenderer renderer, ChunkMesher chunkMesher, ChunkMeshQueue meshQueue) {
         this.renderer = renderer;
         this.chunkMesher = chunkMesher;
+        this.meshQueue = meshQueue;
     }
 
     public void start() {
@@ -33,7 +35,7 @@ public final class ChunkMesherThread implements Runnable {
     }
     
     private void tick() throws InterruptedException {
-        Chunk chunkToMesh = renderer.getNextChunkToMesh();
+        Chunk chunkToMesh = meshQueue.getNext();
         if (chunkToMesh != null && !chunkToMesh.renderCache.isDone()) {
             long startTime = System.currentTimeMillis();
             Log.debug(this, "Meshing chunk at " + chunkToMesh.chunkX + "," + chunkToMesh.chunkZ);
